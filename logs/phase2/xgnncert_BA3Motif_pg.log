@@ -1,0 +1,20 @@
+/nas/home/jahin/.local/lib/python3.12/site-packages/pgmpy/estimators/__init__.py:4: FutureWarning: `pgmpy.estimators.StructureScore` is deprecated and will be removed in v1.3.0. Use `pgmpy.structure_score` instead.
+  from .StructureScore import (
+/nas/home/jahin/Aethelred/baselines/XGNNCert/graphxai/explainers/__init__.py:13: UserWarning: [graphxai.explainers] optional explainer PGMExplainer unavailable: ImportError: cannot import name 'BicScore' from 'pgmpy.estimators' (/nas/home/jahin/.local/lib/python3.12/site-packages/pgmpy/estimators/__init__.py)
+  _warnings.warn(f"[graphxai.explainers] optional explainer {name} "
+Traceback (most recent call last):
+  File "/nas/home/jahin/Aethelred/baselines/XGNNCert/run_xgnncert_baseline.py", line 213, in <module>
+    main()
+  File "/nas/home/jahin/Aethelred/baselines/XGNNCert/run_xgnncert_baseline.py", line 85, in main
+    dataset = _load_dataset(args.dataset, args.seed)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/nas/home/jahin/Aethelred/baselines/XGNNCert/run_xgnncert_baseline.py", line 48, in _load_dataset
+    return table[name](split_sizes=(0.7, 0.2, 0.1), seed=seed)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/nas/home/jahin/Aethelred/baselines/XGNNCert/graphxai/datasets/ba3motif.py", line 74, in __init__
+    edge_index_list, label_list, ground_truth_list, role_id_list, pos = np.load(process_path, allow_pickle=True)
+                                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/nas/home/jahin/.local/lib/python3.12/site-packages/numpy/lib/_npyio_impl.py", line 454, in load
+    fid = stack.enter_context(open(os.fspath(file), "rb"))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/nas/home/jahin/Aethelred/baselines/XGNNCert/graphxai/datasets/BA-3motif-p.npy'

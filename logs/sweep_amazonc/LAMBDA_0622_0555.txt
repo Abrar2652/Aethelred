@@ -1,0 +1,8 @@
+=== Amazon-C gate_lambda sweep Mon Jun 22 05:55:33 AM UTC 2026 ===
+baseline NodeGCN (table1_1, ungated) = 0.883
+gate_lambda=1.0   = 0.7724
+gate_lambda=0.5   = 0.7675
+gate_lambda=0.3   = 0.7675
+gate_lambda=0.1   = 0.7695
+gate_lambda=0.0   = 0.7687
+=== LAMBDA SWEEP DONE Mon Jun 22 06:10:14 AM UTC 2026 ===

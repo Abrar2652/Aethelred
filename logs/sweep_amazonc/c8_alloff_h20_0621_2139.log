@@ -1,0 +1,42 @@
+/nas/home/jahin/Aethelred/run_aethelred_comparison.py:306: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  ckpt = torch.load(ckpt_path, map_location=device)
+
+------------------------------------------------------------------------
+  AETHELRED -- CHECKPOINT STATUS & RETRAIN GUIDE
+------------------------------------------------------------------------
+  Aethelred   : 31 saved checkpoint(s) ? will be OVERWRITTEN this run
+                (aethelred_node_GCN_clean_s316, aethelred_graph_GAT_clean_s179, aethelred_graph_GAT_clean_s316, aethelred_graph_GAT_clean_s42...)
+  PGNNCert    : no checkpoints -> trains from scratch
+
+  WHEN TO USE  --force_retrain
+  -----------------------------------------------------------------
+  YES ? must retrain:
+    * After changing FULL_HPARAMS / FULL_ROBUST_HPARAMS
+    * After changing --arch (GCN -> GAT etc.)
+    * Final NeurIPS submission run (clean slate, 5 seeds)
+
+  NO  ? retrain not needed:
+    * Changing evaluation budgets (--pgnncert_T, --pgd_node_budgets)
+    * Re-running Tables 5/6 or Figure 1 (always train fresh)
+    * Changing --epochs_expl or --expl_n_seeds
+------------------------------------------------------------------------
+
+  [ckpt] Loading Aethelred node (clean) from checkpoints/aethelred_node_GCN_clean/Amazon-C/best_model
+Traceback (most recent call last):
+  File "/nas/home/jahin/Aethelred/run_aethelred_comparison.py", line 7851, in <module>
+    main()
+  File "/nas/home/jahin/Aethelred/run_aethelred_comparison.py", line 7794, in main
+    model, test_acc = train_aethelred_node(data, nf, nc, args)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/nas/home/jahin/Aethelred/run_aethelred_comparison.py", line 308, in train_aethelred_node
+    model.load_state_dict(ckpt['model_state_dict'], strict=False)
+  File "/nas/home/jahin/.local/lib/python3.12/site-packages/torch/nn/modules/module.py", line 2215, in load_state_dict
+    raise RuntimeError('Error(s) in loading state_dict for {}:\n\t{}'.format(
+RuntimeError: Error(s) in loading state_dict for Aethelred:
+	size mismatch for focal_engine.convs.0.bias: copying a param with shape torch.Size([64]) from checkpoint, the shape in current model is torch.Size([20]).
+	size mismatch for focal_engine.convs.0.lin.weight: copying a param with shape torch.Size([64, 767]) from checkpoint, the shape in current model is torch.Size([20, 767]).
+	size mismatch for focal_engine.convs.1.bias: copying a param with shape torch.Size([64]) from checkpoint, the shape in current model is torch.Size([20]).
+	size mismatch for focal_engine.convs.1.lin.weight: copying a param with shape torch.Size([64, 64]) from checkpoint, the shape in current model is torch.Size([20, 20]).
+	size mismatch for focal_engine.convs.2.bias: copying a param with shape torch.Size([64]) from checkpoint, the shape in current model is torch.Size([20]).
+	size mismatch for focal_engine.convs.2.lin.weight: copying a param with shape torch.Size([64, 64]) from checkpoint, the shape in current model is torch.Size([20, 20]).
+	size mismatch for focal_engine.lin.weight: copying a param with shape torch.Size([10, 192]) from checkpoint, the shape in current model is torch.Size([10, 60]).

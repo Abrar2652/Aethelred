@@ -1,0 +1,8 @@
+=== Amazon-C sweep (FORCE RETRAIN, sequential) Mon Jun 22 03:27:54 AM UTC 2026 ===
+baseline NodeGCN (table1_1) = 0.883
+c1_default         = 0.7724
+c2_alloff          = 0.7675
+c8_alloff_h20      = 0.6702
+c4_noalpha         = 0.7724
+c6_noeps           = 0.7724
+=== SWEEP DONE Mon Jun 22 03:41:57 AM UTC 2026 ===

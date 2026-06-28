@@ -1,0 +1,32 @@
+/nas/home/jahin/.local/lib/python3.10/site-packages/torch_geometric/__init__.py:4: UserWarning: An issue occurred while importing 'torch-scatter'. Disabling its usage. Stacktrace: /nas/home/jahin/.local/lib/python3.10/site-packages/torch_scatter/_version_cuda.so: undefined symbol: _ZN5torch3jit17parseSchemaOrNameERKSsb
+  import torch_geometric.typing
+/nas/home/jahin/.local/lib/python3.10/site-packages/torch_geometric/__init__.py:4: UserWarning: An issue occurred while importing 'torch-sparse'. Disabling its usage. Stacktrace: /nas/home/jahin/.local/lib/python3.10/site-packages/torch_sparse/_version_cuda.so: undefined symbol: _ZN5torch3jit17parseSchemaOrNameERKSsb
+  import torch_geometric.typing
+/nas/home/jahin/.local/lib/python3.10/site-packages/requests/__init__.py:113: RequestsDependencyWarning: urllib3 (1.26.5) or chardet (7.2.0)/charset_normalizer (3.4.4) doesn't match a supported version!
+  warnings.warn(
+Disabling PyTorch because PyTorch >= 2.1 is required but found 2.0.1
+None of PyTorch, TensorFlow >= 2.0, or Flax have been found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+
+------------------------------------------------------------------------
+  AETHELRED -- CHECKPOINT STATUS & RETRAIN GUIDE
+------------------------------------------------------------------------
+  Aethelred   : 1 saved checkpoint(s) ? will be OVERWRITTEN this run
+                (aethelred_node_GCN_clean)
+  PGNNCert    : no checkpoints -> trains from scratch
+
+  WHEN TO USE  --force_retrain
+  -----------------------------------------------------------------
+  YES ? must retrain:
+    * After changing FULL_HPARAMS / FULL_ROBUST_HPARAMS
+    * After changing --arch (GCN -> GAT etc.)
+    * Final NeurIPS submission run (clean slate, 5 seeds)
+
+  NO  ? retrain not needed:
+    * Changing evaluation budgets (--pgnncert_T, --pgd_node_budgets)
+    * Re-running Tables 5/6 or Figure 1 (always train fresh)
+    * Changing --epochs_expl or --expl_n_seeds
+------------------------------------------------------------------------
+
+
+  [--force_retrain] Deleted 3 checkpoint group(s): normal_node, normal_graph, aethelred_node_GCN_clean
+  [FROZEN] Table 5 (Precision@K / SPMotif) is excluded from the current submission. Skipping.

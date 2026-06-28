@@ -1,0 +1,100 @@
+Epoch: 0, train_acc: 0.6763, val_acc: 0.7277, train_loss: 0.5872
+Val improved
+Epoch: 1, train_acc: 0.7957, val_acc: 0.7877, train_loss: 0.4447
+Val improved
+Epoch: 2, train_acc: 0.8152, val_acc: 0.8052, train_loss: 0.4156
+Val improved
+Epoch: 3, train_acc: 0.8124, val_acc: 0.8177, train_loss: 0.4173
+Val improved
+Epoch: 4, train_acc: 0.8272, val_acc: 0.8226, train_loss: 0.4005
+Val improved
+Epoch: 5, train_acc: 0.8344, val_acc: 0.8035, train_loss: 0.3839
+Epoch: 6, train_acc: 0.8268, val_acc: 0.8401, train_loss: 0.3915
+Val improved
+Epoch: 7, train_acc: 0.8359, val_acc: 0.8343, train_loss: 0.3814
+Epoch: 8, train_acc: 0.8383, val_acc: 0.8518, train_loss: 0.3768
+Val improved
+Epoch: 9, train_acc: 0.8381, val_acc: 0.8235, train_loss: 0.3775
+Epoch: 10, train_acc: 0.8437, val_acc: 0.8326, train_loss: 0.3620
+Epoch: 11, train_acc: 0.8261, val_acc: 0.8551, train_loss: 0.4035
+Val improved
+Epoch: 12, train_acc: 0.8499, val_acc: 0.8626, train_loss: 0.3617
+Val improved
+Epoch: 13, train_acc: 0.8537, val_acc: 0.8251, train_loss: 0.3505
+Epoch: 14, train_acc: 0.8421, val_acc: 0.8251, train_loss: 0.3715
+Epoch: 15, train_acc: 0.8463, val_acc: 0.8393, train_loss: 0.3686
+Epoch: 16, train_acc: 0.8577, val_acc: 0.8193, train_loss: 0.3485
+Epoch: 17, train_acc: 0.8444, val_acc: 0.8693, train_loss: 0.3776
+Val improved
+Epoch: 18, train_acc: 0.8586, val_acc: 0.8260, train_loss: 0.3462
+Epoch: 19, train_acc: 0.8634, val_acc: 0.8310, train_loss: 0.3376
+Epoch: 20, train_acc: 0.8476, val_acc: 0.8235, train_loss: 0.3611
+Epoch: 21, train_acc: 0.8552, val_acc: 0.8576, train_loss: 0.3554
+Epoch: 22, train_acc: 0.8499, val_acc: 0.8718, train_loss: 0.3535
+Val improved
+Epoch: 23, train_acc: 0.8563, val_acc: 0.8460, train_loss: 0.3486
+Epoch: 24, train_acc: 0.8439, val_acc: 0.7835, train_loss: 0.3649
+Epoch: 25, train_acc: 0.8550, val_acc: 0.8410, train_loss: 0.3495
+Epoch: 26, train_acc: 0.8500, val_acc: 0.8818, train_loss: 0.3599
+Val improved
+Epoch: 27, train_acc: 0.8669, val_acc: 0.8809, train_loss: 0.3342
+Epoch: 28, train_acc: 0.8594, val_acc: 0.8618, train_loss: 0.3471
+Epoch: 29, train_acc: 0.8549, val_acc: 0.8585, train_loss: 0.3630
+Epoch: 30, train_acc: 0.8514, val_acc: 0.8010, train_loss: 0.3603
+Epoch: 31, train_acc: 0.8527, val_acc: 0.8734, train_loss: 0.3452
+Epoch: 32, train_acc: 0.8551, val_acc: 0.8834, train_loss: 0.3446
+Val improved
+Epoch: 33, train_acc: 0.8588, val_acc: 0.8193, train_loss: 0.3439
+Epoch: 34, train_acc: 0.8584, val_acc: 0.8809, train_loss: 0.3442
+Epoch: 35, train_acc: 0.8677, val_acc: 0.8676, train_loss: 0.3301
+Epoch: 36, train_acc: 0.8684, val_acc: 0.8759, train_loss: 0.3362
+Epoch: 37, train_acc: 0.8472, val_acc: 0.7419, train_loss: 0.3579
+Epoch: 38, train_acc: 0.8403, val_acc: 0.8768, train_loss: 0.3868
+Epoch: 39, train_acc: 0.8493, val_acc: 0.8052, train_loss: 0.3639
+Epoch: 40, train_acc: 0.8472, val_acc: 0.8751, train_loss: 0.3757
+Epoch: 41, train_acc: 0.8506, val_acc: 0.8560, train_loss: 0.3617
+Epoch: 42, train_acc: 0.8589, val_acc: 0.8743, train_loss: 0.3487
+Epoch: 43, train_acc: 0.8626, val_acc: 0.8809, train_loss: 0.3445
+Epoch: 44, train_acc: 0.8570, val_acc: 0.7427, train_loss: 0.3495
+Epoch: 45, train_acc: 0.8512, val_acc: 0.8784, train_loss: 0.3663
+Epoch: 46, train_acc: 0.8574, val_acc: 0.8535, train_loss: 0.3546
+Epoch: 47, train_acc: 0.8608, val_acc: 0.8376, train_loss: 0.3460
+Epoch: 48, train_acc: 0.8572, val_acc: 0.8410, train_loss: 0.3587
+Epoch: 49, train_acc: 0.8659, val_acc: 0.8168, train_loss: 0.3409
+Epoch: 50, train_acc: 0.8649, val_acc: 0.8551, train_loss: 0.3404
+Epoch: 51, train_acc: 0.8736, val_acc: 0.8826, train_loss: 0.3195
+Epoch: 52, train_acc: 0.8583, val_acc: 0.8784, train_loss: 0.3476
+Epoch: 53, train_acc: 0.8664, val_acc: 0.8893, train_loss: 0.3320
+Val improved
+Epoch: 54, train_acc: 0.8674, val_acc: 0.8410, train_loss: 0.3342
+Epoch: 55, train_acc: 0.8714, val_acc: 0.8784, train_loss: 0.3276
+Epoch: 56, train_acc: 0.8656, val_acc: 0.8768, train_loss: 0.3350
+Epoch: 57, train_acc: 0.8699, val_acc: 0.8010, train_loss: 0.3271
+Epoch: 58, train_acc: 0.8683, val_acc: 0.8784, train_loss: 0.3325
+Epoch: 59, train_acc: 0.8625, val_acc: 0.8818, train_loss: 0.3416
+Epoch: 60, train_acc: 0.8528, val_acc: 0.8734, train_loss: 0.3538
+Epoch: 61, train_acc: 0.8587, val_acc: 0.8893, train_loss: 0.3480
+Epoch: 62, train_acc: 0.8577, val_acc: 0.8693, train_loss: 0.3483
+Epoch: 63, train_acc: 0.8771, val_acc: 0.7927, train_loss: 0.3251
+Epoch: 64, train_acc: 0.8703, val_acc: 0.8701, train_loss: 0.3307
+Epoch: 65, train_acc: 0.8719, val_acc: 0.8759, train_loss: 0.3334
+Epoch: 66, train_acc: 0.8634, val_acc: 0.8876, train_loss: 0.3434
+Epoch: 67, train_acc: 0.8661, val_acc: 0.8734, train_loss: 0.3322
+Epoch: 68, train_acc: 0.8634, val_acc: 0.8776, train_loss: 0.3444
+Epoch: 69, train_acc: 0.8662, val_acc: 0.8751, train_loss: 0.3369
+Epoch: 70, train_acc: 0.8697, val_acc: 0.8801, train_loss: 0.3390
+Epoch: 71, train_acc: 0.8650, val_acc: 0.8493, train_loss: 0.3477
+Epoch: 72, train_acc: 0.8665, val_acc: 0.8818, train_loss: 0.3334
+Epoch: 73, train_acc: 0.8638, val_acc: 0.8826, train_loss: 0.3399
+Epoch: 74, train_acc: 0.8736, val_acc: 0.8476, train_loss: 0.3219
+Epoch: 75, train_acc: 0.8732, val_acc: 0.8460, train_loss: 0.3198
+Epoch: 76, train_acc: 0.8751, val_acc: 0.8868, train_loss: 0.3189
+Epoch: 77, train_acc: 0.8721, val_acc: 0.8901, train_loss: 0.3308
+Val improved
+Epoch: 78, train_acc: 0.8740, val_acc: 0.7460, train_loss: 0.3247
+Epoch: 79, train_acc: 0.8655, val_acc: 0.8801, train_loss: 0.3397
+
+Final test accuracy on gx_Benzene_atk: 0.8775 (best epoch: 77, val: 0.8901)
+  [ckpt] Saved -> checkpoints/aethelred_graph_GCN_clean/gx_Benzene_atk/best_model  test_acc=0.8775
+[atk] Benzene acc 0.877
+[atk] RESULT {"method": "Aethelred", "dataset": "Benzene", "attack_edges": 2, "cert_k": 10, "n": 80, "explanation_accuracy": 0.5550000000000004, "difference_fraction_pct": 6.874999999999998}

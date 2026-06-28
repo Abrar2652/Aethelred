@@ -1,0 +1,10 @@
+Epoch: 0, train_acc: 0.8239, val_acc: 0.7938, train_loss: 0.4794
+Val improved
+Epoch: 1, train_acc: 0.8309, val_acc: 0.7938, train_loss: 0.4595
+Epoch: 2, train_acc: 0.8309, val_acc: 0.7938, train_loss: 0.4605
+Epoch: 3, train_acc: 0.8309, val_acc: 0.7938, train_loss: 0.4600
+Epoch: 4, train_acc: 0.8309, val_acc: 0.7938, train_loss: 0.4584
+Epoch: 5, train_acc: 0.8309, val_acc: 0.7938, train_loss: 0.4571
+Epoch: 6, train_acc: 0.8309, val_acc: 0.7938, train_loss: 0.4576
+Epoch: 7, train_acc: 0.8309, val_acc: 0.7938, train_loss: 0.4564
+Epoch: 8, train_acc: 0.8309, val_acc: 0.7938, train_loss: 0.4544

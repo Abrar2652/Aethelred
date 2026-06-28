@@ -1,0 +1,267 @@
+
+============================================================
+Graph Classification: DD | GNN: GCN | T=50
+============================================================
+CUDA enabled: Quadro RTX 8000 | torch CUDA 12.1
+Epoch: 0, train_acc: 0.5867, val_acc: 0.5872, train_loss: 408.2680
+Val improved
+Epoch: 1, train_acc: 0.5867, val_acc: 0.5872, train_loss: 406.5895
+Epoch: 2, train_acc: 0.5867, val_acc: 0.5872, train_loss: 403.6124
+Epoch: 3, train_acc: 0.5867, val_acc: 0.5872, train_loss: 401.4169
+Epoch: 4, train_acc: 0.5867, val_acc: 0.5872, train_loss: 399.8196
+Epoch: 5, train_acc: 0.5867, val_acc: 0.5872, train_loss: 398.5727
+Epoch: 6, train_acc: 0.5867, val_acc: 0.5872, train_loss: 397.6230
+Epoch: 7, train_acc: 0.5867, val_acc: 0.5872, train_loss: 396.9197
+Epoch: 8, train_acc: 0.5867, val_acc: 0.5872, train_loss: 396.3556
+Epoch: 9, train_acc: 0.5867, val_acc: 0.5872, train_loss: 395.8648
+Epoch: 10, train_acc: 0.5867, val_acc: 0.5872, train_loss: 395.4141
+Epoch: 11, train_acc: 0.5867, val_acc: 0.5872, train_loss: 394.9631
+Epoch: 12, train_acc: 0.5867, val_acc: 0.5872, train_loss: 394.4911
+Epoch: 13, train_acc: 0.5867, val_acc: 0.5872, train_loss: 393.9758
+Epoch: 14, train_acc: 0.5867, val_acc: 0.5872, train_loss: 393.4187
+Epoch: 15, train_acc: 0.5867, val_acc: 0.5872, train_loss: 392.8204
+Epoch: 16, train_acc: 0.5867, val_acc: 0.5872, train_loss: 392.1898
+Epoch: 17, train_acc: 0.5867, val_acc: 0.5872, train_loss: 391.5237
+Epoch: 18, train_acc: 0.5867, val_acc: 0.5872, train_loss: 390.8356
+Epoch: 19, train_acc: 0.5867, val_acc: 0.5872, train_loss: 390.1130
+Epoch: 20, train_acc: 0.5867, val_acc: 0.5872, train_loss: 389.3598
+Epoch: 21, train_acc: 0.5867, val_acc: 0.5872, train_loss: 388.5779
+Epoch: 22, train_acc: 0.5867, val_acc: 0.5872, train_loss: 387.7587
+Epoch: 23, train_acc: 0.5884, val_acc: 0.5872, train_loss: 386.9052
+Train improved
+Epoch: 24, train_acc: 0.5884, val_acc: 0.5872, train_loss: 386.0165
+Epoch: 25, train_acc: 0.5884, val_acc: 0.5872, train_loss: 385.0875
+Epoch: 26, train_acc: 0.5884, val_acc: 0.5872, train_loss: 384.1164
+Epoch: 27, train_acc: 0.5884, val_acc: 0.5915, train_loss: 383.1092
+Val improved
+Epoch: 28, train_acc: 0.5884, val_acc: 0.5915, train_loss: 382.0755
+Epoch: 29, train_acc: 0.5884, val_acc: 0.5915, train_loss: 381.0167
+Epoch: 30, train_acc: 0.5918, val_acc: 0.5915, train_loss: 379.9371
+Train improved
+Epoch: 31, train_acc: 0.5935, val_acc: 0.5915, train_loss: 378.8250
+Train improved
+Epoch: 32, train_acc: 0.5935, val_acc: 0.5915, train_loss: 377.6861
+Epoch: 33, train_acc: 0.5952, val_acc: 0.5915, train_loss: 376.5185
+Train improved
+Epoch: 34, train_acc: 0.5986, val_acc: 0.5915, train_loss: 375.3296
+Train improved
+Epoch: 35, train_acc: 0.6037, val_acc: 0.5915, train_loss: 374.1179
+Train improved
+Epoch: 36, train_acc: 0.6054, val_acc: 0.5915, train_loss: 372.8935
+Train improved
+Epoch: 37, train_acc: 0.6122, val_acc: 0.5915, train_loss: 371.6517
+Train improved
+Epoch: 38, train_acc: 0.6190, val_acc: 0.5915, train_loss: 370.3955
+Train improved
+Epoch: 39, train_acc: 0.6224, val_acc: 0.5915, train_loss: 369.1322
+Train improved
+Epoch: 40, train_acc: 0.6241, val_acc: 0.5915, train_loss: 367.8545
+Train improved
+Epoch: 41, train_acc: 0.6293, val_acc: 0.6000, train_loss: 366.5672
+Val improved
+Epoch: 42, train_acc: 0.6310, val_acc: 0.6000, train_loss: 365.2716
+Train improved
+Epoch: 43, train_acc: 0.6412, val_acc: 0.6000, train_loss: 363.9714
+Train improved
+Epoch: 44, train_acc: 0.6429, val_acc: 0.6000, train_loss: 362.6639
+Train improved
+Epoch: 45, train_acc: 0.6446, val_acc: 0.6043, train_loss: 361.3493
+Val improved
+Epoch: 46, train_acc: 0.6616, val_acc: 0.6085, train_loss: 360.0283
+Val improved
+Epoch: 47, train_acc: 0.6684, val_acc: 0.6128, train_loss: 358.6988
+Val improved
+Epoch: 48, train_acc: 0.6701, val_acc: 0.6170, train_loss: 357.3611
+Val improved
+Epoch: 49, train_acc: 0.6752, val_acc: 0.6170, train_loss: 356.0168
+Train improved
+Epoch: 50, train_acc: 0.6837, val_acc: 0.6128, train_loss: 354.6714
+Epoch: 51, train_acc: 0.6871, val_acc: 0.6128, train_loss: 353.3208
+Epoch: 52, train_acc: 0.6905, val_acc: 0.6128, train_loss: 351.9680
+Epoch: 53, train_acc: 0.7007, val_acc: 0.6128, train_loss: 350.6136
+Epoch: 54, train_acc: 0.7041, val_acc: 0.6128, train_loss: 349.2582
+Epoch: 55, train_acc: 0.7143, val_acc: 0.6170, train_loss: 347.9005
+Train improved
+Epoch: 56, train_acc: 0.7160, val_acc: 0.6170, train_loss: 346.5394
+Train improved
+Epoch: 57, train_acc: 0.7228, val_acc: 0.6170, train_loss: 345.1754
+Train improved
+Epoch: 58, train_acc: 0.7245, val_acc: 0.6255, train_loss: 343.8116
+Val improved
+Epoch: 59, train_acc: 0.7296, val_acc: 0.6298, train_loss: 342.4460
+Val improved
+Epoch: 60, train_acc: 0.7296, val_acc: 0.6340, train_loss: 341.0773
+Val improved
+Epoch: 61, train_acc: 0.7313, val_acc: 0.6340, train_loss: 339.7053
+Train improved
+Epoch: 62, train_acc: 0.7381, val_acc: 0.6340, train_loss: 338.3362
+Train improved
+Epoch: 63, train_acc: 0.7398, val_acc: 0.6298, train_loss: 336.9689
+Epoch: 64, train_acc: 0.7415, val_acc: 0.6298, train_loss: 335.6041
+Epoch: 65, train_acc: 0.7483, val_acc: 0.6383, train_loss: 334.2536
+Val improved
+Epoch: 66, train_acc: 0.7483, val_acc: 0.6340, train_loss: 332.9163
+Epoch: 67, train_acc: 0.7517, val_acc: 0.6383, train_loss: 331.5859
+Train improved
+Epoch: 68, train_acc: 0.7585, val_acc: 0.6383, train_loss: 330.2574
+Train improved
+Epoch: 69, train_acc: 0.7653, val_acc: 0.6426, train_loss: 328.9402
+Val improved
+Epoch: 70, train_acc: 0.7670, val_acc: 0.6426, train_loss: 327.6393
+Train improved
+Epoch: 71, train_acc: 0.7721, val_acc: 0.6426, train_loss: 326.3531
+Train improved
+Epoch: 72, train_acc: 0.7721, val_acc: 0.6426, train_loss: 325.0853
+Epoch: 73, train_acc: 0.7806, val_acc: 0.6468, train_loss: 323.8397
+Val improved
+Epoch: 74, train_acc: 0.7857, val_acc: 0.6468, train_loss: 322.6161
+Train improved
+Epoch: 75, train_acc: 0.7891, val_acc: 0.6426, train_loss: 321.4151
+Epoch: 76, train_acc: 0.7874, val_acc: 0.6383, train_loss: 320.2367
+Epoch: 77, train_acc: 0.7976, val_acc: 0.6426, train_loss: 319.0812
+Epoch: 78, train_acc: 0.7942, val_acc: 0.6468, train_loss: 317.9473
+Train improved
+Epoch: 79, train_acc: 0.7959, val_acc: 0.6511, train_loss: 316.8268
+Val improved
+Epoch: 80, train_acc: 0.7993, val_acc: 0.6511, train_loss: 315.7245
+Train improved
+Epoch: 81, train_acc: 0.7993, val_acc: 0.6511, train_loss: 314.6424
+Epoch: 82, train_acc: 0.8044, val_acc: 0.6511, train_loss: 313.5748
+Train improved
+Epoch: 83, train_acc: 0.8027, val_acc: 0.6511, train_loss: 312.5207
+Epoch: 84, train_acc: 0.8095, val_acc: 0.6383, train_loss: 311.4857
+Epoch: 85, train_acc: 0.8095, val_acc: 0.6426, train_loss: 310.4682
+Epoch: 86, train_acc: 0.8197, val_acc: 0.6426, train_loss: 309.4671
+Epoch: 87, train_acc: 0.8197, val_acc: 0.6383, train_loss: 308.4927
+Epoch: 88, train_acc: 0.8214, val_acc: 0.6468, train_loss: 307.5339
+Epoch: 89, train_acc: 0.8214, val_acc: 0.6426, train_loss: 306.5925
+Epoch: 90, train_acc: 0.8231, val_acc: 0.6468, train_loss: 305.6720
+Epoch: 91, train_acc: 0.8197, val_acc: 0.6511, train_loss: 304.7553
+Train improved
+Epoch: 92, train_acc: 0.8282, val_acc: 0.6426, train_loss: 303.8673
+Epoch: 93, train_acc: 0.8231, val_acc: 0.6468, train_loss: 302.9828
+Epoch: 94, train_acc: 0.8282, val_acc: 0.6511, train_loss: 302.1393
+Train improved
+Epoch: 95, train_acc: 0.8367, val_acc: 0.6553, train_loss: 301.2803
+Val improved
+Epoch: 96, train_acc: 0.8299, val_acc: 0.6426, train_loss: 300.4768
+Epoch: 97, train_acc: 0.8367, val_acc: 0.6511, train_loss: 299.6347
+Epoch: 98, train_acc: 0.8333, val_acc: 0.6426, train_loss: 298.8783
+Epoch: 99, train_acc: 0.8316, val_acc: 0.6468, train_loss: 298.0385
+Epoch: 100, train_acc: 0.8333, val_acc: 0.6468, train_loss: 297.3662
+Epoch: 101, train_acc: 0.8401, val_acc: 0.6468, train_loss: 296.4836
+Epoch: 102, train_acc: 0.8452, val_acc: 0.6468, train_loss: 296.0093
+Epoch: 103, train_acc: 0.8401, val_acc: 0.6468, train_loss: 295.3532
+Epoch: 104, train_acc: 0.8350, val_acc: 0.6426, train_loss: 294.4709
+Epoch: 105, train_acc: 0.8401, val_acc: 0.6383, train_loss: 294.0262
+Epoch: 106, train_acc: 0.8384, val_acc: 0.6426, train_loss: 293.4690
+Epoch: 107, train_acc: 0.8469, val_acc: 0.6468, train_loss: 292.7612
+Epoch: 108, train_acc: 0.8469, val_acc: 0.6468, train_loss: 292.3112
+Epoch: 109, train_acc: 0.8435, val_acc: 0.6426, train_loss: 291.8641
+Epoch: 110, train_acc: 0.8452, val_acc: 0.6426, train_loss: 291.2100
+Epoch: 111, train_acc: 0.8435, val_acc: 0.6468, train_loss: 290.8351
+Epoch: 112, train_acc: 0.8452, val_acc: 0.6426, train_loss: 290.4225
+Epoch: 113, train_acc: 0.8452, val_acc: 0.6468, train_loss: 289.8637
+Epoch: 114, train_acc: 0.8486, val_acc: 0.6511, train_loss: 289.3609
+Epoch: 115, train_acc: 0.8503, val_acc: 0.6511, train_loss: 289.0115
+Epoch: 116, train_acc: 0.8435, val_acc: 0.6511, train_loss: 288.5074
+Epoch: 117, train_acc: 0.8486, val_acc: 0.6468, train_loss: 288.0806
+Epoch: 118, train_acc: 0.8520, val_acc: 0.6468, train_loss: 287.6762
+Epoch: 119, train_acc: 0.8486, val_acc: 0.6511, train_loss: 287.2466
+Epoch: 120, train_acc: 0.8554, val_acc: 0.6468, train_loss: 286.7807
+Epoch: 121, train_acc: 0.8520, val_acc: 0.6468, train_loss: 286.4377
+Epoch: 122, train_acc: 0.8554, val_acc: 0.6511, train_loss: 285.9984
+Epoch: 123, train_acc: 0.8605, val_acc: 0.6511, train_loss: 285.5799
+Epoch: 124, train_acc: 0.8554, val_acc: 0.6511, train_loss: 285.1699
+Epoch: 125, train_acc: 0.8571, val_acc: 0.6426, train_loss: 284.8359
+Epoch: 126, train_acc: 0.8639, val_acc: 0.6553, train_loss: 284.3525
+Train improved
+Epoch: 127, train_acc: 0.8588, val_acc: 0.6553, train_loss: 284.1057
+Epoch: 128, train_acc: 0.8622, val_acc: 0.6468, train_loss: 283.6353
+Epoch: 129, train_acc: 0.8605, val_acc: 0.6426, train_loss: 283.3804
+Epoch: 130, train_acc: 0.8639, val_acc: 0.6468, train_loss: 282.8825
+Epoch: 131, train_acc: 0.8605, val_acc: 0.6468, train_loss: 282.7080
+Epoch: 132, train_acc: 0.8622, val_acc: 0.6383, train_loss: 282.3245
+Epoch: 133, train_acc: 0.8622, val_acc: 0.6426, train_loss: 281.9581
+Epoch: 134, train_acc: 0.8605, val_acc: 0.6468, train_loss: 281.5987
+Epoch: 135, train_acc: 0.8656, val_acc: 0.6511, train_loss: 281.2969
+Epoch: 136, train_acc: 0.8639, val_acc: 0.6468, train_loss: 280.9621
+Epoch: 137, train_acc: 0.8639, val_acc: 0.6468, train_loss: 280.6590
+Epoch: 138, train_acc: 0.8690, val_acc: 0.6468, train_loss: 280.2975
+Epoch: 139, train_acc: 0.8622, val_acc: 0.6468, train_loss: 280.0766
+Epoch: 140, train_acc: 0.8690, val_acc: 0.6468, train_loss: 279.7340
+Epoch: 141, train_acc: 0.8707, val_acc: 0.6553, train_loss: 279.3779
+Train improved
+Epoch: 142, train_acc: 0.8690, val_acc: 0.6468, train_loss: 279.1106
+Epoch: 143, train_acc: 0.8656, val_acc: 0.6426, train_loss: 278.8001
+Epoch: 144, train_acc: 0.8673, val_acc: 0.6426, train_loss: 278.5054
+Epoch: 145, train_acc: 0.8707, val_acc: 0.6511, train_loss: 278.1867
+Epoch: 146, train_acc: 0.8724, val_acc: 0.6468, train_loss: 277.9168
+Epoch: 147, train_acc: 0.8724, val_acc: 0.6426, train_loss: 277.5939
+Epoch: 148, train_acc: 0.8724, val_acc: 0.6426, train_loss: 277.3509
+Epoch: 149, train_acc: 0.8673, val_acc: 0.6468, train_loss: 276.9833
+Epoch: 150, train_acc: 0.8759, val_acc: 0.6426, train_loss: 276.7539
+Epoch: 151, train_acc: 0.8707, val_acc: 0.6468, train_loss: 276.4249
+Epoch: 152, train_acc: 0.8776, val_acc: 0.6468, train_loss: 276.1656
+Epoch: 153, train_acc: 0.8673, val_acc: 0.6511, train_loss: 275.8189
+Epoch: 154, train_acc: 0.8793, val_acc: 0.6426, train_loss: 275.6389
+Epoch: 155, train_acc: 0.8776, val_acc: 0.6383, train_loss: 275.2138
+Epoch: 156, train_acc: 0.8690, val_acc: 0.6426, train_loss: 275.1937
+Epoch: 157, train_acc: 0.8759, val_acc: 0.6468, train_loss: 274.6773
+Epoch: 158, train_acc: 0.8776, val_acc: 0.6468, train_loss: 274.8257
+Epoch: 159, train_acc: 0.8724, val_acc: 0.6511, train_loss: 274.4589
+Epoch: 160, train_acc: 0.8810, val_acc: 0.6383, train_loss: 274.0306
+Epoch: 161, train_acc: 0.8861, val_acc: 0.6468, train_loss: 273.8427
+Epoch: 162, train_acc: 0.8810, val_acc: 0.6383, train_loss: 273.5607
+Epoch: 163, train_acc: 0.8724, val_acc: 0.6426, train_loss: 273.2617
+Epoch: 164, train_acc: 0.8861, val_acc: 0.6383, train_loss: 273.0555
+Epoch: 165, train_acc: 0.8861, val_acc: 0.6468, train_loss: 272.7655
+Epoch: 166, train_acc: 0.8776, val_acc: 0.6468, train_loss: 272.5166
+Epoch: 167, train_acc: 0.8793, val_acc: 0.6383, train_loss: 272.3542
+Epoch: 168, train_acc: 0.8878, val_acc: 0.6468, train_loss: 272.0310
+Epoch: 169, train_acc: 0.8827, val_acc: 0.6468, train_loss: 271.8740
+Epoch: 170, train_acc: 0.8810, val_acc: 0.6468, train_loss: 271.5561
+Epoch: 171, train_acc: 0.8827, val_acc: 0.6383, train_loss: 271.3956
+Epoch: 172, train_acc: 0.8861, val_acc: 0.6426, train_loss: 271.1649
+Epoch: 173, train_acc: 0.8827, val_acc: 0.6383, train_loss: 270.8218
+Epoch: 174, train_acc: 0.8827, val_acc: 0.6426, train_loss: 270.7921
+Epoch: 175, train_acc: 0.8844, val_acc: 0.6426, train_loss: 270.4225
+Epoch: 176, train_acc: 0.8878, val_acc: 0.6383, train_loss: 270.2659
+Epoch: 177, train_acc: 0.8844, val_acc: 0.6426, train_loss: 270.0602
+Epoch: 178, train_acc: 0.8861, val_acc: 0.6426, train_loss: 269.6980
+Epoch: 179, train_acc: 0.8895, val_acc: 0.6426, train_loss: 269.7179
+Epoch: 180, train_acc: 0.8878, val_acc: 0.6383, train_loss: 269.3443
+Epoch: 181, train_acc: 0.8895, val_acc: 0.6383, train_loss: 269.2551
+Epoch: 182, train_acc: 0.8895, val_acc: 0.6383, train_loss: 268.9879
+Epoch: 183, train_acc: 0.8878, val_acc: 0.6340, train_loss: 268.7817
+Epoch: 184, train_acc: 0.8878, val_acc: 0.6298, train_loss: 268.4936
+Epoch: 185, train_acc: 0.8878, val_acc: 0.6340, train_loss: 268.3716
+Epoch: 186, train_acc: 0.8895, val_acc: 0.6426, train_loss: 268.1029
+Epoch: 187, train_acc: 0.8878, val_acc: 0.6383, train_loss: 267.8991
+Epoch: 188, train_acc: 0.8861, val_acc: 0.6340, train_loss: 267.7077
+Epoch: 189, train_acc: 0.8946, val_acc: 0.6511, train_loss: 267.4630
+Epoch: 190, train_acc: 0.8912, val_acc: 0.6298, train_loss: 267.2556
+Epoch: 191, train_acc: 0.8861, val_acc: 0.6426, train_loss: 267.0818
+Epoch: 192, train_acc: 0.8878, val_acc: 0.6383, train_loss: 266.9325
+Epoch: 193, train_acc: 0.8895, val_acc: 0.6383, train_loss: 266.5787
+Epoch: 194, train_acc: 0.8929, val_acc: 0.6426, train_loss: 266.5936
+Epoch: 195, train_acc: 0.8844, val_acc: 0.6383, train_loss: 266.2892
+Epoch: 196, train_acc: 0.8912, val_acc: 0.6340, train_loss: 266.0412
+Epoch: 197, train_acc: 0.8963, val_acc: 0.6426, train_loss: 265.8916
+Epoch: 198, train_acc: 0.8827, val_acc: 0.6383, train_loss: 265.5938
+Epoch: 199, train_acc: 0.8895, val_acc: 0.6383, train_loss: 265.6030
+/nas/home/jahin/Aethelred/_ref_pgnncert/edge_hash.py:284: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  checkpoint = torch.load(path+f"_{i}", map_location=self.device)
+
+PGNNCert-E:
+  Test Accuracy: 0.6451
+  Time: 35893.6s
+  Certified accuracy at p=0: 0.6451
+  Certified accuracy at p=5: 0.5972
+  Certified accuracy at p=10: 0.4986
+  Certified accuracy at p=15: 0.3718
+
+Summary:
+  PGNNCert-E   | Acc: 0.6451 | Time: 35893.6s
+
+Results saved to results/graph_DD_GCN_T50.json

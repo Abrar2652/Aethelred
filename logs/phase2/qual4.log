@@ -1,0 +1,89 @@
+/nas/home/jahin/.local/lib/python3.12/site-packages/torch/storage.py:414: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  return torch.load(io.BytesIO(b))
+tensor([0])
+tensor([[0, 0, 0, 0, 0],
+        [1, 2, 3, 4, 5]])
+tensor([[ 0.3477, -0.5548, -1.5905,  2.2821, -0.2455, -1.6994,  2.4764, -0.8047,
+         -0.3562,  0.7917],
+        [-0.1832,  0.8801, -2.5690,  2.2175, -0.5636, -2.6115,  0.0144, -0.1981,
+         -1.7803, -0.7240],
+        [ 0.7329,  0.1965,  0.7398,  1.3626,  0.4535, -1.8475,  0.8893,  1.4570,
+         -0.6454,  0.2181],
+        [ 0.4348,  1.0763,  0.8629, -0.6888,  1.0543, -1.5378, -0.2064, -1.1625,
+          2.5555, -0.9332],
+        [-0.0277,  0.6358,  1.7352,  2.2132,  1.1428,  2.7659,  0.2235,  3.2200,
+          0.7249, -0.9803],
+        [ 0.9285,  0.6509,  1.1109,  1.7811, -0.9324,  0.1748,  0.0618,  0.4988,
+          0.2268, -0.9960]])
+tensor([0., 0., 0., 0., 0.], dtype=torch.float64)
+
+7.245
+7.962
+683
+Epoch: 0, train_acc: 0.7711, val_acc: 1.0000, train_loss: 0.5245
+Val improved
+Epoch: 1, train_acc: 1.0000, val_acc: 1.0000, train_loss: 0.0476
+Epoch: 2, train_acc: 1.0000, val_acc: 1.0000, train_loss: 0.0087
+Epoch: 3, train_acc: 1.0000, val_acc: 1.0000, train_loss: 0.0056
+Epoch: 4, train_acc: 1.0000, val_acc: 1.0000, train_loss: 0.0055
+Epoch: 5, train_acc: 1.0000, val_acc: 1.0000, train_loss: 0.0057
+Epoch: 6, train_acc: 1.0000, val_acc: 1.0000, train_loss: 0.0058
+Epoch: 7, train_acc: 1.0000, val_acc: 1.0000, train_loss: 0.0056
+Epoch: 8, train_acc: 1.0000, val_acc: 1.0000, train_loss: 0.0053
+Epoch: 9, train_acc: 1.0000, val_acc: 1.0000, train_loss: 0.0053
+Epoch: 10, train_acc: 1.0000, val_acc: 1.0000, train_loss: 0.0051
+Epoch: 11, train_acc: 1.0000, val_acc: 1.0000, train_loss: 0.0051
+Epoch: 12, train_acc: 1.0000, val_acc: 1.0000, train_loss: 0.0052
+Epoch: 13, train_acc: 0.9471, val_acc: 1.0000, train_loss: 0.1636
+Epoch: 14, train_acc: 0.9971, val_acc: 1.0000, train_loss: 0.0302
+Epoch: 15, train_acc: 1.0000, val_acc: 1.0000, train_loss: 0.0085
+Epoch: 16, train_acc: 1.0000, val_acc: 1.0000, train_loss: 0.0054
+Epoch: 17, train_acc: 1.0000, val_acc: 1.0000, train_loss: 0.0052
+Epoch: 18, train_acc: 1.0000, val_acc: 1.0000, train_loss: 0.0054
+Epoch: 19, train_acc: 1.0000, val_acc: 1.0000, train_loss: 0.0055
+Epoch: 20, train_acc: 1.0000, val_acc: 1.0000, train_loss: 0.0055
+Epoch: 21, train_acc: 1.0000, val_acc: 1.0000, train_loss: 0.0053
+Epoch: 22, train_acc: 1.0000, val_acc: 1.0000, train_loss: 0.0054
+Epoch: 23, train_acc: 1.0000, val_acc: 1.0000, train_loss: 0.0053
+Epoch: 24, train_acc: 1.0000, val_acc: 1.0000, train_loss: 0.0053
+Epoch: 25, train_acc: 1.0000, val_acc: 1.0000, train_loss: 0.0052
+Epoch: 26, train_acc: 1.0000, val_acc: 1.0000, train_loss: 0.0052
+Epoch: 27, train_acc: 1.0000, val_acc: 1.0000, train_loss: 0.0053
+Epoch: 28, train_acc: 1.0000, val_acc: 1.0000, train_loss: 0.0051
+Epoch: 29, train_acc: 1.0000, val_acc: 1.0000, train_loss: 0.0052
+Epoch: 30, train_acc: 1.0000, val_acc: 1.0000, train_loss: 0.0053
+Epoch: 31, train_acc: 1.0000, val_acc: 1.0000, train_loss: 0.0056
+Epoch: 32, train_acc: 1.0000, val_acc: 1.0000, train_loss: 0.0051
+Epoch: 33, train_acc: 1.0000, val_acc: 1.0000, train_loss: 0.0051
+Epoch: 34, train_acc: 1.0000, val_acc: 1.0000, train_loss: 0.0051
+Epoch: 35, train_acc: 1.0000, val_acc: 1.0000, train_loss: 0.0052
+Epoch: 36, train_acc: 1.0000, val_acc: 1.0000, train_loss: 0.0051
+Epoch: 37, train_acc: 1.0000, val_acc: 1.0000, train_loss: 0.0050
+Epoch: 38, train_acc: 1.0000, val_acc: 1.0000, train_loss: 0.0051
+Epoch: 39, train_acc: 1.0000, val_acc: 1.0000, train_loss: 0.0051
+Epoch: 40, train_acc: 1.0000, val_acc: 1.0000, train_loss: 0.0051
+Epoch: 41, train_acc: 1.0000, val_acc: 1.0000, train_loss: 0.0050
+Epoch: 42, train_acc: 1.0000, val_acc: 1.0000, train_loss: 0.0050
+Epoch: 43, train_acc: 1.0000, val_acc: 1.0000, train_loss: 0.0051
+Epoch: 44, train_acc: 1.0000, val_acc: 1.0000, train_loss: 0.0050
+Epoch: 45, train_acc: 1.0000, val_acc: 1.0000, train_loss: 0.0050
+Epoch: 46, train_acc: 0.8841, val_acc: 1.0000, train_loss: 0.2917
+Epoch: 47, train_acc: 0.9986, val_acc: 1.0000, train_loss: 0.0356
+Epoch: 48, train_acc: 1.0000, val_acc: 1.0000, train_loss: 0.0118
+Epoch: 49, train_acc: 1.0000, val_acc: 1.0000, train_loss: 0.0117
+Epoch: 50, train_acc: 1.0000, val_acc: 1.0000, train_loss: 0.0098
+Epoch: 51, train_acc: 1.0000, val_acc: 1.0000, train_loss: 0.0052
+Epoch: 52, train_acc: 1.0000, val_acc: 1.0000, train_loss: 0.0048
+Epoch: 53, train_acc: 1.0000, val_acc: 1.0000, train_loss: 0.0047
+Epoch: 54, train_acc: 1.0000, val_acc: 1.0000, train_loss: 0.0049
+Epoch: 55, train_acc: 1.0000, val_acc: 1.0000, train_loss: 0.0049
+Epoch: 56, train_acc: 1.0000, val_acc: 1.0000, train_loss: 0.0049
+Epoch: 57, train_acc: 1.0000, val_acc: 1.0000, train_loss: 0.0049
+Epoch: 58, train_acc: 1.0000, val_acc: 1.0000, train_loss: 0.0049
+Epoch: 59, train_acc: 1.0000, val_acc: 1.0000, train_loss: 0.0049
+
+Final test accuracy on gx_BAHouse_qual: 1.0000 (best epoch: 0, val: 1.0000)
+  [ckpt] Saved -> checkpoints/aethelred_graph_GCN_clean/gx_BAHouse_qual/best_model  test_acc=1.0000
+trained acc 1.0
+saved F4
+saved F5 aeth_mean 1.0 vote_mean 0.809

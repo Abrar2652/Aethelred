@@ -1,0 +1,162 @@
+/nas/home/jahin/.local/lib/python3.12/site-packages/pgmpy/estimators/__init__.py:4: FutureWarning: `pgmpy.estimators.StructureScore` is deprecated and will be removed in v1.3.0. Use `pgmpy.structure_score` instead.
+  from .StructureScore import (
+/nas/home/jahin/Aethelred/baselines/XGNNCert/graphxai/explainers/__init__.py:13: UserWarning: [graphxai.explainers] optional explainer PGMExplainer unavailable: ImportError: cannot import name 'BicScore' from 'pgmpy.estimators' (/nas/home/jahin/.local/lib/python3.12/site-packages/pgmpy/estimators/__init__.py)
+  _warnings.warn(f"[graphxai.explainers] optional explainer {name} "
+/nas/home/jahin/.local/lib/python3.12/site-packages/torch/storage.py:414: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  return torch.load(io.BytesIO(b))
+tensor([0])
+tensor([[0, 0, 0, 0, 0],
+        [1, 2, 3, 4, 5]])
+tensor([[ 0.3477, -0.5548, -1.5905,  2.2821, -0.2455, -1.6994,  2.4764, -0.8047,
+         -0.3562,  0.7917],
+        [-0.1832,  0.8801, -2.5690,  2.2175, -0.5636, -2.6115,  0.0144, -0.1981,
+         -1.7803, -0.7240],
+        [ 0.7329,  0.1965,  0.7398,  1.3626,  0.4535, -1.8475,  0.8893,  1.4570,
+         -0.6454,  0.2181],
+        [ 0.4348,  1.0763,  0.8629, -0.6888,  1.0543, -1.5378, -0.2064, -1.1625,
+          2.5555, -0.9332],
+        [-0.0277,  0.6358,  1.7352,  2.2132,  1.1428,  2.7659,  0.2235,  3.2200,
+          0.7249, -0.9803],
+        [ 0.9285,  0.6509,  1.1109,  1.7811, -0.9324,  0.1748,  0.0618,  0.4988,
+          0.2268, -0.9960]])
+tensor([0., 0., 0., 0., 0.], dtype=torch.float64)
+
+7.245
+7.962
+683
+[xgnncert] BAHouse: 1000 graphs, dim_node=10, T=70, p=0.3
+0/1000
+100/1000
+200/1000
+300/1000
+400/1000
+500/1000
+600/1000
+700/1000
+800/1000
+900/1000
+sumloss:10.765708923339844
+[1. 1. 1. ... 1. 0. 0.]
+[1. 1. 1. ... 1. 1. 1.]
+sumloss:7.6730875968933105
+[1. 0. 1. ... 0. 1. 1.]
+[0. 0. 1. ... 1. 1. 1.]
+sumloss:7.322563171386719
+[1. 0. 1. ... 0. 1. 1.]
+[1. 0. 1. ... 1. 1. 1.]
+sumloss:7.3313822746276855
+[1. 0. 1. ... 1. 1. 0.]
+[1. 1. 1. ... 1. 1. 0.]
+sumloss:7.265535354614258
+[1. 1. 0. ... 1. 1. 0.]
+[1. 1. 1. ... 1. 1. 0.]
+sumloss:7.188911437988281
+[0. 1. 1. ... 1. 1. 1.]
+[0. 1. 1. ... 1. 0. 1.]
+sumloss:7.1705522537231445
+[0. 1. 1. ... 1. 1. 1.]
+[0. 1. 1. ... 1. 1. 1.]
+sumloss:7.166408061981201
+[1. 0. 1. ... 0. 1. 1.]
+[1. 1. 1. ... 0. 1. 1.]
+sumloss:7.129501819610596
+[1. 1. 1. ... 0. 0. 0.]
+[1. 1. 1. ... 1. 1. 1.]
+sumloss:7.096725940704346
+[0. 0. 1. ... 1. 1. 0.]
+[0. 0. 1. ... 1. 1. 1.]
+  ep010 val_f1=0.8360 (best=0.8382)
+sumloss:7.081748008728027
+[1. 1. 1. ... 1. 1. 1.]
+[1. 1. 1. ... 1. 1. 1.]
+sumloss:7.06825590133667
+[1. 1. 0. ... 1. 0. 1.]
+[1. 1. 0. ... 1. 1. 1.]
+sumloss:7.077502727508545
+[1. 1. 0. ... 0. 0. 0.]
+[1. 1. 0. ... 0. 0. 0.]
+sumloss:7.0651068687438965
+[0. 1. 0. ... 1. 1. 1.]
+[0. 1. 0. ... 1. 1. 1.]
+sumloss:7.009829521179199
+[1. 0. 1. ... 0. 1. 1.]
+[1. 1. 0. ... 1. 1. 1.]
+sumloss:7.088552474975586
+[1. 1. 1. ... 0. 1. 0.]
+[1. 1. 1. ... 1. 1. 1.]
+sumloss:7.026373386383057
+[0. 1. 1. ... 1. 0. 0.]
+[1. 1. 1. ... 1. 1. 0.]
+sumloss:7.100507736206055
+[0. 1. 0. ... 0. 1. 1.]
+[0. 1. 1. ... 1. 1. 1.]
+sumloss:6.956380844116211
+[1. 1. 1. ... 1. 1. 1.]
+[1. 1. 1. ... 1. 1. 1.]
+sumloss:6.947610855102539
+[1. 1. 1. ... 0. 1. 1.]
+[1. 1. 1. ... 1. 1. 1.]
+  ep020 val_f1=0.8413 (best=0.8421)
+sumloss:6.958011627197266
+[1. 1. 1. ... 1. 1. 1.]
+[1. 1. 1. ... 1. 1. 1.]
+sumloss:6.9629645347595215
+[0. 1. 1. ... 0. 1. 0.]
+[1. 1. 1. ... 1. 1. 0.]
+sumloss:6.914107322692871
+[1. 0. 0. ... 1. 0. 1.]
+[1. 0. 0. ... 1. 1. 1.]
+sumloss:6.8941521644592285
+[1. 0. 1. ... 1. 0. 1.]
+[1. 0. 1. ... 1. 0. 1.]
+sumloss:6.8824462890625
+[1. 1. 1. ... 1. 1. 1.]
+[1. 1. 1. ... 1. 1. 1.]
+sumloss:6.885464191436768
+[1. 0. 1. ... 1. 1. 1.]
+[1. 1. 1. ... 1. 1. 1.]
+sumloss:6.9388203620910645
+[1. 1. 1. ... 1. 1. 0.]
+[1. 1. 1. ... 1. 1. 0.]
+sumloss:6.8710856437683105
+[1. 0. 1. ... 1. 1. 1.]
+[1. 0. 1. ... 1. 1. 1.]
+sumloss:6.842754364013672
+[1. 1. 1. ... 1. 0. 1.]
+[1. 1. 1. ... 1. 1. 1.]
+sumloss:6.8519134521484375
+[1. 1. 0. ... 0. 0. 0.]
+[1. 1. 1. ... 0. 0. 1.]
+  ep030 val_f1=0.8463 (best=0.8463)
+sumloss:6.7851057052612305
+[0. 1. 1. ... 1. 1. 0.]
+[1. 1. 1. ... 1. 1. 0.]
+sumloss:6.795744895935059
+[0. 1. 1. ... 1. 1. 0.]
+[1. 1. 1. ... 1. 1. 1.]
+sumloss:6.722847938537598
+[0. 0. 1. ... 0. 1. 0.]
+[1. 0. 1. ... 0. 1. 0.]
+sumloss:6.742713451385498
+[0. 0. 1. ... 0. 0. 1.]
+[1. 0. 1. ... 0. 1. 1.]
+sumloss:6.794912338256836
+[1. 0. 1. ... 1. 0. 0.]
+[1. 0. 1. ... 1. 1. 0.]
+sumloss:6.751402854919434
+[0. 1. 0. ... 0. 1. 1.]
+[1. 1. 0. ... 0. 1. 1.]
+sumloss:6.842618942260742
+[1. 1. 1. ... 1. 0. 1.]
+[1. 1. 1. ... 1. 0. 1.]
+sumloss:6.6815314292907715
+[1. 1. 1. ... 1. 0. 1.]
+[1. 1. 1. ... 1. 1. 1.]
+sumloss:6.767803192138672
+[1. 1. 1. ... 1. 1. 1.]
+[1. 1. 1. ... 1. 1. 1.]
+sumloss:6.822012424468994
+[1. 1. 1. ... 1. 1. 0.]
+[1. 1. 1. ... 1. 1. 1.]
+  ep040 val_f1=0.8468 (best=0.8468)
+  [0/50] k=6 Mc=34 gt=6 prec=3/6

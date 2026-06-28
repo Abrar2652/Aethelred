@@ -1,0 +1,493 @@
+/nas/home/jahin/.local/lib/python3.10/site-packages/torch_geometric/__init__.py:4: UserWarning: An issue occurred while importing 'torch-scatter'. Disabling its usage. Stacktrace: /nas/home/jahin/.local/lib/python3.10/site-packages/torch_scatter/_version_cuda.so: undefined symbol: _ZN5torch3jit17parseSchemaOrNameERKSsb
+  import torch_geometric.typing
+/nas/home/jahin/.local/lib/python3.10/site-packages/torch_geometric/__init__.py:4: UserWarning: An issue occurred while importing 'torch-sparse'. Disabling its usage. Stacktrace: /nas/home/jahin/.local/lib/python3.10/site-packages/torch_sparse/_version_cuda.so: undefined symbol: _ZN5torch3jit17parseSchemaOrNameERKSsb
+  import torch_geometric.typing
+/nas/home/jahin/.local/lib/python3.10/site-packages/requests/__init__.py:113: RequestsDependencyWarning: urllib3 (1.26.5) or chardet (7.2.0)/charset_normalizer (3.4.4) doesn't match a supported version!
+  warnings.warn(
+Disabling PyTorch because PyTorch >= 2.1 is required but found 2.0.1
+None of PyTorch, TensorFlow >= 2.0, or Flax have been found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+/nas/home/jahin/.local/lib/python3.10/site-packages/torch_geometric/utils/_scatter.py:91: UserWarning: The usage of `scatter(reduce='max')` can be accelerated via the 'torch-scatter' package, but it was not found
+  warnings.warn(
+
+------------------------------------------------------------------------
+  AETHELRED -- CHECKPOINT STATUS & RETRAIN GUIDE
+------------------------------------------------------------------------
+  Aethelred   : 1 saved checkpoint(s) ? will be OVERWRITTEN this run
+                (aethelred_node_GCN_clean)
+  PGNNCert    : no checkpoints -> trains from scratch
+
+  WHEN TO USE  --force_retrain
+  -----------------------------------------------------------------
+  YES ? must retrain:
+    * After changing FULL_HPARAMS / FULL_ROBUST_HPARAMS
+    * After changing --arch (GCN -> GAT etc.)
+    * Final NeurIPS submission run (clean slate, 5 seeds)
+
+  NO  ? retrain not needed:
+    * Changing evaluation budgets (--pgnncert_T, --pgd_node_budgets)
+    * Re-running Tables 5/6 or Figure 1 (always train fresh)
+    * Changing --epochs_expl or --expl_n_seeds
+------------------------------------------------------------------------
+
+
+  [--force_retrain] Deleted 3 checkpoint group(s): normal_node, normal_graph, aethelred_node_GCN_clean
+
+====================================================================================================
+TABLE 6: Explanation/Rationale Accuracy in Spurious-Motif dataset
+  Protocol : DIR exact ? random features [0,1]^4, same-bias test split
+  Metric   : Precision@K ? adaptive K=GT edge count per graph, TP/K  (DIR-GNN exact)
+  Baselines: GNNExplainer & DIR taken from published paper (Wu et al., ICLR 2022)
+====================================================================================================
+
+--------------------------------------------------------------------------------
+  [Balance]  train_bias=0.33   seeds=5
+--------------------------------------------------------------------------------
+
+  -- Seed 1/5  (seed=42) --
+    Train=2400 Val=300 Test=300 nf=4
+    [Aethelred] Training (200 epochs)...  ckpt=aethelred_expl/t6_b0.33_s42
+    ep=  0 [warmup]  val=0.297  test=0.353  best=0.353 | Lbot=1.114  Ladv=0.000  IRM=0.000  cert=0.000  mmean=0.377+/-0.027
+    ep= 10 [warmup]  val=0.380  test=0.327  best=0.327 | Lbot=1.106  Ladv=0.000  IRM=0.000  cert=0.000  mmean=0.337+/-0.030
+    ep= 20 [warmup]  val=0.387  test=0.353  best=0.353 | Lbot=1.077  Ladv=0.000  IRM=0.000  cert=0.000  mmean=0.327+/-0.033
+    ep= 30 [ramp  ]  val=0.373  test=0.363  best=0.353 | Lbot=1.100  Ladv=0.000  IRM=0.000  cert=0.000  mmean=0.310+/-0.034
+    ep= 40 [ramp  ]  val=0.390  test=0.340  best=0.340 | Lbot=1.082  Ladv=0.001  IRM=0.000  cert=0.056  mmean=0.304+/-0.033
+    ep= 50 [ramp  ]  val=0.373  test=0.390  best=0.340 | Lbot=1.092  Ladv=0.004  IRM=0.000  cert=0.059  mmean=0.286+/-0.034
+    ep= 60 [ramp  ]  val=0.360  test=0.370  best=0.340 | Lbot=1.108  Ladv=0.005  IRM=0.000  cert=0.060  mmean=0.269+/-0.038
+    ep= 70 [ramp  ]  val=0.323  test=0.360  best=0.340 | Lbot=1.073  Ladv=0.004  IRM=0.001  cert=0.058  mmean=0.262+/-0.040
+    ep= 80 [full  ]  val=0.323  test=0.353  best=0.340 | Lbot=1.040  Ladv=0.006  IRM=0.001  cert=0.060  mmean=0.243+/-0.040
+    Early stop at ep=84
+    [ckpt] Saved -> checkpoints/aethelred_expl/t6_b0.33_s42/best_model  test_acc=0.3400
+    Aethelred  Seed 1 Prec@K=adaptive(DIR) = 0.3666
+
+  -- Seed 2/5  (seed=179) --
+    Train=2400 Val=300 Test=300 nf=4
+    [Aethelred] Training (200 epochs)...  ckpt=aethelred_expl/t6_b0.33_s179
+    ep=  0 [warmup]  val=0.307  test=0.337  best=0.337 | Lbot=1.106  Ladv=0.000  IRM=0.000  cert=0.000  mmean=0.339+/-0.025
+    ep= 10 [warmup]  val=0.327  test=0.347  best=0.373 | Lbot=1.097  Ladv=0.000  IRM=0.000  cert=0.000  mmean=0.338+/-0.026
+    ep= 20 [warmup]  val=0.363  test=0.367  best=0.330 | Lbot=1.112  Ladv=0.000  IRM=0.000  cert=0.000  mmean=0.319+/-0.031
+    ep= 30 [ramp  ]  val=0.340  test=0.363  best=0.330 | Lbot=1.091  Ladv=0.000  IRM=0.000  cert=0.000  mmean=0.306+/-0.031
+    ep= 40 [ramp  ]  val=0.327  test=0.373  best=0.330 | Lbot=1.112  Ladv=0.005  IRM=0.000  cert=0.060  mmean=0.290+/-0.034
+    ep= 50 [ramp  ]  val=0.333  test=0.367  best=0.330 | Lbot=1.107  Ladv=0.007  IRM=0.000  cert=0.055  mmean=0.295+/-0.037
+    ep= 60 [ramp  ]  val=0.320  test=0.357  best=0.330 | Lbot=1.086  Ladv=0.003  IRM=0.000  cert=0.057  mmean=0.274+/-0.038
+    ep= 70 [ramp  ]  val=0.337  test=0.340  best=0.330 | Lbot=1.124  Ladv=0.006  IRM=0.000  cert=0.058  mmean=0.260+/-0.039
+    ep= 80 [full  ]  val=0.330  test=0.363  best=0.330 | Lbot=1.112  Ladv=0.006  IRM=0.000  cert=0.055  mmean=0.253+/-0.044
+    ep= 90 [full  ]  val=0.317  test=0.330  best=0.330 | Lbot=1.111  Ladv=0.008  IRM=0.000  cert=0.057  mmean=0.245+/-0.046
+    ep=100 [full  ]  val=0.337  test=0.370  best=0.330 | Lbot=1.094  Ladv=0.008  IRM=0.000  cert=0.055  mmean=0.253+/-0.046
+    ep=110 [full  ]  val=0.343  test=0.383  best=0.330 | Lbot=1.133  Ladv=0.009  IRM=0.000  cert=0.057  mmean=0.242+/-0.048
+    ep=120 [full  ]  val=0.317  test=0.367  best=0.330 | Lbot=1.075  Ladv=0.009  IRM=0.000  cert=0.056  mmean=0.247+/-0.050
+    ep=130 [full  ]  val=0.347  test=0.350  best=0.330 | Lbot=1.068  Ladv=0.013  IRM=0.000  cert=0.057  mmean=0.242+/-0.049
+    ep=140 [full  ]  val=0.330  test=0.353  best=0.330 | Lbot=1.115  Ladv=0.013  IRM=0.000  cert=0.058  mmean=0.236+/-0.050
+    ep=150 [full  ]  val=0.330  test=0.350  best=0.330 | Lbot=1.062  Ladv=0.012  IRM=0.001  cert=0.053  mmean=0.251+/-0.053
+    ep=160 [full  ]  val=0.307  test=0.357  best=0.330 | Lbot=1.068  Ladv=0.012  IRM=0.000  cert=0.055  mmean=0.248+/-0.050
+    ep=170 [full  ]  val=0.313  test=0.353  best=0.330 | Lbot=1.078  Ladv=0.014  IRM=0.000  cert=0.053  mmean=0.251+/-0.052
+    ep=180 [full  ]  val=0.320  test=0.370  best=0.330 | Lbot=1.071  Ladv=0.014  IRM=0.000  cert=0.055  mmean=0.246+/-0.051
+    ep=190 [full  ]  val=0.313  test=0.370  best=0.330 | Lbot=1.119  Ladv=0.012  IRM=0.000  cert=0.053  mmean=0.255+/-0.052
+    [ckpt] Saved -> checkpoints/aethelred_expl/t6_b0.33_s179/best_model  test_acc=0.3300
+    Aethelred  Seed 2 Prec@K=adaptive(DIR) = 0.3372
+
+  -- Seed 3/5  (seed=316) --
+    Train=2400 Val=300 Test=300 nf=4
+    [Aethelred] Training (200 epochs)...  ckpt=aethelred_expl/t6_b0.33_s316
+    ep=  0 [warmup]  val=0.337  test=0.340  best=0.340 | Lbot=1.112  Ladv=0.000  IRM=0.000  cert=0.000  mmean=0.364+/-0.036
+    ep= 10 [warmup]  val=0.347  test=0.300  best=0.357 | Lbot=1.102  Ladv=0.000  IRM=0.000  cert=0.000  mmean=0.326+/-0.040
+    ep= 20 [warmup]  val=0.367  test=0.277  best=0.383 | Lbot=1.102  Ladv=0.000  IRM=0.000  cert=0.000  mmean=0.324+/-0.045
+    ep= 30 [ramp  ]  val=0.350  test=0.287  best=0.327 | Lbot=1.095  Ladv=0.000  IRM=0.000  cert=0.000  mmean=0.309+/-0.048
+    ep= 40 [ramp  ]  val=0.383  test=0.283  best=0.327 | Lbot=1.097  Ladv=0.008  IRM=0.000  cert=0.056  mmean=0.293+/-0.055
+    ep= 50 [ramp  ]  val=0.393  test=0.287  best=0.327 | Lbot=1.099  Ladv=0.007  IRM=0.000  cert=0.057  mmean=0.282+/-0.056
+    ep= 60 [ramp  ]  val=0.373  test=0.330  best=0.327 | Lbot=1.078  Ladv=0.008  IRM=0.000  cert=0.057  mmean=0.274+/-0.057
+    ep= 70 [ramp  ]  val=0.360  test=0.293  best=0.327 | Lbot=1.096  Ladv=0.011  IRM=0.000  cert=0.057  mmean=0.257+/-0.063
+    ep= 80 [full  ]  val=0.357  test=0.320  best=0.327 | Lbot=1.093  Ladv=0.011  IRM=0.000  cert=0.055  mmean=0.248+/-0.070
+    Early stop at ep=81
+    [ckpt] Saved -> checkpoints/aethelred_expl/t6_b0.33_s316/best_model  test_acc=0.3267
+    Aethelred  Seed 3 Prec@K=adaptive(DIR) = 0.3260
+
+  -- Seed 4/5  (seed=453) --
+    Train=2400 Val=300 Test=300 nf=4
+    [Aethelred] Training (200 epochs)...  ckpt=aethelred_expl/t6_b0.33_s453
+    ep=  0 [warmup]  val=0.300  test=0.327  best=0.327 | Lbot=1.095  Ladv=0.000  IRM=0.000  cert=0.000  mmean=0.313+/-0.026
+    ep= 10 [warmup]  val=0.300  test=0.330  best=0.317 | Lbot=1.083  Ladv=0.000  IRM=0.000  cert=0.000  mmean=0.349+/-0.025
+    ep= 20 [warmup]  val=0.340  test=0.380  best=0.317 | Lbot=1.101  Ladv=0.000  IRM=0.000  cert=0.000  mmean=0.326+/-0.030
+    ep= 30 [ramp  ]  val=0.360  test=0.383  best=0.317 | Lbot=1.081  Ladv=0.000  IRM=0.000  cert=0.000  mmean=0.315+/-0.031
+    ep= 40 [ramp  ]  val=0.350  test=0.420  best=0.317 | Lbot=1.097  Ladv=0.003  IRM=0.000  cert=0.058  mmean=0.295+/-0.036
+    ep= 50 [ramp  ]  val=0.347  test=0.323  best=0.317 | Lbot=1.060  Ladv=0.003  IRM=0.001  cert=0.061  mmean=0.281+/-0.035
+    ep= 60 [ramp  ]  val=0.347  test=0.387  best=0.317 | Lbot=1.069  Ladv=0.004  IRM=0.000  cert=0.062  mmean=0.265+/-0.038
+    ep= 70 [ramp  ]  val=0.340  test=0.360  best=0.317 | Lbot=1.063  Ladv=0.005  IRM=0.001  cert=0.056  mmean=0.272+/-0.041
+    ep= 80 [full  ]  val=0.350  test=0.357  best=0.317 | Lbot=1.084  Ladv=0.005  IRM=0.000  cert=0.058  mmean=0.249+/-0.044
+    ep= 90 [full  ]  val=0.350  test=0.340  best=0.317 | Lbot=1.074  Ladv=0.004  IRM=0.003  cert=0.059  mmean=0.253+/-0.037
+    ep=100 [full  ]  val=0.307  test=0.387  best=0.317 | Lbot=1.088  Ladv=0.007  IRM=0.001  cert=0.061  mmean=0.240+/-0.042
+    ep=110 [full  ]  val=0.360  test=0.333  best=0.317 | Lbot=1.144  Ladv=0.004  IRM=0.002  cert=0.061  mmean=0.239+/-0.042
+    ep=120 [full  ]  val=0.333  test=0.347  best=0.317 | Lbot=1.045  Ladv=0.006  IRM=0.002  cert=0.058  mmean=0.250+/-0.046
+    ep=130 [full  ]  val=0.367  test=0.373  best=0.317 | Lbot=1.046  Ladv=0.006  IRM=0.002  cert=0.058  mmean=0.247+/-0.045
+    ep=140 [full  ]  val=0.343  test=0.343  best=0.317 | Lbot=1.006  Ladv=0.006  IRM=0.001  cert=0.060  mmean=0.241+/-0.046
+    ep=150 [full  ]  val=0.383  test=0.323  best=0.317 | Lbot=1.043  Ladv=0.004  IRM=0.002  cert=0.059  mmean=0.242+/-0.048
+    ep=160 [full  ]  val=0.413  test=0.353  best=0.353 | Lbot=1.002  Ladv=0.005  IRM=0.001  cert=0.058  mmean=0.248+/-0.047
+    ep=170 [full  ]  val=0.387  test=0.370  best=0.347 | Lbot=1.079  Ladv=0.005  IRM=0.005  cert=0.058  mmean=0.250+/-0.045
+    ep=180 [full  ]  val=0.380  test=0.337  best=0.347 | Lbot=1.005  Ladv=0.006  IRM=0.004  cert=0.057  mmean=0.253+/-0.045
+    ep=190 [full  ]  val=0.393  test=0.367  best=0.347 | Lbot=1.037  Ladv=0.004  IRM=0.008  cert=0.060  mmean=0.246+/-0.042
+    [ckpt] Saved -> checkpoints/aethelred_expl/t6_b0.33_s453/best_model  test_acc=0.3467
+    Aethelred  Seed 4 Prec@K=adaptive(DIR) = 0.3225
+
+  -- Seed 5/5  (seed=590) --
+    Train=2400 Val=300 Test=300 nf=4
+    [Aethelred] Training (200 epochs)...  ckpt=aethelred_expl/t6_b0.33_s590
+    ep=  0 [warmup]  val=0.280  test=0.327  best=0.327 | Lbot=1.093  Ladv=0.000  IRM=0.000  cert=0.000  mmean=0.332+/-0.037
+    ep= 10 [warmup]  val=0.313  test=0.347  best=0.367 | Lbot=1.108  Ladv=0.000  IRM=0.000  cert=0.000  mmean=0.333+/-0.042
+    ep= 20 [warmup]  val=0.270  test=0.360  best=0.367 | Lbot=1.090  Ladv=0.000  IRM=0.000  cert=0.000  mmean=0.320+/-0.046
+    ep= 30 [ramp  ]  val=0.293  test=0.353  best=0.367 | Lbot=1.092  Ladv=0.000  IRM=0.000  cert=0.000  mmean=0.301+/-0.049
+    ep= 40 [ramp  ]  val=0.270  test=0.343  best=0.367 | Lbot=1.105  Ladv=0.008  IRM=0.000  cert=0.058  mmean=0.287+/-0.055
+    ep= 50 [ramp  ]  val=0.297  test=0.343  best=0.367 | Lbot=1.122  Ladv=0.010  IRM=0.000  cert=0.051  mmean=0.291+/-0.069
+    ep= 60 [ramp  ]  val=0.340  test=0.367  best=0.367 | Lbot=1.074  Ladv=0.006  IRM=0.000  cert=0.057  mmean=0.257+/-0.075
+    ep= 70 [ramp  ]  val=0.270  test=0.327  best=0.367 | Lbot=1.127  Ladv=0.010  IRM=0.001  cert=0.050  mmean=0.265+/-0.084
+    ep= 80 [full  ]  val=0.317  test=0.343  best=0.367 | Lbot=1.098  Ladv=0.008  IRM=0.000  cert=0.051  mmean=0.242+/-0.099
+    ep= 90 [full  ]  val=0.300  test=0.323  best=0.367 | Lbot=1.067  Ladv=0.009  IRM=0.000  cert=0.039  mmean=0.247+/-0.139
+    ep=100 [full  ]  val=0.317  test=0.313  best=0.367 | Lbot=1.066  Ladv=0.009  IRM=0.000  cert=0.035  mmean=0.242+/-0.186
+    ep=110 [full  ]  val=0.263  test=0.357  best=0.367 | Lbot=1.043  Ladv=0.010  IRM=0.000  cert=0.041  mmean=0.237+/-0.224
+    ep=120 [full  ]  val=0.260  test=0.340  best=0.367 | Lbot=1.112  Ladv=0.005  IRM=0.000  cert=0.044  mmean=0.216+/-0.262
+    ep=130 [full  ]  val=0.320  test=0.337  best=0.367 | Lbot=1.080  Ladv=0.005  IRM=0.001  cert=0.050  mmean=0.227+/-0.280
+    ep=140 [full  ]  val=0.310  test=0.340  best=0.367 | Lbot=1.084  Ladv=0.006  IRM=0.000  cert=0.058  mmean=0.264+/-0.318
+    ep=150 [full  ]  val=0.313  test=0.323  best=0.367 | Lbot=1.050  Ladv=0.009  IRM=0.001  cert=0.067  mmean=0.250+/-0.325
+    ep=160 [full  ]  val=0.350  test=0.387  best=0.377 | Lbot=1.053  Ladv=0.010  IRM=0.001  cert=0.059  mmean=0.262+/-0.350
+    ep=170 [full  ]  val=0.317  test=0.343  best=0.357 | Lbot=1.038  Ladv=0.006  IRM=0.001  cert=0.056  mmean=0.242+/-0.349
+    ep=180 [full  ]  val=0.317  test=0.363  best=0.357 | Lbot=1.052  Ladv=0.007  IRM=0.001  cert=0.048  mmean=0.241+/-0.355
+    ep=190 [full  ]  val=0.337  test=0.360  best=0.357 | Lbot=1.093  Ladv=0.008  IRM=0.001  cert=0.061  mmean=0.219+/-0.334
+    [ckpt] Saved -> checkpoints/aethelred_expl/t6_b0.33_s590/best_model  test_acc=0.3567
+    Aethelred  Seed 5 Prec@K=adaptive(DIR) = 0.3044
+
+--------------------------------------------------------------------------------
+  [b=0.50]  train_bias=0.50   seeds=5
+--------------------------------------------------------------------------------
+
+  -- Seed 1/5  (seed=42) --
+    Train=2400 Val=300 Test=300 nf=4
+    [Aethelred] Training (200 epochs)...  ckpt=aethelred_expl/t6_b0.50_s42
+    ep=  0 [warmup]  val=0.360  test=0.383  best=0.383 | Lbot=1.103  Ladv=0.000  IRM=0.000  cert=0.000  mmean=0.339+/-0.027
+    ep= 10 [warmup]  val=0.427  test=0.437  best=0.413 | Lbot=1.146  Ladv=0.000  IRM=0.000  cert=0.000  mmean=0.341+/-0.029
+    ep= 20 [warmup]  val=0.423  test=0.417  best=0.413 | Lbot=1.179  Ladv=0.000  IRM=0.000  cert=0.000  mmean=0.320+/-0.037
+    ep= 30 [ramp  ]  val=0.393  test=0.403  best=0.413 | Lbot=1.032  Ladv=0.000  IRM=0.001  cert=0.000  mmean=0.292+/-0.060
+    ep= 40 [ramp  ]  val=0.423  test=0.393  best=0.413 | Lbot=1.058  Ladv=0.027  IRM=0.000  cert=0.052  mmean=0.299+/-0.072
+    ep= 50 [ramp  ]  val=0.387  test=0.433  best=0.413 | Lbot=1.018  Ladv=0.029  IRM=0.003  cert=0.039  mmean=0.301+/-0.112
+    ep= 60 [ramp  ]  val=0.403  test=0.400  best=0.413 | Lbot=1.056  Ladv=0.027  IRM=0.003  cert=0.055  mmean=0.202+/-0.173
+    ep= 70 [ramp  ]  val=0.470  test=0.390  best=0.383 | Lbot=1.080  Ladv=0.025  IRM=0.002  cert=0.046  mmean=0.265+/-0.264
+    ep= 80 [full  ]  val=0.443  test=0.397  best=0.397 | Lbot=1.071  Ladv=0.041  IRM=0.008  cert=0.067  mmean=0.276+/-0.306
+    ep= 90 [full  ]  val=0.460  test=0.413  best=0.400 | Lbot=0.919  Ladv=0.031  IRM=0.013  cert=0.112  mmean=0.269+/-0.381
+    ep=100 [full  ]  val=0.430  test=0.427  best=0.400 | Lbot=1.113  Ladv=0.035  IRM=0.005  cert=0.116  mmean=0.217+/-0.372
+    ep=110 [full  ]  val=0.477  test=0.400  best=0.400 | Lbot=1.022  Ladv=0.032  IRM=0.004  cert=0.131  mmean=0.294+/-0.416
+    ep=120 [full  ]  val=0.460  test=0.403  best=0.400 | Lbot=0.998  Ladv=0.046  IRM=0.007  cert=0.132  mmean=0.240+/-0.391
+    ep=130 [full  ]  val=0.473  test=0.407  best=0.400 | Lbot=0.851  Ladv=0.075  IRM=0.023  cert=0.148  mmean=0.275+/-0.411
+    Early stop at ep=132
+    [ckpt] Saved -> checkpoints/aethelred_expl/t6_b0.50_s42/best_model  test_acc=0.4000
+    Aethelred  Seed 1 Prec@K=adaptive(DIR) = 0.3075
+
+  -- Seed 2/5  (seed=179) --
+    Train=2400 Val=300 Test=300 nf=4
+    [Aethelred] Training (200 epochs)...  ckpt=aethelred_expl/t6_b0.50_s179
+    ep=  0 [warmup]  val=0.307  test=0.333  best=0.333 | Lbot=1.135  Ladv=0.000  IRM=0.000  cert=0.000  mmean=0.374+/-0.021
+    ep= 10 [warmup]  val=0.323  test=0.333  best=0.410 | Lbot=1.135  Ladv=0.000  IRM=0.000  cert=0.000  mmean=0.323+/-0.027
+    ep= 20 [warmup]  val=0.360  test=0.337  best=0.410 | Lbot=1.117  Ladv=0.000  IRM=0.000  cert=0.000  mmean=0.310+/-0.033
+    ep= 30 [ramp  ]  val=0.373  test=0.350  best=0.400 | Lbot=1.059  Ladv=0.000  IRM=0.000  cert=0.000  mmean=0.325+/-0.039
+    ep= 40 [ramp  ]  val=0.413  test=0.433  best=0.467 | Lbot=1.035  Ladv=0.009  IRM=0.001  cert=0.053  mmean=0.288+/-0.056
+    ep= 50 [ramp  ]  val=0.377  test=0.377  best=0.427 | Lbot=1.079  Ladv=0.013  IRM=0.000  cert=0.047  mmean=0.290+/-0.069
+    ep= 60 [ramp  ]  val=0.477  test=0.460  best=0.467 | Lbot=1.022  Ladv=0.023  IRM=0.001  cert=0.038  mmean=0.272+/-0.105
+    ep= 70 [ramp  ]  val=0.423  test=0.407  best=0.467 | Lbot=1.133  Ladv=0.015  IRM=0.000  cert=0.024  mmean=0.225+/-0.228
+    ep= 80 [full  ]  val=0.447  test=0.477  best=0.467 | Lbot=1.062  Ladv=0.017  IRM=0.003  cert=0.038  mmean=0.231+/-0.345
+    ep= 90 [full  ]  val=0.453  test=0.533  best=0.453 | Lbot=0.985  Ladv=0.019  IRM=0.008  cert=0.051  mmean=0.242+/-0.379
+    ep=100 [full  ]  val=0.417  test=0.463  best=0.453 | Lbot=0.907  Ladv=0.021  IRM=0.007  cert=0.053  mmean=0.277+/-0.407
+    ep=110 [full  ]  val=0.413  test=0.480  best=0.453 | Lbot=0.987  Ladv=0.026  IRM=0.011  cert=0.052  mmean=0.194+/-0.358
+    ep=120 [full  ]  val=0.413  test=0.427  best=0.453 | Lbot=1.013  Ladv=0.022  IRM=0.005  cert=0.053  mmean=0.243+/-0.384
+    ep=130 [full  ]  val=0.413  test=0.433  best=0.453 | Lbot=0.953  Ladv=0.030  IRM=0.015  cert=0.055  mmean=0.252+/-0.386
+    Early stop at ep=136
+    [ckpt] Saved -> checkpoints/aethelred_expl/t6_b0.50_s179/best_model  test_acc=0.4533
+    Aethelred  Seed 2 Prec@K=adaptive(DIR) = 0.3404
+
+  -- Seed 3/5  (seed=316) --
+    Train=2400 Val=300 Test=300 nf=4
+    [Aethelred] Training (200 epochs)...  ckpt=aethelred_expl/t6_b0.50_s316
+    ep=  0 [warmup]  val=0.350  test=0.377  best=0.377 | Lbot=1.110  Ladv=0.000  IRM=0.000  cert=0.000  mmean=0.349+/-0.034
+    ep= 10 [warmup]  val=0.367  test=0.327  best=0.407 | Lbot=1.019  Ladv=0.000  IRM=0.000  cert=0.000  mmean=0.338+/-0.040
+    ep= 20 [warmup]  val=0.433  test=0.407  best=0.407 | Lbot=1.097  Ladv=0.000  IRM=0.000  cert=0.000  mmean=0.335+/-0.101
+    ep= 30 [ramp  ]  val=0.440  test=0.373  best=0.373 | Lbot=1.082  Ladv=0.000  IRM=0.000  cert=0.000  mmean=0.329+/-0.244
+    ep= 40 [ramp  ]  val=0.430  test=0.353  best=0.423 | Lbot=0.979  Ladv=0.012  IRM=0.003  cert=0.050  mmean=0.304+/-0.313
+    ep= 50 [ramp  ]  val=0.407  test=0.397  best=0.460 | Lbot=1.038  Ladv=0.036  IRM=0.001  cert=0.078  mmean=0.322+/-0.432
+    ep= 60 [ramp  ]  val=0.403  test=0.397  best=0.430 | Lbot=0.983  Ladv=0.022  IRM=0.013  cert=0.069  mmean=0.286+/-0.427
+    ep= 70 [ramp  ]  val=0.503  test=0.477  best=0.437 | Lbot=1.066  Ladv=0.037  IRM=0.003  cert=0.058  mmean=0.301+/-0.431
+    ep= 80 [full  ]  val=0.503  test=0.493  best=0.473 | Lbot=1.077  Ladv=0.047  IRM=0.001  cert=0.032  mmean=0.251+/-0.411
+    ep= 90 [full  ]  val=0.483  test=0.503  best=0.497 | Lbot=0.992  Ladv=0.079  IRM=0.001  cert=0.025  mmean=0.275+/-0.426
+    ep=100 [full  ]  val=0.507  test=0.490  best=0.500 | Lbot=0.879  Ladv=0.054  IRM=0.003  cert=0.017  mmean=0.253+/-0.417
+    ep=110 [full  ]  val=0.503  test=0.500  best=0.500 | Lbot=1.019  Ladv=0.050  IRM=0.003  cert=0.018  mmean=0.264+/-0.422
+    ep=120 [full  ]  val=0.477  test=0.463  best=0.500 | Lbot=1.007  Ladv=0.064  IRM=0.000  cert=0.015  mmean=0.257+/-0.419
+    ep=130 [full  ]  val=0.453  test=0.497  best=0.500 | Lbot=0.908  Ladv=0.077  IRM=0.016  cert=0.016  mmean=0.262+/-0.422
+    ep=140 [full  ]  val=0.447  test=0.473  best=0.500 | Lbot=0.802  Ladv=0.064  IRM=0.018  cert=0.017  mmean=0.271+/-0.426
+    Early stop at ep=142
+    [ckpt] Saved -> checkpoints/aethelred_expl/t6_b0.50_s316/best_model  test_acc=0.5000
+    Aethelred  Seed 3 Prec@K=adaptive(DIR) = 0.3289
+
+  -- Seed 4/5  (seed=453) --
+    Train=2400 Val=300 Test=300 nf=4
+    [Aethelred] Training (200 epochs)...  ckpt=aethelred_expl/t6_b0.50_s453
+    ep=  0 [warmup]  val=0.323  test=0.367  best=0.367 | Lbot=1.095  Ladv=0.000  IRM=0.000  cert=0.000  mmean=0.368+/-0.025
+    ep= 10 [warmup]  val=0.417  test=0.353  best=0.400 | Lbot=0.999  Ladv=0.000  IRM=0.000  cert=0.000  mmean=0.337+/-0.028
+    ep= 20 [warmup]  val=0.403  test=0.390  best=0.407 | Lbot=1.083  Ladv=0.000  IRM=0.001  cert=0.000  mmean=0.322+/-0.035
+    ep= 30 [ramp  ]  val=0.453  test=0.330  best=0.407 | Lbot=1.028  Ladv=0.000  IRM=0.000  cert=0.000  mmean=0.313+/-0.084
+    ep= 40 [ramp  ]  val=0.473  test=0.377  best=0.437 | Lbot=1.087  Ladv=0.023  IRM=0.001  cert=0.027  mmean=0.302+/-0.281
+    ep= 50 [ramp  ]  val=0.467  test=0.393  best=0.427 | Lbot=1.099  Ladv=0.027  IRM=0.001  cert=0.037  mmean=0.298+/-0.311
+    ep= 60 [ramp  ]  val=0.497  test=0.407  best=0.427 | Lbot=1.022  Ladv=0.048  IRM=0.005  cert=0.056  mmean=0.271+/-0.386
+    ep= 70 [ramp  ]  val=0.500  test=0.433  best=0.410 | Lbot=0.872  Ladv=0.017  IRM=0.008  cert=0.058  mmean=0.274+/-0.409
+    ep= 80 [full  ]  val=0.510  test=0.403  best=0.410 | Lbot=1.043  Ladv=0.029  IRM=0.007  cert=0.053  mmean=0.246+/-0.399
+    ep= 90 [full  ]  val=0.517  test=0.410  best=0.410 | Lbot=0.944  Ladv=0.030  IRM=0.023  cert=0.060  mmean=0.249+/-0.400
+    ep=100 [full  ]  val=0.493  test=0.413  best=0.410 | Lbot=0.916  Ladv=0.020  IRM=0.005  cert=0.066  mmean=0.284+/-0.420
+    ep=110 [full  ]  val=0.487  test=0.400  best=0.410 | Lbot=0.989  Ladv=0.045  IRM=0.010  cert=0.062  mmean=0.286+/-0.426
+    Early stop at ep=116
+    [ckpt] Saved -> checkpoints/aethelred_expl/t6_b0.50_s453/best_model  test_acc=0.4100
+    Aethelred  Seed 4 Prec@K=adaptive(DIR) = 0.3539
+
+  -- Seed 5/5  (seed=590) --
+    Train=2400 Val=300 Test=300 nf=4
+    [Aethelred] Training (200 epochs)...  ckpt=aethelred_expl/t6_b0.50_s590
+    ep=  0 [warmup]  val=0.340  test=0.353  best=0.353 | Lbot=1.091  Ladv=0.000  IRM=0.000  cert=0.000  mmean=0.366+/-0.033
+    ep= 10 [warmup]  val=0.373  test=0.360  best=0.417 | Lbot=1.127  Ladv=0.000  IRM=0.001  cert=0.000  mmean=0.325+/-0.038
+    ep= 20 [warmup]  val=0.367  test=0.337  best=0.420 | Lbot=1.048  Ladv=0.000  IRM=0.000  cert=0.000  mmean=0.310+/-0.043
+    ep= 30 [ramp  ]  val=0.450  test=0.443  best=0.420 | Lbot=1.094  Ladv=0.000  IRM=0.000  cert=0.000  mmean=0.292+/-0.049
+    ep= 40 [ramp  ]  val=0.433  test=0.443  best=0.397 | Lbot=1.065  Ladv=0.023  IRM=0.000  cert=0.051  mmean=0.312+/-0.051
+    ep= 50 [ramp  ]  val=0.457  test=0.457  best=0.413 | Lbot=1.153  Ladv=0.030  IRM=0.001  cert=0.052  mmean=0.292+/-0.061
+    ep= 60 [ramp  ]  val=0.480  test=0.443  best=0.413 | Lbot=1.094  Ladv=0.014  IRM=0.001  cert=0.051  mmean=0.281+/-0.069
+    ep= 70 [ramp  ]  val=0.450  test=0.433  best=0.413 | Lbot=1.047  Ladv=0.030  IRM=0.003  cert=0.040  mmean=0.266+/-0.122
+    ep= 80 [full  ]  val=0.480  test=0.413  best=0.413 | Lbot=1.117  Ladv=0.029  IRM=0.002  cert=0.032  mmean=0.257+/-0.147
+    ep= 90 [full  ]  val=0.457  test=0.407  best=0.413 | Lbot=1.046  Ladv=0.030  IRM=0.000  cert=0.040  mmean=0.223+/-0.183
+    ep=100 [full  ]  val=0.447  test=0.397  best=0.413 | Lbot=1.035  Ladv=0.026  IRM=0.001  cert=0.048  mmean=0.231+/-0.239
+    Early stop at ep=100
+    [ckpt] Saved -> checkpoints/aethelred_expl/t6_b0.50_s590/best_model  test_acc=0.4133
+    Aethelred  Seed 5 Prec@K=adaptive(DIR) = 0.3293
+
+--------------------------------------------------------------------------------
+  [b=0.70]  train_bias=0.70   seeds=5
+--------------------------------------------------------------------------------
+
+  -- Seed 1/5  (seed=42) --
+    Train=2400 Val=300 Test=300 nf=4
+    [Aethelred] Training (200 epochs)...  ckpt=aethelred_expl/t6_b0.70_s42
+    ep=  0 [warmup]  val=0.340  test=0.403  best=0.403 | Lbot=1.062  Ladv=0.000  IRM=0.000  cert=0.000  mmean=0.342+/-0.030
+    ep= 10 [warmup]  val=0.467  test=0.503  best=0.493 | Lbot=0.906  Ladv=0.000  IRM=0.001  cert=0.000  mmean=0.304+/-0.136
+    ep= 20 [warmup]  val=0.570  test=0.550  best=0.550 | Lbot=0.884  Ladv=0.000  IRM=0.001  cert=0.000  mmean=0.286+/-0.347
+    ep= 30 [ramp  ]  val=0.530  test=0.570  best=0.610 | Lbot=0.643  Ladv=0.000  IRM=0.009  cert=0.000  mmean=0.380+/-0.435
+    ep= 40 [ramp  ]  val=0.563  test=0.560  best=0.617 | Lbot=0.899  Ladv=0.166  IRM=0.064  cert=0.110  mmean=0.305+/-0.426
+    ep= 50 [ramp  ]  val=0.583  test=0.613  best=0.617 | Lbot=0.965  Ladv=0.195  IRM=0.021  cert=0.113  mmean=0.258+/-0.406
+    ep= 60 [ramp  ]  val=0.563  test=0.610  best=0.617 | Lbot=0.744  Ladv=0.228  IRM=0.054  cert=0.115  mmean=0.354+/-0.451
+    ep= 70 [ramp  ]  val=0.603  test=0.590  best=0.617 | Lbot=0.806  Ladv=0.258  IRM=0.067  cert=0.126  mmean=0.292+/-0.422
+    ep= 80 [full  ]  val=0.537  test=0.547  best=0.617 | Lbot=0.892  Ladv=0.283  IRM=0.018  cert=0.135  mmean=0.322+/-0.434
+    Early stop at ep=89
+    [ckpt] Saved -> checkpoints/aethelred_expl/t6_b0.70_s42/best_model  test_acc=0.6167
+    Aethelred  Seed 1 Prec@K=adaptive(DIR) = 0.3150
+
+  -- Seed 2/5  (seed=179) --
+    Train=2400 Val=300 Test=300 nf=4
+    [Aethelred] Training (200 epochs)...  ckpt=aethelred_expl/t6_b0.70_s179
+    ep=  0 [warmup]  val=0.323  test=0.317  best=0.317 | Lbot=1.094  Ladv=0.000  IRM=0.000  cert=0.000  mmean=0.368+/-0.023
+    ep= 10 [warmup]  val=0.503  test=0.543  best=0.543 | Lbot=0.976  Ladv=0.000  IRM=0.000  cert=0.000  mmean=0.341+/-0.066
+    ep= 20 [warmup]  val=0.470  test=0.537  best=0.543 | Lbot=0.981  Ladv=0.000  IRM=0.001  cert=0.000  mmean=0.366+/-0.372
+    ep= 30 [ramp  ]  val=0.523  test=0.533  best=0.590 | Lbot=0.842  Ladv=0.000  IRM=0.002  cert=0.000  mmean=0.258+/-0.395
+    ep= 40 [ramp  ]  val=0.537  test=0.577  best=0.587 | Lbot=0.831  Ladv=0.153  IRM=0.015  cert=0.056  mmean=0.367+/-0.450
+    ep= 50 [ramp  ]  val=0.540  test=0.533  best=0.557 | Lbot=0.688  Ladv=0.135  IRM=0.088  cert=0.062  mmean=0.248+/-0.391
+    ep= 60 [ramp  ]  val=0.563  test=0.593  best=0.557 | Lbot=0.941  Ladv=0.183  IRM=0.039  cert=0.091  mmean=0.393+/-0.452
+    ep= 70 [ramp  ]  val=0.550  test=0.570  best=0.557 | Lbot=0.662  Ladv=0.141  IRM=0.132  cert=0.064  mmean=0.295+/-0.426
+    ep= 80 [full  ]  val=0.587  test=0.563  best=0.563 | Lbot=0.742  Ladv=0.200  IRM=0.019  cert=0.056  mmean=0.272+/-0.413
+    ep= 90 [full  ]  val=0.577  test=0.567  best=0.543 | Lbot=0.734  Ladv=0.167  IRM=0.016  cert=0.055  mmean=0.270+/-0.413
+    ep=100 [full  ]  val=0.557  test=0.583  best=0.593 | Lbot=0.686  Ladv=0.204  IRM=0.010  cert=0.062  mmean=0.250+/-0.397
+    ep=110 [full  ]  val=0.600  test=0.580  best=0.593 | Lbot=0.516  Ladv=0.172  IRM=0.046  cert=0.062  mmean=0.264+/-0.403
+    ep=120 [full  ]  val=0.607  test=0.587  best=0.573 | Lbot=0.752  Ladv=0.169  IRM=0.026  cert=0.055  mmean=0.261+/-0.404
+    ep=130 [full  ]  val=0.580  test=0.563  best=0.577 | Lbot=0.543  Ladv=0.171  IRM=0.054  cert=0.057  mmean=0.272+/-0.406
+    ep=140 [full  ]  val=0.580  test=0.580  best=0.577 | Lbot=0.593  Ladv=0.168  IRM=0.101  cert=0.049  mmean=0.231+/-0.387
+    ep=150 [full  ]  val=0.557  test=0.580  best=0.577 | Lbot=0.654  Ladv=0.201  IRM=0.022  cert=0.061  mmean=0.304+/-0.420
+    ep=160 [full  ]  val=0.557  test=0.577  best=0.577 | Lbot=0.546  Ladv=0.169  IRM=0.075  cert=0.054  mmean=0.255+/-0.395
+    ep=170 [full  ]  val=0.540  test=0.590  best=0.577 | Lbot=0.550  Ladv=0.202  IRM=0.039  cert=0.059  mmean=0.282+/-0.406
+    Early stop at ep=177
+    [ckpt] Saved -> checkpoints/aethelred_expl/t6_b0.70_s179/best_model  test_acc=0.5767
+    Aethelred  Seed 2 Prec@K=adaptive(DIR) = 0.3528
+
+  -- Seed 3/5  (seed=316) --
+    Train=2400 Val=300 Test=300 nf=4
+    [Aethelred] Training (200 epochs)...  ckpt=aethelred_expl/t6_b0.70_s316
+    ep=  0 [warmup]  val=0.440  test=0.463  best=0.463 | Lbot=1.072  Ladv=0.000  IRM=0.000  cert=0.000  mmean=0.354+/-0.036
+    ep= 10 [warmup]  val=0.360  test=0.390  best=0.513 | Lbot=0.983  Ladv=0.000  IRM=0.002  cert=0.000  mmean=0.305+/-0.166
+    ep= 20 [warmup]  val=0.493  test=0.630  best=0.513 | Lbot=0.913  Ladv=0.000  IRM=0.001  cert=0.000  mmean=0.308+/-0.336
+    ep= 30 [ramp  ]  val=0.493  test=0.587  best=0.653 | Lbot=0.837  Ladv=0.000  IRM=0.004  cert=0.000  mmean=0.398+/-0.458
+    ep= 40 [ramp  ]  val=0.540  test=0.643  best=0.660 | Lbot=0.738  Ladv=0.142  IRM=0.067  cert=0.112  mmean=0.350+/-0.449
+    ep= 50 [ramp  ]  val=0.580  test=0.633  best=0.657 | Lbot=0.777  Ladv=0.134  IRM=0.099  cert=0.116  mmean=0.288+/-0.425
+    ep= 60 [ramp  ]  val=0.540  test=0.570  best=0.657 | Lbot=0.915  Ladv=0.180  IRM=0.038  cert=0.119  mmean=0.293+/-0.431
+    ep= 70 [ramp  ]  val=0.653  test=0.673  best=0.673 | Lbot=0.836  Ladv=0.179  IRM=0.039  cert=0.147  mmean=0.277+/-0.417
+    ep= 80 [full  ]  val=0.620  test=0.693  best=0.673 | Lbot=0.608  Ladv=0.130  IRM=0.048  cert=0.135  mmean=0.255+/-0.407
+    ep= 90 [full  ]  val=0.603  test=0.657  best=0.673 | Lbot=0.544  Ladv=0.216  IRM=0.064  cert=0.139  mmean=0.289+/-0.419
+    ep=100 [full  ]  val=0.583  test=0.630  best=0.673 | Lbot=0.665  Ladv=0.178  IRM=0.042  cert=0.133  mmean=0.273+/-0.414
+    ep=110 [full  ]  val=0.580  test=0.610  best=0.673 | Lbot=0.561  Ladv=0.160  IRM=0.087  cert=0.111  mmean=0.241+/-0.402
+    ep=120 [full  ]  val=0.587  test=0.610  best=0.673 | Lbot=0.537  Ladv=0.183  IRM=0.031  cert=0.123  mmean=0.280+/-0.415
+    Early stop at ep=121
+    [ckpt] Saved -> checkpoints/aethelred_expl/t6_b0.70_s316/best_model  test_acc=0.6733
+    Aethelred  Seed 3 Prec@K=adaptive(DIR) = 0.3037
+
+  -- Seed 4/5  (seed=453) --
+    Train=2400 Val=300 Test=300 nf=4
+    [Aethelred] Training (200 epochs)...  ckpt=aethelred_expl/t6_b0.70_s453
+    ep=  0 [warmup]  val=0.290  test=0.387  best=0.387 | Lbot=1.092  Ladv=0.000  IRM=0.000  cert=0.000  mmean=0.391+/-0.025
+    ep= 10 [warmup]  val=0.463  test=0.500  best=0.533 | Lbot=0.989  Ladv=0.000  IRM=0.001  cert=0.000  mmean=0.316+/-0.119
+    ep= 20 [warmup]  val=0.503  test=0.503  best=0.520 | Lbot=0.847  Ladv=0.000  IRM=0.000  cert=0.000  mmean=0.400+/-0.415
+    ep= 30 [ramp  ]  val=0.523  test=0.540  best=0.570 | Lbot=0.977  Ladv=0.000  IRM=0.000  cert=0.000  mmean=0.292+/-0.420
+    ep= 40 [ramp  ]  val=0.537  test=0.567  best=0.613 | Lbot=0.848  Ladv=0.120  IRM=0.027  cert=0.082  mmean=0.293+/-0.425
+    ep= 50 [ramp  ]  val=0.587  test=0.620  best=0.617 | Lbot=0.868  Ladv=0.242  IRM=0.058  cert=0.095  mmean=0.295+/-0.423
+    ep= 60 [ramp  ]  val=0.573  test=0.610  best=0.617 | Lbot=1.020  Ladv=0.181  IRM=0.016  cert=0.114  mmean=0.316+/-0.426
+    ep= 70 [ramp  ]  val=0.607  test=0.633  best=0.573 | Lbot=0.899  Ladv=0.149  IRM=0.028  cert=0.091  mmean=0.281+/-0.419
+    ep= 80 [full  ]  val=0.593  test=0.607  best=0.610 | Lbot=0.863  Ladv=0.141  IRM=0.045  cert=0.091  mmean=0.236+/-0.392
+    ep= 90 [full  ]  val=0.603  test=0.600  best=0.610 | Lbot=0.807  Ladv=0.190  IRM=0.062  cert=0.109  mmean=0.258+/-0.401
+    ep=100 [full  ]  val=0.610  test=0.603  best=0.610 | Lbot=0.707  Ladv=0.154  IRM=0.029  cert=0.101  mmean=0.247+/-0.393
+    ep=110 [full  ]  val=0.600  test=0.577  best=0.610 | Lbot=0.623  Ladv=0.174  IRM=0.025  cert=0.105  mmean=0.238+/-0.392
+    ep=120 [full  ]  val=0.590  test=0.583  best=0.610 | Lbot=0.610  Ladv=0.152  IRM=0.029  cert=0.117  mmean=0.253+/-0.395
+    Early stop at ep=126
+    [ckpt] Saved -> checkpoints/aethelred_expl/t6_b0.70_s453/best_model  test_acc=0.6100
+    Aethelred  Seed 4 Prec@K=adaptive(DIR) = 0.3220
+
+  -- Seed 5/5  (seed=590) --
+    Train=2400 Val=300 Test=300 nf=4
+    [Aethelred] Training (200 epochs)...  ckpt=aethelred_expl/t6_b0.70_s590
+    ep=  0 [warmup]  val=0.323  test=0.357  best=0.357 | Lbot=1.110  Ladv=0.000  IRM=0.000  cert=0.000  mmean=0.332+/-0.036
+    ep= 10 [warmup]  val=0.437  test=0.447  best=0.487 | Lbot=1.043  Ladv=0.000  IRM=0.002  cert=0.000  mmean=0.333+/-0.048
+    ep= 20 [warmup]  val=0.467  test=0.487  best=0.540 | Lbot=1.037  Ladv=0.000  IRM=0.001  cert=0.000  mmean=0.320+/-0.047
+    ep= 30 [ramp  ]  val=0.523  test=0.543  best=0.557 | Lbot=0.863  Ladv=0.000  IRM=0.002  cert=0.000  mmean=0.308+/-0.034
+    ep= 40 [ramp  ]  val=0.583  test=0.550  best=0.577 | Lbot=0.984  Ladv=0.115  IRM=0.005  cert=0.055  mmean=0.313+/-0.015
+    ep= 50 [ramp  ]  val=0.567  test=0.553  best=0.567 | Lbot=1.109  Ladv=0.101  IRM=0.008  cert=0.066  mmean=0.265+/-0.013
+    ep= 60 [ramp  ]  val=0.593  test=0.567  best=0.567 | Lbot=0.839  Ladv=0.048  IRM=0.037  cert=0.061  mmean=0.278+/-0.006
+    ep= 70 [ramp  ]  val=0.617  test=0.620  best=0.567 | Lbot=0.863  Ladv=0.116  IRM=0.016  cert=0.063  mmean=0.257+/-0.004
+    ep= 80 [full  ]  val=0.660  test=0.637  best=0.637 | Lbot=0.839  Ladv=0.087  IRM=0.012  cert=0.054  mmean=0.280+/-0.005
+    ep= 90 [full  ]  val=0.627  test=0.667  best=0.600 | Lbot=0.749  Ladv=0.110  IRM=0.033  cert=0.062  mmean=0.250+/-0.005
+    ep=100 [full  ]  val=0.637  test=0.640  best=0.600 | Lbot=0.837  Ladv=0.192  IRM=0.008  cert=0.063  mmean=0.244+/-0.005
+    ep=110 [full  ]  val=0.670  test=0.643  best=0.600 | Lbot=0.797  Ladv=0.178  IRM=0.038  cert=0.061  mmean=0.251+/-0.006
+    ep=120 [full  ]  val=0.673  test=0.637  best=0.600 | Lbot=0.760  Ladv=0.133  IRM=0.014  cert=0.059  mmean=0.260+/-0.006
+    ep=130 [full  ]  val=0.643  test=0.620  best=0.600 | Lbot=0.713  Ladv=0.193  IRM=0.006  cert=0.058  mmean=0.262+/-0.006
+    Early stop at ep=136
+    [ckpt] Saved -> checkpoints/aethelred_expl/t6_b0.70_s590/best_model  test_acc=0.6000
+    Aethelred  Seed 5 Prec@K=adaptive(DIR) = 0.2952
+
+--------------------------------------------------------------------------------
+  [b=0.90]  train_bias=0.90   seeds=5
+--------------------------------------------------------------------------------
+
+  -- Seed 1/5  (seed=42) --
+    Train=2400 Val=300 Test=300 nf=4
+    [Aethelred] Training (200 epochs)...  ckpt=aethelred_expl/t6_b0.90_s42
+    ep=  0 [warmup]  val=0.513  test=0.537  best=0.537 | Lbot=1.042  Ladv=0.000  IRM=0.001  cert=0.000  mmean=0.327+/-0.030
+    ep= 10 [warmup]  val=0.607  test=0.660  best=0.677 | Lbot=0.789  Ladv=0.000  IRM=0.002  cert=0.000  mmean=0.000+/-0.001
+    ep= 20 [warmup]  val=0.653  test=0.643  best=0.770 | Lbot=0.800  Ladv=0.000  IRM=0.002  cert=0.000  mmean=0.973+/-0.005
+    ep= 30 [ramp  ]  val=0.677  test=0.697  best=0.753 | Lbot=0.465  Ladv=0.000  IRM=0.001  cert=0.000  mmean=1.000+/-0.000
+    ep= 40 [ramp  ]  val=0.650  test=0.680  best=0.780 | Lbot=0.354  Ladv=0.657  IRM=0.449  cert=0.350  mmean=1.000+/-0.000
+    ep= 50 [ramp  ]  val=0.740  test=0.733  best=0.797 | Lbot=0.509  Ladv=0.748  IRM=0.220  cert=0.356  mmean=1.000+/-0.000
+    ep= 60 [ramp  ]  val=0.787  test=0.800  best=0.797 | Lbot=0.618  Ladv=0.873  IRM=0.098  cert=0.362  mmean=1.000+/-0.000
+    ep= 70 [ramp  ]  val=0.773  test=0.733  best=0.797 | Lbot=0.435  Ladv=1.018  IRM=0.152  cert=0.369  mmean=0.999+/-0.000
+    ep= 80 [full  ]  val=0.807  test=0.800  best=0.797 | Lbot=0.680  Ladv=0.762  IRM=0.085  cert=0.375  mmean=0.999+/-0.000
+    ep= 90 [full  ]  val=0.753  test=0.770  best=0.797 | Lbot=0.529  Ladv=0.970  IRM=0.096  cert=0.374  mmean=0.998+/-0.001
+    Early stop at ep=98
+    [ckpt] Saved -> checkpoints/aethelred_expl/t6_b0.90_s42/best_model  test_acc=0.7967
+    Aethelred  Seed 1 Prec@K=adaptive(DIR) = 0.3726
+
+  -- Seed 2/5  (seed=179) --
+    Train=2400 Val=300 Test=300 nf=4
+    [Aethelred] Training (200 epochs)...  ckpt=aethelred_expl/t6_b0.90_s179
+    ep=  0 [warmup]  val=0.570  test=0.563  best=0.563 | Lbot=1.038  Ladv=0.000  IRM=0.000  cert=0.000  mmean=0.336+/-0.025
+    ep= 10 [warmup]  val=0.607  test=0.593  best=0.627 | Lbot=0.795  Ladv=0.000  IRM=0.000  cert=0.000  mmean=0.000+/-0.000
+    ep= 20 [warmup]  val=0.657  test=0.647  best=0.703 | Lbot=0.565  Ladv=0.000  IRM=0.000  cert=0.000  mmean=0.001+/-0.001
+    ep= 30 [ramp  ]  val=0.847  test=0.880  best=0.880 | Lbot=0.289  Ladv=0.000  IRM=0.000  cert=0.000  mmean=0.686+/-0.000
+    ep= 40 [ramp  ]  val=0.753  test=0.713  best=0.880 | Lbot=0.586  Ladv=0.657  IRM=0.147  cert=0.134  mmean=0.692+/-0.000
+    ep= 50 [ramp  ]  val=0.747  test=0.747  best=0.880 | Lbot=0.569  Ladv=0.715  IRM=0.127  cert=0.356  mmean=1.000+/-0.000
+    ep= 60 [ramp  ]  val=0.790  test=0.833  best=0.880 | Lbot=0.685  Ladv=0.618  IRM=0.075  cert=0.362  mmean=1.000+/-0.000
+    ep= 70 [ramp  ]  val=0.803  test=0.830  best=0.880 | Lbot=0.708  Ladv=0.584  IRM=0.092  cert=0.369  mmean=0.999+/-0.000
+    ep= 80 [full  ]  val=0.830  test=0.833  best=0.807 | Lbot=0.497  Ladv=0.620  IRM=0.071  cert=0.375  mmean=0.999+/-0.000
+    ep= 90 [full  ]  val=0.843  test=0.830  best=0.807 | Lbot=0.526  Ladv=1.032  IRM=0.048  cert=0.375  mmean=0.999+/-0.000
+    ep=100 [full  ]  val=0.807  test=0.817  best=0.807 | Lbot=0.515  Ladv=0.699  IRM=0.066  cert=0.375  mmean=0.999+/-0.000
+    ep=110 [full  ]  val=0.843  test=0.847  best=0.807 | Lbot=0.463  Ladv=1.029  IRM=0.064  cert=0.375  mmean=0.999+/-0.000
+    ep=120 [full  ]  val=0.723  test=0.763  best=0.807 | Lbot=0.481  Ladv=1.089  IRM=0.103  cert=0.374  mmean=0.999+/-0.001
+    Early stop at ep=128
+    [ckpt] Saved -> checkpoints/aethelred_expl/t6_b0.90_s179/best_model  test_acc=0.8067
+    Aethelred  Seed 2 Prec@K=adaptive(DIR) = 0.3251
+
+  -- Seed 3/5  (seed=316) --
+    Train=2400 Val=300 Test=300 nf=4
+    [Aethelred] Training (200 epochs)...  ckpt=aethelred_expl/t6_b0.90_s316
+    ep=  0 [warmup]  val=0.403  test=0.347  best=0.347 | Lbot=1.078  Ladv=0.000  IRM=0.000  cert=0.000  mmean=0.362+/-0.036
+    ep= 10 [warmup]  val=0.617  test=0.657  best=0.620 | Lbot=0.861  Ladv=0.000  IRM=0.004  cert=0.000  mmean=0.313+/-0.191
+    ep= 20 [warmup]  val=0.757  test=0.747  best=0.747 | Lbot=0.591  Ladv=0.000  IRM=0.001  cert=0.000  mmean=0.326+/-0.181
+    ep= 30 [ramp  ]  val=0.747  test=0.750  best=0.747 | Lbot=0.556  Ladv=0.000  IRM=0.005  cert=0.000  mmean=0.350+/-0.051
+    ep= 40 [ramp  ]  val=0.723  test=0.720  best=0.747 | Lbot=0.813  Ladv=0.766  IRM=0.073  cert=0.350  mmean=0.999+/-0.001
+    ep= 50 [ramp  ]  val=0.733  test=0.753  best=0.767 | Lbot=0.945  Ladv=0.918  IRM=0.073  cert=0.356  mmean=1.000+/-0.000
+    ep= 60 [ramp  ]  val=0.760  test=0.780  best=0.780 | Lbot=0.758  Ladv=0.992  IRM=0.068  cert=0.363  mmean=1.000+/-0.000
+    ep= 70 [ramp  ]  val=0.800  test=0.817  best=0.817 | Lbot=0.603  Ladv=1.143  IRM=0.122  cert=0.369  mmean=1.000+/-0.000
+    ep= 80 [full  ]  val=0.747  test=0.760  best=0.817 | Lbot=0.463  Ladv=1.182  IRM=0.122  cert=0.375  mmean=0.999+/-0.000
+    ep= 90 [full  ]  val=0.757  test=0.777  best=0.817 | Lbot=0.482  Ladv=1.125  IRM=0.125  cert=0.375  mmean=0.999+/-0.000
+    ep=100 [full  ]  val=0.780  test=0.803  best=0.817 | Lbot=0.523  Ladv=1.489  IRM=0.114  cert=0.374  mmean=0.999+/-0.001
+    ep=110 [full  ]  val=0.737  test=0.753  best=0.817 | Lbot=0.330  Ladv=1.331  IRM=0.206  cert=0.374  mmean=0.999+/-0.001
+    ep=120 [full  ]  val=0.757  test=0.750  best=0.817 | Lbot=0.377  Ladv=1.510  IRM=0.070  cert=0.374  mmean=0.999+/-0.000
+    Early stop at ep=121
+    [ckpt] Saved -> checkpoints/aethelred_expl/t6_b0.90_s316/best_model  test_acc=0.8167
+    Aethelred  Seed 3 Prec@K=adaptive(DIR) = 0.3098
+
+  -- Seed 4/5  (seed=453) --
+    Train=2400 Val=300 Test=300 nf=4
+    [Aethelred] Training (200 epochs)...  ckpt=aethelred_expl/t6_b0.90_s453
+    ep=  0 [warmup]  val=0.450  test=0.427  best=0.427 | Lbot=1.020  Ladv=0.000  IRM=0.000  cert=0.000  mmean=0.319+/-0.026
+    ep= 10 [warmup]  val=0.520  test=0.513  best=0.577 | Lbot=0.858  Ladv=0.000  IRM=0.004  cert=0.000  mmean=0.235+/-0.333
+    ep= 20 [warmup]  val=0.633  test=0.637  best=0.637 | Lbot=0.636  Ladv=0.000  IRM=0.003  cert=0.000  mmean=0.324+/-0.434
+    ep= 30 [ramp  ]  val=0.770  test=0.743  best=0.763 | Lbot=0.625  Ladv=0.000  IRM=0.006  cert=0.000  mmean=0.792+/-0.362
+    ep= 40 [ramp  ]  val=0.757  test=0.677  best=0.763 | Lbot=0.583  Ladv=0.849  IRM=0.182  cert=0.350  mmean=1.000+/-0.002
+    ep= 50 [ramp  ]  val=0.720  test=0.717  best=0.763 | Lbot=0.475  Ladv=0.862  IRM=0.174  cert=0.356  mmean=1.000+/-0.001
+    ep= 60 [ramp  ]  val=0.723  test=0.697  best=0.763 | Lbot=0.468  Ladv=0.941  IRM=0.199  cert=0.362  mmean=1.000+/-0.000
+    ep= 70 [ramp  ]  val=0.763  test=0.770  best=0.763 | Lbot=0.483  Ladv=1.124  IRM=0.125  cert=0.369  mmean=1.000+/-0.000
+    ep= 80 [full  ]  val=0.780  test=0.770  best=0.763 | Lbot=0.583  Ladv=1.391  IRM=0.050  cert=0.375  mmean=1.000+/-0.000
+    ep= 90 [full  ]  val=0.753  test=0.790  best=0.770 | Lbot=0.366  Ladv=1.111  IRM=0.172  cert=0.375  mmean=1.000+/-0.000
+    ep=100 [full  ]  val=0.787  test=0.753  best=0.770 | Lbot=0.522  Ladv=0.998  IRM=0.059  cert=0.375  mmean=1.000+/-0.000
+    ep=110 [full  ]  val=0.817  test=0.813  best=0.770 | Lbot=0.379  Ladv=1.297  IRM=0.077  cert=0.375  mmean=0.999+/-0.000
+    ep=120 [full  ]  val=0.790  test=0.783  best=0.770 | Lbot=0.452  Ladv=1.216  IRM=0.043  cert=0.374  mmean=0.999+/-0.001
+    ep=130 [full  ]  val=0.777  test=0.780  best=0.770 | Lbot=0.563  Ladv=1.244  IRM=0.059  cert=0.374  mmean=0.999+/-0.000
+    ep=140 [full  ]  val=0.803  test=0.773  best=0.770 | Lbot=0.420  Ladv=1.164  IRM=0.116  cert=0.374  mmean=0.999+/-0.001
+    Early stop at ep=143
+    [ckpt] Saved -> checkpoints/aethelred_expl/t6_b0.90_s453/best_model  test_acc=0.7700
+    Aethelred  Seed 4 Prec@K=adaptive(DIR) = 0.3245
+
+  -- Seed 5/5  (seed=590) --
+    Train=2400 Val=300 Test=300 nf=4
+    [Aethelred] Training (200 epochs)...  ckpt=aethelred_expl/t6_b0.90_s590
+    ep=  0 [warmup]  val=0.410  test=0.397  best=0.397 | Lbot=1.049  Ladv=0.000  IRM=0.000  cert=0.000  mmean=0.377+/-0.034
+    ep= 10 [warmup]  val=0.543  test=0.573  best=0.573 | Lbot=0.761  Ladv=0.000  IRM=0.000  cert=0.000  mmean=0.282+/-0.251
+    ep= 20 [warmup]  val=0.733  test=0.730  best=0.730 | Lbot=0.423  Ladv=0.000  IRM=0.002  cert=0.000  mmean=0.427+/-0.441
+    ep= 30 [ramp  ]  val=0.680  test=0.660  best=0.700 | Lbot=0.612  Ladv=0.000  IRM=0.000  cert=0.000  mmean=0.999+/-0.001
+    ep= 40 [ramp  ]  val=0.713  test=0.683  best=0.740 | Lbot=0.467  Ladv=0.986  IRM=0.200  cert=0.350  mmean=1.000+/-0.000
+    ep= 50 [ramp  ]  val=0.763  test=0.710  best=0.707 | Lbot=0.520  Ladv=1.400  IRM=0.172  cert=0.356  mmean=1.000+/-0.000
+    ep= 60 [ramp  ]  val=0.773  test=0.690  best=0.790 | Lbot=0.465  Ladv=1.348  IRM=0.142  cert=0.362  mmean=0.999+/-0.000
+    ep= 70 [ramp  ]  val=0.767  test=0.777  best=0.790 | Lbot=0.464  Ladv=1.130  IRM=0.114  cert=0.368  mmean=0.999+/-0.000
+    ep= 80 [full  ]  val=0.817  test=0.807  best=0.807 | Lbot=0.739  Ladv=0.861  IRM=0.032  cert=0.375  mmean=0.999+/-0.000
+    ep= 90 [full  ]  val=0.773  test=0.803  best=0.807 | Lbot=0.571  Ladv=0.765  IRM=0.090  cert=0.375  mmean=0.999+/-0.000
+    ep=100 [full  ]  val=0.763  test=0.760  best=0.807 | Lbot=0.544  Ladv=0.915  IRM=0.034  cert=0.374  mmean=0.999+/-0.001
+    ep=110 [full  ]  val=0.827  test=0.773  best=0.773 | Lbot=0.570  Ladv=1.070  IRM=0.047  cert=0.374  mmean=0.999+/-0.001
+    ep=120 [full  ]  val=0.807  test=0.770  best=0.773 | Lbot=0.320  Ladv=0.826  IRM=0.096  cert=0.374  mmean=0.998+/-0.001
+    ep=130 [full  ]  val=0.793  test=0.803  best=0.763 | Lbot=0.567  Ladv=0.873  IRM=0.034  cert=0.374  mmean=0.999+/-0.001
+    ep=140 [full  ]  val=0.803  test=0.773  best=0.763 | Lbot=0.577  Ladv=0.832  IRM=0.040  cert=0.373  mmean=0.998+/-0.001
+    ep=150 [full  ]  val=0.813  test=0.770  best=0.763 | Lbot=0.348  Ladv=0.780  IRM=0.069  cert=0.374  mmean=0.998+/-0.001
+    ep=160 [full  ]  val=0.817  test=0.760  best=0.763 | Lbot=0.389  Ladv=0.939  IRM=0.137  cert=0.374  mmean=0.998+/-0.001
+    ep=170 [full  ]  val=0.813  test=0.783  best=0.763 | Lbot=0.305  Ladv=0.992  IRM=0.039  cert=0.374  mmean=0.998+/-0.001
+    Early stop at ep=177
+    [ckpt] Saved -> checkpoints/aethelred_expl/t6_b0.90_s590/best_model  test_acc=0.7633
+    Aethelred  Seed 5 Prec@K=adaptive(DIR) = 0.3261
+
+======================================================================================================
+TABLE 6: Explanation/Rationale Accuracy in Spurious-Motif dataset
+  (? better | format: mean +/- std | K=GT edge count per graph, DIR-GNN exact)
+  (* = from published paper, Wu et al., ICLR 2022)
+======================================================================================================
+Model                       Balance              b=0.50              b=0.70              b=0.90       
+------------------------------------------------------------------------------------------------------
+GNNExplainer *           0.249+/-0.011       0.203+/-0.019       0.167+/-0.039       0.066+/-0.007    
+DIR *                    0.257+/-0.014       0.255+/-0.016       0.247+/-0.012       0.192+/-0.044    
+------------------------------------------------------------------------------------------------------
+Aethelred (Ours)         0.331+/-0.021       0.332+/-0.015       0.318+/-0.020       0.332+/-0.021      <- Ours (4/4 beat DIR)
+======================================================================================================
+
+  Aethelred vs DIR (published):
+       Balance: Aeth=0.3314+/-0.0205  DIR=0.2570(pub)  ?=+0.0744  WIN OK
+        b=0.50: Aeth=0.3320+/-0.0152  DIR=0.2550(pub)  ?=+0.0770  WIN OK
+        b=0.70: Aeth=0.3177+/-0.0198  DIR=0.2470(pub)  ?=+0.0707  WIN OK
+        b=0.90: Aeth=0.3316+/-0.0214  DIR=0.1920(pub)  ?=+0.1396  WIN OK
+  Results saved to results/table6.json

@@ -1,0 +1,7 @@
+=== Amazon-C training-recipe sweep Mon Jun 22 07:43:00 AM UTC 2026 ===
+baseline NodeGCN (lr0.002, env1, ungated) = 0.883
+r_lr002_env1_gl0       = 0.8602
+r_lr002_env5_gl0       = 0.8602
+r_lr0005_env1_gl0      = 0.7687
+r_lr002_env1_gl1       = 0.8753
+=== RECIPE SWEEP DONE Mon Jun 22 07:54:28 AM UTC 2026 ===

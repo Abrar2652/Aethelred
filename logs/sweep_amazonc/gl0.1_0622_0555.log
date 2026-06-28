@@ -1,0 +1,57 @@
+
+------------------------------------------------------------------------
+  AETHELRED -- CHECKPOINT STATUS & RETRAIN GUIDE
+------------------------------------------------------------------------
+  Aethelred   : 1 saved checkpoint(s) ? will be OVERWRITTEN this run
+                (aethelred_node_GCN_clean)
+  PGNNCert    : no checkpoints -> trains from scratch
+
+  WHEN TO USE  --force_retrain
+  -----------------------------------------------------------------
+  YES ? must retrain:
+    * After changing FULL_HPARAMS / FULL_ROBUST_HPARAMS
+    * After changing --arch (GCN -> GAT etc.)
+    * Final NeurIPS submission run (clean slate, 5 seeds)
+
+  NO  ? retrain not needed:
+    * Changing evaluation budgets (--pgnncert_T, --pgd_node_budgets)
+    * Re-running Tables 5/6 or Figure 1 (always train fresh)
+    * Changing --epochs_expl or --expl_n_seeds
+------------------------------------------------------------------------
+
+
+  [--force_retrain] Deleted 1 checkpoint group(s): aethelred_node_GCN_clean
+Epoch: 0, train_acc: 0.0595, val_acc: 0.0591, loss: 2.3430
+Val improved
+Epoch: 10, train_acc: 0.3735, val_acc: 0.3737, loss: 2.1774
+Val improved
+Epoch: 20, train_acc: 0.3754, val_acc: 0.3759, loss: 2.0976
+Epoch: 30, train_acc: 0.3754, val_acc: 0.3759, loss: 2.0338
+Epoch: 40, train_acc: 0.3759, val_acc: 0.3759, loss: 1.9718
+Epoch: 50, train_acc: 0.4033, val_acc: 0.4036, loss: 1.8989
+Val improved
+Epoch: 60, train_acc: 0.5734, val_acc: 0.5547, loss: 1.8027
+Val improved
+Epoch: 70, train_acc: 0.6865, val_acc: 0.6672, loss: 1.7149
+Val improved
+Epoch: 80, train_acc: 0.7069, val_acc: 0.6847, loss: 1.6355
+Val improved
+Epoch: 90, train_acc: 0.7175, val_acc: 0.7000, loss: 1.5681
+Epoch: 100, train_acc: 0.7268, val_acc: 0.7102, loss: 1.5127
+Val improved
+Epoch: 110, train_acc: 0.7411, val_acc: 0.7190, loss: 1.4679
+Val improved
+Epoch: 120, train_acc: 0.7564, val_acc: 0.7394, loss: 1.4323
+Val improved
+Epoch: 130, train_acc: 0.7641, val_acc: 0.7474, loss: 1.4048
+Val improved
+Epoch: 140, train_acc: 0.7668, val_acc: 0.7482, loss: 1.3841
+Epoch: 150, train_acc: 0.7690, val_acc: 0.7489, loss: 1.3693
+Epoch: 160, train_acc: 0.7702, val_acc: 0.7496, loss: 1.3593
+Val improved
+Epoch: 170, train_acc: 0.7704, val_acc: 0.7511, loss: 1.3532
+Epoch: 180, train_acc: 0.7707, val_acc: 0.7511, loss: 1.3501
+Epoch: 190, train_acc: 0.7707, val_acc: 0.7511, loss: 1.3489
+  [ckpt] Saved -> checkpoints/aethelred_node_GCN_clean/Amazon-C/best_model  test_acc=0.7695
+
+Final test accuracy on Amazon-C: 0.7695

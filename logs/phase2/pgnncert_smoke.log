@@ -1,0 +1,36 @@
+
+============================================================
+Graph Classification: MUTAG | GNN: GCN | T=15
+============================================================
+CUDA enabled: Quadro RTX 8000 | torch CUDA 12.1
+Epoch: 0, train_acc: 0.6667, val_acc: 0.6757, train_loss: 64.1291
+Val improved
+Epoch: 1, train_acc: 0.6667, val_acc: 0.6757, train_loss: 62.8048
+Epoch: 2, train_acc: 0.6667, val_acc: 0.6757, train_loss: 61.9886
+Epoch: 3, train_acc: 0.6667, val_acc: 0.6757, train_loss: 61.4827
+Epoch: 4, train_acc: 0.6667, val_acc: 0.6757, train_loss: 60.9751
+Epoch: 5, train_acc: 0.6667, val_acc: 0.6757, train_loss: 60.5477
+Epoch: 6, train_acc: 0.6667, val_acc: 0.6757, train_loss: 60.1467
+Epoch: 7, train_acc: 0.6667, val_acc: 0.6757, train_loss: 59.7643
+Epoch: 8, train_acc: 0.6667, val_acc: 0.6757, train_loss: 59.4108
+Epoch: 9, train_acc: 0.6667, val_acc: 0.6757, train_loss: 59.0759
+Epoch: 10, train_acc: 0.6667, val_acc: 0.6757, train_loss: 58.7552
+Epoch: 11, train_acc: 0.6667, val_acc: 0.6757, train_loss: 58.4463
+Epoch: 12, train_acc: 0.6667, val_acc: 0.6757, train_loss: 58.1470
+Epoch: 13, train_acc: 0.6667, val_acc: 0.6757, train_loss: 57.8591
+Epoch: 14, train_acc: 0.6667, val_acc: 0.6757, train_loss: 57.5778
+/nas/home/jahin/Aethelred/_ref_pgnncert/edge_hash.py:284: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  checkpoint = torch.load(path+f"_{i}", map_location=self.device)
+
+PGNNCert-E:
+  Test Accuracy: 0.6552
+  Time: 152.8s
+  Certified accuracy at p=0: 0.6552
+  Certified accuracy at p=5: 0.4310
+  Certified accuracy at p=10: 0.0000
+  Certified accuracy at p=15: 0.0000
+
+Summary:
+  PGNNCert-E   | Acc: 0.6552 | Time: 152.8s
+
+Results saved to results/graph_MUTAG_GCN_T15.json
