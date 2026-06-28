@@ -19,7 +19,6 @@ published numbers, Aethelred certifies a **3–6× larger** perturbation size on
 real molecular data, stays faithful under a controlled spurious-correlation
 sweep where prior explainers collapse, and certifies in a single $O(1)$ pass.
 
-The paper source is under [`docs/paper/`](docs/paper/).
 
 ---
 
@@ -65,7 +64,7 @@ make_*.py                    # schematic (F0), qualitative (F4), sensitivity (F8
                              #   edge-locality (F10), tightness (F11), attack faithfulness (F2b)
 results/                     # JSON results that back every figure
 figures/                     # camera-ready figures (PNG + PDF)
-docs/paper/                  # AAAI paper source (main.tex, experiments.tex, appendix.tex, refs.bib)
+
 ```
 
 ---
@@ -151,15 +150,11 @@ and verified in `results/sota_published.json`; the digitized SOTA curves live in
    voting/smoothing machinery into a closed-form counting argument: certified
    overlap `|E_k ∩ E'_k| ≥ k − B`, a per-edge radius `R(e_r) = k − r`, and (in
    the transductive setting) provable hijack-impossibility. Proofs are in
-   [`docs/paper/appendix.tex`](docs/paper/appendix.tex) and the docstring of
-   [`aethelred_edge_certify.py`](aethelred_edge_certify.py).
+   the docstring of [`aethelred_edge_certify.py`](aethelred_edge_certify.py).
 
 ---
 
-## Citation
-
-The paper is under review. A BibTeX entry will be added on acceptance.
 
 ## License
 
-To be added (MIT or Apache-2.0) before public release.
+MIT License
