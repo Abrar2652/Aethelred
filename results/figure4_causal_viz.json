@@ -1,0 +1,43 @@
+{
+  "dataset": "CiteSeer",
+  "pgd_eps": 0.05,
+  "pgd_steps": 20,
+  "n_hops": 2,
+  "top_k_frac": 0.3,
+  "clean_acc": 0.7600401606425703,
+  "nodes": [
+    {
+      "tier": "Stable+Stable",
+      "node_idx": 1379,
+      "node_class": 3,
+      "degree": 6,
+      "clean_correct": true,
+      "adv_correct": false,
+      "jaccard_topk": 1.0,
+      "n_sub_nodes": 20,
+      "n_sub_edges": 64
+    },
+    {
+      "tier": "Flipped+Stable",
+      "node_idx": 2351,
+      "node_class": 3,
+      "degree": 6,
+      "clean_correct": true,
+      "adv_correct": false,
+      "jaccard_topk": 0.8571428571428571,
+      "n_sub_nodes": 18,
+      "n_sub_edges": 44
+    },
+    {
+      "tier": "Flipped+Disrupted",
+      "node_idx": 1829,
+      "node_class": 4,
+      "degree": 4,
+      "clean_correct": true,
+      "adv_correct": false,
+      "jaccard_topk": 0.5,
+      "n_sub_nodes": 13,
+      "n_sub_edges": 30
+    }
+  ]
+}

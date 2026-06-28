@@ -1,0 +1,9 @@
+{
+  "method": "Aethelred",
+  "dataset": "Benzene",
+  "attack_edges": 2,
+  "cert_k": 10,
+  "n": 80,
+  "explanation_accuracy": 0.5550000000000004,
+  "difference_fraction_pct": 6.874999999999998
+}

@@ -1,0 +1,31 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.ipynb_checkpoints/
+.DS_Store
+
+# Large / regenerated artifacts — not version controlled
+checkpoints/
+logs/
+data/
+*.ckpt
+*.pt
+
+# Downloaded dataset payloads (only the loaders in datasets/*.py are tracked)
+/datasets/*/
+
+# LaTeX build products
+docs/paper/*.aux
+docs/paper/*.bbl
+docs/paper/*.blg
+docs/paper/*.log
+docs/paper/*.out
+docs/paper/*.pdf
+!figures/*.pdf
+
+# Third-party baselines are NOT redistributed here — fetch from upstream.
+# (Our self-contained DIR re-implementation in baselines/dir_gnn.py IS tracked.)
+/baselines/XGNNCert/
+/_ref_pgnncert/
+/DIR-GNN-main/
