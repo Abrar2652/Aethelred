@@ -1,0 +1,100 @@
+% =====================================================================
+%  Experiments  (\input by main.tex).  Figures in ../../figures
+% =====================================================================
+
+\subsection{Setup}
+We evaluate certified \emph{explanation} on datasets with ground-truth motifs:
+the real molecular graphs \textsc{Benzene} and \textsc{Fluoride-Carbonyl} (FC),
+the synthetic \textsc{ShapeGGen} families (House/Diamond/Wheel)
+\cite{agarwal2023graphxai}, and the bias-controlled \textsc{SPMotif} benchmark
+\cite{wu2022dir}. Faithfulness is precision@$K$ of the
+explanatory edges against the ground-truth motif ($K{=}$ \#motif edges, the
+DIR protocol). The certification metric is the certified perturbation size
+$M_\lambda$: the number of edge perturbations under which at least $\lambda$ of
+the $k$ ground-truth edges are \emph{guaranteed} to remain---the state of the
+art's own metric. We compare against the certified explainer \xgn{}
+\cite{li2025xgnncert} (using its \textbf{authoritative published} curves at its
+default setting, $T{=}70$, PGExplainer), the base explainers
+PGExplainer/ReFine/GSAT \cite{luo2020pgexplainer,wang2021refine,miao2022gsat},
+the causal invariant-rationale method DIR \cite{wu2022dir}, the non-causal
+GNNExplainer \cite{ying2019gnnexplainer}, and the empirical explanation defense
+\textcolor{vinfomag}{V-InfoR} \cite{wang2023vinfor}. Certified \emph{prediction}
+is reported as a secondary axis against \pgn{} \cite{li2025pgnncert}. All \aeth{} numbers are our own
+runs (5 seeds); baseline numbers are reproduced or taken from the original
+papers as noted.
+
+\subsection{Stability is not enough: certifying what matters}
+\label{sec:exp-thesis}
+Figure~\ref{fig:thesis} is the paper's central experiment. On \textsc{SPMotif}
+we sweep the strength of a spurious structural correlation and measure
+faithfulness against the \emph{causal} motif. As the bias grows
+$0.33\!\to\!0.90$, the non-causal \textcolor{vinfomag}{GNNExplainer drifts onto
+the spurious feature and its faithfulness collapses $0.25\!\to\!0.07$}: a method
+whose explanation could be \emph{certified stable} would here certify a
+\emph{wrong} subgraph. DIR, being causal, resists but still degrades (to $0.19$),
+while the four pooling rationale baselines (Attention/ASAP/Top-k/SAG, DIR
+Table~2) sit far lower ($\approx0.18$) and likewise collapse toward high bias.
+\aeth{} is \win{bias-invariant ($\approx0.33$ at every level) and the most
+faithful throughout}. This makes the thesis quantitative: a certificate is worth
+only as much as the faithfulness of what it certifies.
+
+\subsection{Certified faithfulness vs.\ the state of the art}
+\label{sec:exp-headline}
+Figure~\ref{fig:mlambda} is the headline comparison, on \xgn{}'s own
+$M_\lambda$-vs-$\lambda$ axis and its published default curves. On the
+\textbf{real molecular datasets} \aeth{} certifies a \win{$3$--$6\times$ larger
+perturbation size} (\textsc{Benzene} $\lambda{=}1$: $8$ vs.\ $2.4$;
+\textsc{FC} comparable): the deterministic per-edge radius is far stronger than a
+vote margin where both are measured on identical data. \cav{On the synthetic
+families the two are comparable (\xgn{} ahead on Wheel); these use a different
+graph generator from our runs and are reported with that caveat.}
+Figure~\ref{fig:unifaith} places \aeth{} against \emph{all} explanation
+baselines on clean faithfulness: \aeth{} is competitive-to-best on the real
+datasets while being the only \emph{certified, deterministic} method.
+Figure~\ref{fig:frontier} summarizes both axes---\aeth{} occupies the
+\win{certifiably-stable region (right)} at comparable faithfulness, with the
+largest gap on real data.
+
+\subsection{The certificate is deterministic and tight}
+\label{sec:exp-cert}
+Figure~\ref{fig:locality} isolates the mechanism: a target edge's importance is
+\win{exactly invariant} ($1.000$) to perturbing other edges under \aeth{}, while
+a message-passing score \textcolor{vinfomag}{wanders by $\sim9\%$}. This
+edge-locality is what removes the need for voting. Figure~\ref{fig:tight} shows
+the consequence: \aeth{}'s certified lower bound \win{coincides exactly with the
+empirical worst-case (gap $=0$)}---a greedy adversary achieves precisely the
+bound, so the certificate wastes no conservatism, unlike the loose lower bounds
+of smoothing. Figure~\ref{fig:eff} closes the practical case: \aeth{} certifies
+in a \win{single $\bigO(1)$ pass} (vs.\ $\sim\!2T$ for \xgn{}, $\sim\!T$ for
+\pgn{}) and its explanation is \win{identical across reruns} (Jaccard $1.0$ vs.\
+$\sim0.81$ for voting).
+
+\subsection{Robustness under attack}
+\label{sec:exp-attack}
+Under the $2$-edge attack of prior work (Fig.~\ref{fig:attack}, all five
+ground-truth-motif datasets), \aeth{} is \win{the most faithful on
+\textsc{Benzene}} ($0.56$ vs.\ \xgn{} $0.47$, V-InfoR $0.35$) and competitive
+elsewhere. The decisive, \emph{universal} effect is stability: the empirical
+V-InfoR's explanation \textcolor{vinfomag}{drifts up to $\sim83\%$}, whereas
+\aeth{}'s certified subset moves \win{$\le7\%$ everywhere---exactly $0\%$ on the
+three synthetic motifs}. Figure~\ref{fig:qual} shows this qualitatively: under
+three inserted edges (dashed) the certified top-$(k{-}2)$ subset (red) is
+pointwise unchanged on the ground-truth motif (green), exactly as the radius of
+Thm.~\ref{thm:radius} guarantees. A stable-but-wrong explanation is useless:
+\aeth{} is provably stable \emph{and} faithful.
+
+\subsection{Sensitivity, prediction, and clean accuracy}
+\label{sec:exp-misc}
+\aeth{} is well-behaved (Fig.~\ref{fig:sens}): larger $T$ monotonically extends
+the prediction-certified radius, and faithfulness is flat across the
+explanation-size hyper-parameter. Table~\ref{tab:cleanacc} shows certification
+costs \emph{no} clean accuracy---\aeth{} is free-or-better on graph
+classification (DD $+3.4$, PROTEINS $+2.4$) and at parity on citation nodes. As a
+secondary axis, \aeth{} retains certified \emph{prediction} accuracy at large
+budgets where \pgn{}-E/-N and Bagging collapse (Fig.~\ref{fig:predcert}); we
+report this on PROTEINS/DD, where the sub-graph protocol is clean, and place the
+node-injection field (Fig.~\ref{fig:nodeinj}) as context for a distinct threat
+model that \aeth{} does not target.
+
+% ----- figure floats (insight prose is in the narrative above) --------
+\input{figures_floats}

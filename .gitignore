@@ -8,7 +8,7 @@ __pycache__/
 # Large / regenerated artifacts — not version controlled
 checkpoints/
 # logs/
-data/
+# data/
 *.ckpt
 *.pt
 

@@ -1,117 +1,571 @@
 {
-  "_README": "Published SOTA numbers transcribed VERBATIM and VERIFIED against the paper PDFs in the repo (pgnncert.pdf, XGNNCert.pdf). For use as the 'reported' SOTA column in Aethelred's comparison tables. ALWAYS label these '(reported, <paper> <table/fig>)' — never as our own measurements. Our re-run numbers live in the other phase2_*/table1_* json files.",
-  "_verification": "Cross-checked cell-by-cell against XGNNCert.pdf p7 (Tables 1-3), p9 (Table 4) and pgnncert.pdf p6 (Table 1) on 2026-06-23 via pymupdf text extraction.",
-
-  "PGNNCert": {
-    "source_pdf": "pgnncert.pdf (in repo). Paper text: _ref_pgnncert/_paper_text.txt. Code: github.com/JetRichardLee/PGNNCert",
-    "certifies": "PREDICTION (label stable under <=B arbitrary edge/node perturbations) via hash-subgraph majority voting (PGNNCert-E hashes edges, PGNNCert-N hashes nodes)",
-    "datasets": "Cora-ML, CiteSeer, PubMed, Amazon-C (node) + AIDS, MUTAG, PROTEINS, DD (graph) -- IDENTICAL to ours",
-    "compatibility": "DIRECTLY compatible with our PREDICTION axis (aethelred_pred_certify + Phase-1 clean acc). Their 'GCN/GSAGE/GAT' = normally-trained no-defense (~ our table1_1 baseline); 'PGNNCert-E/-N' = certified-method clean acc (~ our Aethelred table1_2/3/4). CAVEAT: split (30/10/30 node, 50/20/30 graph) & seeds differ from ours -> reference, not identical-protocol.",
-    "max_certified_radius": {"node_datasets": 25, "graph_datasets": 30, "note": "max tolerated arbitrary edges (PGNNCert-E) / nodes (PGNNCert-N)"},
-    "certified_accuracy_vs_budget": "PGNNCert's OWN certified curves reproduced numerically via official code -> results/sota_pgnncert_certcurves.json. PGNNCert vs other SOTA defenses below.",
-    "wider_sota_baselines_note": "PGNNCert benchmarks against RS (sparse randomized smoothing, Bojchevski et al.), Bagging (Jia et al.), and Bi-RS (Include/Exclude, Lai et al. 2024). Bagging is TABULATED (Table 2 below). RS / Bi-RS node-injection comparison is FIGURE-ONLY (qualitative: PGNNCert > RS, Bagging, Bi-RS-Include; < Bi-RS-Exclude). Reproduce these from their own public code only if a full numeric curve is needed; otherwise cite reported values.",
-    "table2_certified_graph_accuracy_vs_Bagging": {
-      "_provenance": "pgnncert.pdf Table 2 (p8), verbatim & verified. Certified GRAPH accuracy vs #perturbed edges.",
-      "_columns_edges": [0, 5, 10, 15],
-      "PROTEINS": {"Bagging": [0.756, 0.205, 0.000, 0.00], "PGNNCert-E": [0.744, 0.518, 0.260, 0.00], "PGNNCert-N": [0.778, 0.474, 0.102, 0.00]},
-      "DD":       {"Bagging": [0.785, 0.311, 0.000, 0.00], "PGNNCert-E": [0.792, 0.578, 0.330, 0.063], "PGNNCert-N": [0.771, 0.344, 0.006, 0.000]}
-    },
-    "table1_clean_accuracy": {
-      "_provenance": "pgnncert.pdf Table 1 (p6), verbatim & verified",
-      "_columns": ["GCN", "PGNNCert-E(GCN)", "PGNNCert-N(GCN)", "GSAGE", "PGNNCert-E(GSAGE)", "PGNNCert-N(GSAGE)", "GAT", "PGNNCert-E(GAT)", "PGNNCert-N(GAT)"],
-      "Cora-ML":  [0.73, 0.68, 0.68, 0.67, 0.65, 0.68, 0.74, 0.69, 0.69],
-      "CiteSeer": [0.66, 0.67, 0.67, 0.69, 0.68, 0.68, 0.70, 0.67, 0.67],
-      "PubMed":   [0.86, 0.83, 0.85, 0.84, 0.84, 0.85, 0.85, 0.85, 0.84],
-      "Amazon-C": [0.81, 0.81, 0.81, 0.82, 0.78, 0.80, 0.83, 0.78, 0.80],
-      "AIDS":     [0.99, 0.88, 0.96, 0.97, 0.94, 0.95, 0.96, 0.93, 0.96],
-      "MUTAG":    [0.71, 0.64, 0.64, 0.70, 0.63, 0.64, 0.71, 0.65, 0.65],
-      "PROTEINS": [0.82, 0.81, 0.78, 0.83, 0.80, 0.81, 0.82, 0.78, 0.77],
-      "DD":       [0.80, 0.79, 0.77, 0.81, 0.78, 0.76, 0.81, 0.77, 0.79]
-    }
+ "_README": "Published SOTA numbers transcribed VERBATIM and VERIFIED against the paper PDFs in the repo (pgnncert.pdf, XGNNCert.pdf). For use as the 'reported' SOTA column in Aethelred's comparison tables. ALWAYS label these '(reported, <paper> <table/fig>)' \u2014 never as our own measurements. Our re-run numbers live in the other phase2_*/table1_* json files.",
+ "_verification": "Cross-checked cell-by-cell against XGNNCert.pdf p7 (Tables 1-3), p9 (Table 4) and pgnncert.pdf p6 (Table 1) on 2026-06-23 via pymupdf text extraction.",
+ "PGNNCert": {
+  "source_pdf": "pgnncert.pdf (in repo). Paper text: _ref_pgnncert/_paper_text.txt. Code: github.com/JetRichardLee/PGNNCert",
+  "certifies": "PREDICTION (label stable under <=B arbitrary edge/node perturbations) via hash-subgraph majority voting (PGNNCert-E hashes edges, PGNNCert-N hashes nodes)",
+  "datasets": "Cora-ML, CiteSeer, PubMed, Amazon-C (node) + AIDS, MUTAG, PROTEINS, DD (graph) -- IDENTICAL to ours",
+  "compatibility": "DIRECTLY compatible with our PREDICTION axis (aethelred_pred_certify + Phase-1 clean acc). Their 'GCN/GSAGE/GAT' = normally-trained no-defense (~ our table1_1 baseline); 'PGNNCert-E/-N' = certified-method clean acc (~ our Aethelred table1_2/3/4). CAVEAT: split (30/10/30 node, 50/20/30 graph) & seeds differ from ours -> reference, not identical-protocol.",
+  "max_certified_radius": {
+   "node_datasets": 25,
+   "graph_datasets": 30,
+   "note": "max tolerated arbitrary edges (PGNNCert-E) / nodes (PGNNCert-N)"
   },
-
-  "XGNNCert": {
-    "source_pdf": "XGNNCert.pdf (in repo). arXiv:2502.04224, ICLR 2025. Code vendored at baselines/XGNNCert",
-    "certifies": "EXPLANATION (explanatory-edge / ground-truth-motif overlap stable under <=B edge perturbations) via hybrid-subgraph voting over a base explainer",
-    "datasets": "SG+House, SG+Diamond, SG+Wheel (synthetic ShapeGGen, k_gt per appendix Table 5), Benzene, FC=FluorideCarbonyl (real molecular ground-truth)",
-    "compatibility": "Compatible with our FAITHFULNESS axis on Benzene/FC + synthetic (SG+House ~ graphxai BAHouse). NOT on TU MUTAG/AIDS/PROTEINS/DD. Match T=70, p=0.3, gamma(tau)=0.3, MD5, and per-dataset k_gt for apples-to-apples.",
-    "default_hyperparams": {"T": 70, "p": 0.3, "gamma_tau": 0.3, "hash": "md5", "lambda_cert_target": 3, "default_classifier": "GCN", "default_explainer": "PGExplainer"},
-    "metrics": {
-      "explanation_accuracy": "fraction of output explanatory edges that are in the ground-truth, over all test graphs (precision-style)",
-      "classification_accuracy": "fraction of correctly classified test graphs (voting classifier)",
-      "M_star": "Certified Perturbation Size at certified explanation accuracy lambda/k: >= lambda ground-truth edges guaranteed under M* arbitrary edge perturbations (REPORTED AS FIGURE 3, not a table)"
-    },
-    "table1_explanation_accuracy": {
-      "_provenance": "XGNNCert.pdf Table 1 (p7), verbatim & verified. Columns = [Orig, T=30, T=50, T=70(default), T=90] for EACH base explainer.",
-      "_columns": ["Orig", "T30", "T50", "T70", "T90"],
-      "_default_col_index": 3,
-      "PGExplainer": {
-        "SG+House":   [0.740, 0.658, 0.725, 0.725, 0.673],
-        "SG+Diamond": [0.745, 0.704, 0.730, 0.729, 0.620],
-        "SG+Wheel":   [0.629, 0.587, 0.612, 0.571, 0.542],
-        "Benzene":    [0.552, 0.421, 0.497, 0.468, 0.429],
-        "FC":         [0.531, 0.385, 0.452, 0.373, 0.328]
-      },
-      "ReFine": {
-        "SG+House":   [0.707, 0.588, 0.690, 0.593, 0.564],
-        "SG+Diamond": [0.569, 0.440, 0.499, 0.521, 0.398],
-        "SG+Wheel":   [0.604, 0.614, 0.626, 0.606, 0.462],
-        "Benzene":    [0.559, 0.463, 0.474, 0.512, 0.440],
-        "FC":         [0.503, 0.369, 0.447, 0.425, 0.314]
-      },
-      "GSAT": {
-        "SG+House":   [0.744, 0.759, 0.716, 0.673, 0.658],
-        "SG+Diamond": [0.564, 0.426, 0.493, 0.558, 0.420],
-        "SG+Wheel":   [0.568, 0.491, 0.544, 0.612, 0.562],
-        "Benzene":    [0.552, 0.314, 0.430, 0.445, 0.398],
-        "FC":         [0.487, 0.350, 0.392, 0.412, 0.373]
-      }
-    },
-    "table2_classification_accuracy": {
-      "_provenance": "XGNNCert.pdf Table 2 (p7), verbatim & verified. Columns = [Orig, T=30, T=50, T=70(default), T=90] per classifier.",
-      "_columns": ["Orig", "T30", "T50", "T70", "T90"],
-      "_default_col_index": 3,
-      "GCN": {
-        "SG+House":   [0.920, 0.895, 0.905, 0.905, 0.890],
-        "SG+Diamond": [0.965, 0.935, 0.935, 0.935, 0.930],
-        "SG+Wheel":   [0.915, 0.905, 0.905, 0.900, 0.885],
-        "Benzene":    [0.758, 0.746, 0.700, 0.723, 0.707],
-        "FC":         [0.711, 0.674, 0.692, 0.692, 0.631]
-      },
-      "GIN": {
-        "SG+House":   [0.945, 0.915, 0.915, 0.900, 0.905],
-        "SG+Diamond": [0.975, 0.935, 0.955, 0.955, 0.955],
-        "SG+Wheel":   [0.930, 0.915, 0.905, 0.900, 0.895],
-        "Benzene":    [0.792, 0.736, 0.754, 0.754, 0.754],
-        "FC":         [0.800, 0.662, 0.714, 0.714, 0.703]
-      },
-      "GSAGE": {
-        "SG+House":   [0.930, 0.900, 0.890, 0.895, 0.875],
-        "SG+Diamond": [0.965, 0.940, 0.940, 0.940, 0.940],
-        "SG+Wheel":   [0.920, 0.910, 0.910, 0.895, 0.890],
-        "Benzene":    [0.773, 0.725, 0.760, 0.718, 0.718],
-        "FC":         [0.723, 0.692, 0.692, 0.692, 0.620]
-      }
-    },
-    "table3_sensitivity_PGExplainer": {
-      "_provenance": "XGNNCert.pdf Table 3 (p7), verbatim & verified. Explanation accuracy vs p, gamma, hash. Defaults p=0.3, gamma=0.3, MD5 (these cols match Table1 PGExplainer T70).",
-      "_columns": ["p=0.0", "p=0.2", "p=0.3", "p=0.4", "gamma=0.2", "gamma=0.3", "gamma=0.4", "MD5", "SHA1", "SHA256"],
-      "SG+House":   [0.053, 0.695, 0.725, 0.710, 0.715, 0.725, 0.720, 0.725, 0.718, 0.710],
-      "SG+Diamond": [0.045, 0.620, 0.729, 0.720, 0.712, 0.729, 0.718, 0.729, 0.729, 0.721],
-      "SG+Wheel":   [0.042, 0.511, 0.571, 0.508, 0.550, 0.571, 0.564, 0.571, 0.565, 0.562],
-      "Benzene":    [0.102, 0.433, 0.468, 0.403, 0.440, 0.468, 0.452, 0.468, 0.472, 0.468],
-      "FC":         [0.096, 0.353, 0.373, 0.288, 0.345, 0.373, 0.385, 0.373, 0.382, 0.390]
-    },
-    "table4_empirical_robustness_under_attack": {
-      "_provenance": "XGNNCert.pdf Table 4 (p9), verbatim & verified. Under the attack of Li et al. 2024 (2 edge perturbations). expl_acc higher=better; difference_fraction lower=better (rate the explanation changes).",
-      "_datasets_order": ["SG+House", "SG+Diamond", "SG+Wheel", "Benzene", "FC"],
-      "explanation_accuracy": {"V-InfoR": [0.693, 0.419, 0.439, 0.345, 0.217], "XGNNCert": [0.740, 0.729, 0.571, 0.468, 0.403]},
-      "difference_fraction_pct": {"V-InfoR": [48.39, 73.07, 65.35, 83.82, 63.22], "XGNNCert": [7.44, 0.0, 4.20, 1.44, 1.41]}
-    },
-    "certified_result_fig3": {
-      "_provenance": "XGNNCert.pdf Fig 3 + p9 text. Full M*-vs-lambda is a figure; the text gives the SG+House anchor.",
-      "note": "On SG+House with PGExplainer, with average M*=6.2 edges arbitrarily perturbed, XGNNCert guarantees at least lambda ground-truth explanatory edges retained. Certified explanation accuracy = lambda/k.",
-      "M_star_avg_edges_SGHouse": 6.2
-    }
+  "certified_accuracy_vs_budget": "PGNNCert's OWN certified curves reproduced numerically via official code -> results/sota_pgnncert_certcurves.json. PGNNCert vs other SOTA defenses below.",
+  "wider_sota_baselines_note": "PGNNCert benchmarks against RS (sparse randomized smoothing, Bojchevski et al.), Bagging (Jia et al.), and Bi-RS (Include/Exclude, Lai et al. 2024). Bagging is TABULATED (Table 2 below). RS / Bi-RS node-injection comparison is FIGURE-ONLY (qualitative: PGNNCert > RS, Bagging, Bi-RS-Include; < Bi-RS-Exclude). Reproduce these from their own public code only if a full numeric curve is needed; otherwise cite reported values.",
+  "table2_certified_graph_accuracy_vs_Bagging": {
+   "_provenance": "pgnncert.pdf Table 2 (p8), verbatim & verified. Certified GRAPH accuracy vs #perturbed edges.",
+   "_columns_edges": [
+    0,
+    5,
+    10,
+    15
+   ],
+   "PROTEINS": {
+    "Bagging": [
+     0.756,
+     0.205,
+     0.0,
+     0.0
+    ],
+    "PGNNCert-E": [
+     0.744,
+     0.518,
+     0.26,
+     0.0
+    ],
+    "PGNNCert-N": [
+     0.778,
+     0.474,
+     0.102,
+     0.0
+    ]
+   },
+   "DD": {
+    "Bagging": [
+     0.785,
+     0.311,
+     0.0,
+     0.0
+    ],
+    "PGNNCert-E": [
+     0.792,
+     0.578,
+     0.33,
+     0.063
+    ],
+    "PGNNCert-N": [
+     0.771,
+     0.344,
+     0.006,
+     0.0
+    ]
+   }
+  },
+  "table1_clean_accuracy": {
+   "_provenance": "pgnncert.pdf Table 1 (p6), verbatim & verified",
+   "_columns": [
+    "GCN",
+    "PGNNCert-E(GCN)",
+    "PGNNCert-N(GCN)",
+    "GSAGE",
+    "PGNNCert-E(GSAGE)",
+    "PGNNCert-N(GSAGE)",
+    "GAT",
+    "PGNNCert-E(GAT)",
+    "PGNNCert-N(GAT)"
+   ],
+   "Cora-ML": [
+    0.73,
+    0.68,
+    0.68,
+    0.67,
+    0.65,
+    0.68,
+    0.74,
+    0.69,
+    0.69
+   ],
+   "CiteSeer": [
+    0.66,
+    0.67,
+    0.67,
+    0.69,
+    0.68,
+    0.68,
+    0.7,
+    0.67,
+    0.67
+   ],
+   "PubMed": [
+    0.86,
+    0.83,
+    0.85,
+    0.84,
+    0.84,
+    0.85,
+    0.85,
+    0.85,
+    0.84
+   ],
+   "Amazon-C": [
+    0.81,
+    0.81,
+    0.81,
+    0.82,
+    0.78,
+    0.8,
+    0.83,
+    0.78,
+    0.8
+   ],
+   "AIDS": [
+    0.99,
+    0.88,
+    0.96,
+    0.97,
+    0.94,
+    0.95,
+    0.96,
+    0.93,
+    0.96
+   ],
+   "MUTAG": [
+    0.71,
+    0.64,
+    0.64,
+    0.7,
+    0.63,
+    0.64,
+    0.71,
+    0.65,
+    0.65
+   ],
+   "PROTEINS": [
+    0.82,
+    0.81,
+    0.78,
+    0.83,
+    0.8,
+    0.81,
+    0.82,
+    0.78,
+    0.77
+   ],
+   "DD": [
+    0.8,
+    0.79,
+    0.77,
+    0.81,
+    0.78,
+    0.76,
+    0.81,
+    0.77,
+    0.79
+   ]
   }
+ },
+ "XGNNCert": {
+  "source_pdf": "XGNNCert.pdf (in repo). arXiv:2502.04224, ICLR 2025. Code vendored at baselines/XGNNCert",
+  "certifies": "EXPLANATION (explanatory-edge / ground-truth-motif overlap stable under <=B edge perturbations) via hybrid-subgraph voting over a base explainer",
+  "datasets": "SG+House, SG+Diamond, SG+Wheel (synthetic ShapeGGen, k_gt per appendix Table 5), Benzene, FC=FluorideCarbonyl (real molecular ground-truth)",
+  "compatibility": "Compatible with our FAITHFULNESS axis on Benzene/FC + synthetic (SG+House ~ graphxai BAHouse). NOT on TU MUTAG/AIDS/PROTEINS/DD. Match T=70, p=0.3, gamma(tau)=0.3, MD5, and per-dataset k_gt for apples-to-apples.",
+  "default_hyperparams": {
+   "T": 70,
+   "p": 0.3,
+   "gamma_tau": 0.3,
+   "hash": "md5",
+   "lambda_cert_target": 3,
+   "default_classifier": "GCN",
+   "default_explainer": "PGExplainer"
+  },
+  "metrics": {
+   "explanation_accuracy": "fraction of output explanatory edges that are in the ground-truth, over all test graphs (precision-style)",
+   "classification_accuracy": "fraction of correctly classified test graphs (voting classifier)",
+   "M_star": "Certified Perturbation Size at certified explanation accuracy lambda/k: >= lambda ground-truth edges guaranteed under M* arbitrary edge perturbations (REPORTED AS FIGURE 3, not a table)"
+  },
+  "table1_explanation_accuracy": {
+   "_provenance": "XGNNCert.pdf Table 1 (p7), verbatim & verified. Columns = [Orig, T=30, T=50, T=70(default), T=90] for EACH base explainer.",
+   "_columns": [
+    "Orig",
+    "T30",
+    "T50",
+    "T70",
+    "T90"
+   ],
+   "_default_col_index": 3,
+   "PGExplainer": {
+    "SG+House": [
+     0.74,
+     0.658,
+     0.725,
+     0.725,
+     0.673
+    ],
+    "SG+Diamond": [
+     0.745,
+     0.704,
+     0.73,
+     0.729,
+     0.62
+    ],
+    "SG+Wheel": [
+     0.629,
+     0.587,
+     0.612,
+     0.571,
+     0.542
+    ],
+    "Benzene": [
+     0.552,
+     0.421,
+     0.497,
+     0.468,
+     0.429
+    ],
+    "FC": [
+     0.531,
+     0.385,
+     0.452,
+     0.373,
+     0.328
+    ]
+   },
+   "ReFine": {
+    "SG+House": [
+     0.707,
+     0.588,
+     0.69,
+     0.593,
+     0.564
+    ],
+    "SG+Diamond": [
+     0.569,
+     0.44,
+     0.499,
+     0.521,
+     0.398
+    ],
+    "SG+Wheel": [
+     0.604,
+     0.614,
+     0.626,
+     0.606,
+     0.462
+    ],
+    "Benzene": [
+     0.559,
+     0.463,
+     0.474,
+     0.512,
+     0.44
+    ],
+    "FC": [
+     0.503,
+     0.369,
+     0.447,
+     0.425,
+     0.314
+    ]
+   },
+   "GSAT": {
+    "SG+House": [
+     0.744,
+     0.759,
+     0.716,
+     0.673,
+     0.658
+    ],
+    "SG+Diamond": [
+     0.564,
+     0.426,
+     0.493,
+     0.558,
+     0.42
+    ],
+    "SG+Wheel": [
+     0.568,
+     0.491,
+     0.544,
+     0.612,
+     0.562
+    ],
+    "Benzene": [
+     0.552,
+     0.314,
+     0.43,
+     0.445,
+     0.398
+    ],
+    "FC": [
+     0.487,
+     0.35,
+     0.392,
+     0.412,
+     0.373
+    ]
+   }
+  },
+  "table2_classification_accuracy": {
+   "_provenance": "XGNNCert.pdf Table 2 (p7), verbatim & verified. Columns = [Orig, T=30, T=50, T=70(default), T=90] per classifier.",
+   "_columns": [
+    "Orig",
+    "T30",
+    "T50",
+    "T70",
+    "T90"
+   ],
+   "_default_col_index": 3,
+   "GCN": {
+    "SG+House": [
+     0.92,
+     0.895,
+     0.905,
+     0.905,
+     0.89
+    ],
+    "SG+Diamond": [
+     0.965,
+     0.935,
+     0.935,
+     0.935,
+     0.93
+    ],
+    "SG+Wheel": [
+     0.915,
+     0.905,
+     0.905,
+     0.9,
+     0.885
+    ],
+    "Benzene": [
+     0.758,
+     0.746,
+     0.7,
+     0.723,
+     0.707
+    ],
+    "FC": [
+     0.711,
+     0.674,
+     0.692,
+     0.692,
+     0.631
+    ]
+   },
+   "GIN": {
+    "SG+House": [
+     0.945,
+     0.915,
+     0.915,
+     0.9,
+     0.905
+    ],
+    "SG+Diamond": [
+     0.975,
+     0.935,
+     0.955,
+     0.955,
+     0.955
+    ],
+    "SG+Wheel": [
+     0.93,
+     0.915,
+     0.905,
+     0.9,
+     0.895
+    ],
+    "Benzene": [
+     0.792,
+     0.736,
+     0.754,
+     0.754,
+     0.754
+    ],
+    "FC": [
+     0.8,
+     0.662,
+     0.714,
+     0.714,
+     0.703
+    ]
+   },
+   "GSAGE": {
+    "SG+House": [
+     0.93,
+     0.9,
+     0.89,
+     0.895,
+     0.875
+    ],
+    "SG+Diamond": [
+     0.965,
+     0.94,
+     0.94,
+     0.94,
+     0.94
+    ],
+    "SG+Wheel": [
+     0.92,
+     0.91,
+     0.91,
+     0.895,
+     0.89
+    ],
+    "Benzene": [
+     0.773,
+     0.725,
+     0.76,
+     0.718,
+     0.718
+    ],
+    "FC": [
+     0.723,
+     0.692,
+     0.692,
+     0.692,
+     0.62
+    ]
+   }
+  },
+  "table3_sensitivity_PGExplainer": {
+   "_provenance": "XGNNCert.pdf Table 3 (p7), verbatim & verified. Explanation accuracy vs p, gamma, hash. Defaults p=0.3, gamma=0.3, MD5 (these cols match Table1 PGExplainer T70).",
+   "_columns": [
+    "p=0.0",
+    "p=0.2",
+    "p=0.3",
+    "p=0.4",
+    "gamma=0.2",
+    "gamma=0.3",
+    "gamma=0.4",
+    "MD5",
+    "SHA1",
+    "SHA256"
+   ],
+   "SG+House": [
+    0.053,
+    0.695,
+    0.725,
+    0.71,
+    0.715,
+    0.725,
+    0.72,
+    0.725,
+    0.718,
+    0.71
+   ],
+   "SG+Diamond": [
+    0.045,
+    0.62,
+    0.729,
+    0.72,
+    0.712,
+    0.729,
+    0.718,
+    0.729,
+    0.729,
+    0.721
+   ],
+   "SG+Wheel": [
+    0.042,
+    0.511,
+    0.571,
+    0.508,
+    0.55,
+    0.571,
+    0.564,
+    0.571,
+    0.565,
+    0.562
+   ],
+   "Benzene": [
+    0.102,
+    0.433,
+    0.468,
+    0.403,
+    0.44,
+    0.468,
+    0.452,
+    0.468,
+    0.472,
+    0.468
+   ],
+   "FC": [
+    0.096,
+    0.353,
+    0.373,
+    0.288,
+    0.345,
+    0.373,
+    0.385,
+    0.373,
+    0.382,
+    0.39
+   ]
+  },
+  "table4_empirical_robustness_under_attack": {
+   "_provenance": "XGNNCert.pdf Table 4 (p9), verbatim & verified. Under the attack of Li et al. 2024 (2 edge perturbations). expl_acc higher=better; difference_fraction lower=better (rate the explanation changes).",
+   "_datasets_order": [
+    "SG+House",
+    "SG+Diamond",
+    "SG+Wheel",
+    "Benzene",
+    "FC"
+   ],
+   "explanation_accuracy": {
+    "V-InfoR": [
+     0.693,
+     0.419,
+     0.439,
+     0.345,
+     0.217
+    ],
+    "XGNNCert": [
+     0.74,
+     0.729,
+     0.571,
+     0.468,
+     0.403
+    ]
+   },
+   "difference_fraction_pct": {
+    "V-InfoR": [
+     48.39,
+     73.07,
+     65.35,
+     83.82,
+     63.22
+    ],
+    "XGNNCert": [
+     7.44,
+     0.0,
+     4.2,
+     1.44,
+     1.41
+    ]
+   }
+  },
+  "certified_result_fig3": {
+   "_provenance": "XGNNCert.pdf Fig 3 + p9 text. Full M*-vs-lambda is a figure; the text gives the SG+House anchor.",
+   "note": "On SG+House with PGExplainer, with average M*=6.2 edges arbitrarily perturbed, XGNNCert guarantees at least lambda ground-truth explanatory edges retained. Certified explanation accuracy = lambda/k.",
+   "M_star_avg_edges_SGHouse": 6.2
+  },
+  "table8_gnnexplainer_faithfulness": {
+   "_source": "XGNNCert.pdf Table 8 (App. D): GNNExplainer explanation accuracy (avg over 5 runs)",
+   "_datasets_order": [
+    "SG+House",
+    "SG+Diamond",
+    "SG+Wheel",
+    "Benzene",
+    "FC"
+   ],
+   "explanation_accuracy": [
+    0.624,
+    0.368,
+    0.475,
+    0.276,
+    0.226
+   ]
+  }
+ }
 }

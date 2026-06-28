@@ -46,6 +46,11 @@ C = {
     "GNNExplainer-spm": "#B08968",  # warm taupe — non-causal explainer
     "Undefended":  "#ADADAD",  # neutral grey
     "GNNExplainer": "#A8A8A8",
+    # DIR-paper Table 2 interpretation baselines (secondary; muted, distinct tones)
+    "Attention":   "#9AA0A6",  # cool grey
+    "ASAP":        "#B5838D",  # dusty rose
+    "Top-k Pool":  "#8E9B6C",  # olive
+    "SAG Pool":    "#C08552",  # caramel
 }
 # linestyle + marker per method (ours solid+filled; baselines dashed/dotted)
 _LS = {
@@ -56,6 +61,8 @@ _LS = {
     "V-InfoR": ("-.", "*"),
     "PGExplainer": (":", "."), "ReFine": (":", "."), "GSAT": (":", "."),
     "DIR": ("--", "s"), "GNNExplainer-spm": (":", "v"),
+    "Attention": (":", "v"), "ASAP": ((0, (4, 2)), "^"),
+    "Top-k Pool": ((0, (2, 1)), "D"), "SAG Pool": ((0, (5, 1, 1, 1)), "s"),
     "Undefended": ((0, (1, 1)), None),
 }
 

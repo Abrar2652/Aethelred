@@ -1,0 +1,139 @@
+% =====================================================================
+%  Technical appendix: full proofs of the deterministic edge certificate.
+%  \input by main.tex after the bibliography. Restated results are kept
+%  UNNUMBERED (bold) so the body's Prop.~1 / Thm.~1--3 numbering is intact.
+% =====================================================================
+
+\section{Proofs of the Edge Certificate}
+\label{app:proofs}
+
+Throughout, an explanation is the set $\Ek=\{e_1,\dots,e_k\}$ of the $k$
+highest-scoring \emph{undirected} edges of the clean graph, ordered
+$s(e_1)\ge\cdots\ge s(e_M)$. An adversary applies a perturbation
+$\pi=(\mathcal{A},\mathcal{D})$: a set $\mathcal{A}$ of added edges and a set
+$\mathcal{D}$ of deleted edges, with total budget
+$|\mathcal{A}|+|\mathcal{D}|\le B$. Let $G'$ be the perturbed graph and
+$\Ek'$ its top-$k$ explanation. All scores are taken from the Causal Discovery
+Core, $s(u,v)=\sigma(\mathrm{MLP}[\,h_u,h_v,|h_u-h_v|,\cos(x_u,x_v)\,])$ with
+$h_u=\mathrm{MLP}(x_u)$.
+
+\paragraph{Undirected aggregation.}
+The core scores directed edges; \aeth{} stores each physical edge as the pair
+$(u,v),(v,u)$ and the unit of perturbation is the \emph{physical} (undirected)
+edge. We assign each physical edge the mean of its two directed scores,
+$s(\{u,v\})=\tfrac12\big(s(u,v)+s(v,u)\big)$. Because each directed score is a
+function of its own two endpoints' features only, $s(\{u,v\})$ is a function of
+$\{x_u,x_v\}$ only; adding or deleting any \emph{other} physical edge leaves it
+unchanged. This is the sole property the proofs use.
+
+\subsection*{Proposition~\ref{prop:local} (Edge-locality), restated}
+\emph{For any perturbation that adds or deletes edges other than $e$, the score
+$s(e)$ is unchanged.}
+
+\begin{proof}
+$s(e)$ depends only on the features of $e$'s two endpoints (above). Edge
+additions and deletions do not alter node features, and the node set is fixed
+(both threat models in \xgn{}/\pgn{} perturb $E$, not $X$ or $V$). Hence any
+$\pi$ that does not itself add or delete $e$ leaves the features of $e$'s
+endpoints---and therefore $s(e)$---invariant.
+\end{proof}
+
+A first corollary, used repeatedly: \emph{deletions of edges other than $e$
+leave both $s(e)$ and the entire relative ranking of all surviving edges
+unchanged}, since every surviving score is individually invariant and ranking
+depends only on the multiset of scores.
+
+\subsection*{Theorem~\ref{thm:overlap} (Certified overlap), restated}
+\emph{For any $\pi$ with $|\mathcal{A}|+|\mathcal{D}|\le B$,
+$\;|\Ek\cap\Ek'|\ge k-B$.}
+
+\begin{proof}
+We bound the number of clean explanatory edges that can leave the top-$k$. An
+edge $e_i\in\Ek$ can fail to lie in $\Ek'$ in exactly two ways.
+
+\emph{(i) Direct deletion.} If $e_i\in\mathcal{D}$, it is absent from $G'$ and
+hence from $\Ek'$. Each deletion removes at most one member of $\Ek$, so
+deletions account for at most $|\mathcal{D}|$ losses.
+
+\emph{(ii) Eviction by an addition.} Suppose $e_i\notin\mathcal{D}$. By
+Prop.~\ref{prop:local} its score $s(e_i)$ and the scores of all other surviving
+clean edges are unchanged, so among the surviving clean edges the ranking is
+identical to the clean ranking. The only edges that can outrank $e_i$ in $G'$
+beyond those that already did are the added edges $\mathcal{A}$. Each added edge
+occupies exactly one position in the sorted order of $G'$; thus the $a$ added
+edges collectively push the clean edges down by at most $a$ positions in total,
+and---because each added edge sits in a single slot---can displace at most
+$|\mathcal{A}|$ clean edges out of the top-$k$. Formally, the number of clean
+survivors with final rank $>k$ is at most the number of added edges with score
+exceeding the clean $k$-th score, which is at most $|\mathcal{A}|$.
+
+Combining, the number of members of $\Ek$ absent from $\Ek'$ is at most
+$|\mathcal{D}|+|\mathcal{A}|\le B$. Therefore
+$|\Ek\cap\Ek'|\ge k-B$.
+\end{proof}
+
+\subsection*{Theorem~\ref{thm:radius} (Per-edge certified radius), restated}
+\emph{The rank-$r$ edge $e_r\in\Ek$ (with $r\le k$) remains in the top-$k$
+explanation under any $\pi$ with $|\mathcal{A}|+|\mathcal{D}|\le R(e_r)=k-r$ that
+does not delete $e_r$.}
+
+\begin{proof}
+Assume $e_r\notin\mathcal{D}$. By Prop.~\ref{prop:local}, $s(e_r)$ is unchanged
+and every surviving clean edge keeps its score, so in $G'$ the only edges that
+can be ranked above $e_r$ are (a) the $r-1$ clean edges already above it and (b)
+those added edges whose score exceeds $s(e_r)$. Deletions of other edges only
+remove competitors, weakly improving $e_r$'s rank. Writing $a\le|\mathcal{A}|$
+for the number of added edges scoring above $s(e_r)$, the rank of $e_r$ in $G'$
+is at most $r+a$. Hence $e_r$ stays in the top-$k$ whenever $r+a\le k$, i.e.\
+whenever $a\le k-r$. Since $a\le|\mathcal{A}|\le B$, a budget $B\le k-r$
+suffices, giving the certified radius $R(e_r)=k-r$.
+\end{proof}
+
+\noindent\textbf{Remark (consistency with Thm.~\ref{thm:overlap}).} Summing the
+per-edge radii recovers the overlap bound: the $j$-th-from-bottom member of
+$\Ek$ has rank $r=k-j+1$ and radius $j-1$, so it can be evicted only once the
+budget exceeds $j-1$; at budget $B$ at most the bottom $B$ members are at risk,
+again yielding $|\Ek\cap\Ek'|\ge k-B$.
+
+\subsection*{Theorem~\ref{thm:hijack} (Transductive hijack impossibility), restated}
+\emph{In the transductive setting, let the structural-prior allowlist be active
+with cap $c<1$, so every edge outside the training adjacency has score at most
+$c$. If every $e_i\in\Ek$ has clean score $s(e_i)>c$, then no inserted edge can
+enter $\Ek'$, for any budget $B$; the explanation can lose members only by
+direct deletion.}
+
+\begin{proof}
+Every added edge is, by construction, absent from the training adjacency, so the
+allowlist multiplier caps its score at $c$. By hypothesis $s(e_i)>c$ for all
+$e_i\in\Ek$, hence every added edge scores strictly below every clean
+explanatory edge. In the proof of Thm.~\ref{thm:radius}, the count $a$ of added
+edges outranking a member $e_i$ is therefore $0$ regardless of $|\mathcal{A}|$:
+the certified radius against additions is $R(e_i)=\infty$. Consequently no added
+edge ever occupies a top-$k$ slot, and the only way to reduce $|\Ek\cap\Ek'|$ is
+to delete clean members directly. The attacker-\emph{insertion} (hijack) rate is
+thus exactly $0$ for unbounded $B$.
+\end{proof}
+
+This guarantee has no analogue for voting-based certificates: a smoothing/voting
+explainer can always be hijacked with enough budget because an inserted edge
+participates in (and can flip the vote of) many sub-graphs. The empirical check
+agrees---$18/18$ top-$k$ edges survive $B=100$ insertions.
+
+\subsection*{Tightness}
+The overlap bound is achieved with equality, so no sound certificate of this
+form can be larger. Fix $B\le k$. Construct an adversary that adds $B$ edges
+whose endpoint features yield scores above $s(e_k)$ (e.g.\ duplicating the
+endpoint profile of $e_1$). By the eviction argument these displace exactly the
+$B$ lowest-ranked members of $\Ek$, giving $|\Ek\cap\Ek'|=k-B$. Hence the bound
+of Thm.~\ref{thm:overlap} is tight, the certified--empirical gap is $0$, and the
+greedy adversary of Fig.~\ref{fig:tight} realizes it---in contrast to randomized
+smoothing, whose lower bound is strictly below the worst case it admits.
+
+\subsection*{Soundness gate}
+Because the certificate is deterministic, soundness is checkable exactly. For
+each trained model and dataset we run the worst-case adversary of the tightness
+construction at every budget $B$ and confirm the \emph{realized} overlap never
+falls below $k-B$ (function \texttt{soundness\_check}). This gate must pass
+before any large certification sweep; an unsound certificate would otherwise
+invalidate every downstream number. All reported configurations pass with the
+gap closing exactly at the bound.

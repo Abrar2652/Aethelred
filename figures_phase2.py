@@ -123,10 +123,12 @@ def fig_unified_faithfulness():
     fs.apply()
     sota = _load(os.path.join(ROOT, "results/sota_published.json"))
     t1 = sota["XGNNCert"]["table1_explanation_accuracy"]
+    t8 = sota["XGNNCert"]["table8_gnnexplainer_faithfulness"]
+    t8map = dict(zip(t8["_datasets_order"], t8["explanation_accuracy"]))
     SG = {"BAHouse": "SG+House", "BADiamond": "SG+Diamond", "BAWheel": "SG+Wheel",
           "Benzene": "Benzene", "FC": "FC"}
     datasets = ["BAHouse", "BADiamond", "BAWheel", "Benzene", "FC"]
-    methods = ["Aethelred", "XGNNCert", "PGExplainer", "ReFine", "GSAT"]
+    methods = ["Aethelred", "XGNNCert", "PGExplainer", "ReFine", "GSAT", "GNNExplainer"]
     vals = {m: [] for m in methods}
     for ds in datasets:
         sg = SG[ds]
@@ -137,15 +139,16 @@ def fig_unified_faithfulness():
         vals["PGExplainer"].append(t1["PGExplainer"][sg][0])   # orig
         vals["ReFine"].append(t1["ReFine"][sg][0])
         vals["GSAT"].append(t1["GSAT"][sg][0])
+        vals["GNNExplainer"].append(t8map[sg])                 # XGNNCert Table 8
 
     import matplotlib.pyplot as plt
-    x = np.arange(len(datasets)); w = 0.16
-    fig, ax = plt.subplots(figsize=(9.6, 4.0))
+    x = np.arange(len(datasets)); w = 0.14
+    fig, ax = plt.subplots(figsize=(9.8, 4.0))
     for i, m in enumerate(methods):
-        fs.bar(ax, x + (i - 2) * w, vals[m], w, m)
+        fs.bar(ax, x + (i - 2.5) * w, vals[m], w, m)
     ax.set_xticks(x); ax.set_xticklabels(datasets)
     ax.set_ylabel("explanation faithfulness  (precision@k)")
-    ax.set_ylim(0, 0.85); ax.legend(ncol=5, fontsize=8.5, loc="upper center",
+    ax.set_ylim(0, 0.85); ax.legend(ncol=6, fontsize=8, loc="upper center",
                                     bbox_to_anchor=(0.5, 1.13))
     print("saved", fs.save(fig, "F2c_unified_faithfulness"))
 
@@ -245,20 +248,29 @@ def fig9_spmotif_thesis():
     # published DIR-paper Table 6 (mean, std)
     DIR = {"m": [0.257, 0.255, 0.247, 0.192], "s": [0.014, 0.016, 0.012, 0.044]}
     GNX = {"m": [0.249, 0.203, 0.167, 0.066], "s": [0.011, 0.019, 0.039, 0.007]}
-    fig, ax = fs.new_fig(5.6, 4.2)
+    # DIR-paper Table 2 interpretation baselines (precision@5 vs bias)
+    POOL = {"Attention": [0.183, 0.183, 0.182, 0.134],
+            "ASAP":       [0.187, 0.188, 0.186, 0.121],
+            "Top-k Pool": [0.215, 0.207, 0.212, 0.148],
+            "SAG Pool":   [0.212, 0.198, 0.201, 0.136]}
+    fig, ax = fs.new_fig(5.8, 4.2)
 
     def band(xs, m, s, style):
         m = np.array(m); s = np.array(s)
         ln, = ax.plot(xs, m, **style)
         ax.fill_between(xs, m - s, m + s, color=style["color"], alpha=0.15, lw=0)
         return ln
+    # secondary pooling baselines first (thin lines, no band) so the three story
+    # lines (GNNExplainer / DIR / Aethelred) stay legible on top
+    for m, ys in POOL.items():
+        ax.plot(biasx, ys, **fs.style(m, linewidth=1.4, markersize=4.0, alpha=0.9))
     band(biasx, GNX["m"], GNX["s"], fs.style("GNNExplainer-spm", label="GNNExplainer (non-causal)"))
     band(biasx, DIR["m"], DIR["s"], fs.style("DIR", label="DIR (causal)"))
     band(biasx, aeth, aeth_s, fs.style("Aethelred"))
     ax.set_xlabel("spurious-correlation bias")
     ax.set_ylabel("explanation faithfulness  (precision@K vs causal motif)")
     ax.set_xticks(biasx); ax.set_ylim(0, 0.40)
-    ax.legend(loc="lower left")
+    ax.legend(loc="lower left", ncol=2, fontsize=8)
     print("saved", fs.save(fig, "F9_spmotif_causal_vs_spurious"))
 
 

@@ -15,9 +15,15 @@ K = int(sys.argv[2]) if len(sys.argv) > 2 else 12
 NB = 2   # attack budget (edges), matching XGNNCert Table 4
 torch.manual_seed(0); np.random.seed(0)
 
-from graphxai.datasets import Benzene
+# F2b uses XGNNCert Table-4 dataset names (SG+House/Diamond/Wheel); map them to
+# the graphxai ShapeGGen loaders and save results under the F2b name.
+_SG2GX = {"SG+House": "BAHouse", "SG+Diamond": "BADiamond", "SG+Wheel": "BAWheel"}
+GX = _SG2GX.get(DS, DS)
+from graphxai.datasets import Benzene, BAHouse, BADiamond, BAWheel
 from graphxai.datasets import FluorideCarbonyl as FC
-ds = {"Benzene": Benzene, "FC": FC}[DS](split_sizes=(0.7, 0.2, 0.1), seed=1200)
+_LOADER = {"Benzene": Benzene, "FC": FC, "BAHouse": BAHouse,
+           "BADiamond": BADiamond, "BAWheel": BAWheel}
+ds = _LOADER[GX](split_sizes=(0.7, 0.2, 0.1), seed=1200)
 graphs = list(ds.graphs)
 for g in graphs:
     g.y = g.y.long().view(-1)
@@ -28,7 +34,7 @@ masks = (_m(ds.train_index), _m(ds.val_index), _m(ds.test_index))
 test_pos, gt_pos = ds.get_test_w_labels(label=1)
 model, acc = train_aethelred_graph(graphs, nf, nc, masks, lab,
     {"epochs": 80, "lr": 0.002, "num_envs": 5, "hparams": dict(FULL_HPARAMS),
-     "arch": "GCN", "task": "graph", "dataset": f"gx_{DS}_atk",
+     "arch": "GCN", "task": "graph", "dataset": f"gx_{GX}_atk",
      "force_retrain": True, "seed": 42, "gate_lambda": 1.0})
 dev = next(model.parameters()).device
 print(f"[atk] {DS} acc {acc:.3f}")
