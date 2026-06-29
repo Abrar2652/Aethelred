@@ -1,0 +1,1192 @@
+Deterministic Certification of Graph Neural Networks against
+Graph Poisoning Attacks with Arbitrary Perturbations
+Jiate Li§, Meng Pang†, Yun Dong‡, and Binghui Wang§*
+§Department of Computer Science, Illinois Institute of Technology, Chicago, USA
+†School of Mathematics and Computer Sciences, Nanchang University, Nanchang, China
+‡Department of Humanities, Social Science, and Communication, MSOE, Milwaukee, USA
+Abstract
+Graph neural networks (GNNs) are becoming the de facto
+method to learn on the graph data and have achieved the
+state-of-the-art on node and graph classification tasks. How-
+ever, recent works show GNNs are vulnerable to training-
+time poisoning attacks – marginally perturbing edges, nodes,
+or/and node features of training graph(s) can largely de-
+grade GNNs’ testing performance. Most previous defenses
+against graph poisoning attacks are empirical and are soon
+broken by adaptive / stronger ones. A few provable defenses
+provide robustness guarantees, but have large gaps when ap-
+plied in practice: 1) restrict the attacker on only one type of
+perturbation; 2) design for a particular GNN architecture or
+task; and 3) robustness guarantees are not 100% accurate.
+In this work, we bridge all these gaps by developing
+PGNNCert, the first certified defense of GNNs against poi-
+soning attacks under arbitrary (edge, node, and node fea-
+ture) perturbations with deterministic robustness guarantees.
+Extensive evaluations on multiple node and graph classifi-
+cation datasets and GNNs demonstrate the effectiveness of
+PGNNCert to provably defend against arbitrary poisoning
+perturbations. PGNNCert is also shown to significantly out-
+perform the state-of-the-art certified defenses against edge
+perturbation or node perturbation during GNN training.
+1. Introduction
+Graph Neural Network (GNN) [ 15, 21, 37, 44, 48, 56]
+is the leading approach for representation learning on
+graphs, showing state-of-the-art performance in various
+graph-related tasks like node classification and graph classifi-
+cation. In node classification, the goal is to predict labels for
+individual nodes, while in graph classification, the objective
+is to predict labels for entire graphs. GNNs have significantly
+advanced applications across fields such as chemistry [14],
+physics [36, 39], neuroscience [3], and social science [13].
+*Corresponding author (bwang70@iit.edu)
+However, various works [6–8, 20, 40, 45, 51, 55, 60, 63]
+have shown that GNNs are vulnerable to training-time graph
+poisoning attacks — an attacker perturbs the graph structure
+during training such that the learnt poisoned GNN model
+will have low accuracy on predicting new test nodes/graphs.
+As a graph consists of three components: nodes, their fea-
+tures, and edges connecting the nodes, an attacker is allowed
+to perturb an individual component or their combinations.
+For instance, an attacker could inject a few nodes [20, 40],
+slightly modify the edges [ 8, 45, 55, 63] on the training
+graphs, and/or perturb features of certain nodes [63].
+Various empirical defenses [12, 42, 43, 59, 61, 62] have
+been proposed to mitigate the graph poisoning attack, but
+were soon broken by adaptive attacks [33]. Most existing cer-
+tified defenses [16, 19, 22, 24, 47, 54] are against test-time
+evasion attacks, with a few exceptions [18, 22], leaving cer-
+tified defenses against poisoning attacks largely unexplored1.
+However, existing provable defenses face several limitations
+when applied in practice: 1) all restrict the attacker’s capa-
+bility to only one type of perturbation (e.g., node injection
+or edge perturbation); 2) they are designed for a particular
+GNN architecture or GNN task [19]; and 3) their robustness
+guarantee is probabilistic (i.e., not 100% accurate) [18, 22].
+We propose PGNNCert to address the above limitations.
+PGNNCert is the first certified defensefor GNNs on the two
+most common node and graph classification tasks against
+arbitrary poisoning perturbations (i.e., arbitrarily manipu-
+late the nodes, node features, and edges of training graph(s))
+with deterministic robustness guarantees. Our defense is
+inspired by ensemble learning, and consists of three main
+steps: 1) Divide each training graph into multiple subgraphs
+and allocate subgraphs of training graph(s) into multiple
+groups via a hash function; 2) Train a set of node/graph clas-
+sifiers for each group and build a majority-voting node/graph
+classifier on the subgraphs; 3) Derive the deterministic ro-
+bustness guarantee against arbitrary poisoning perturbations.
+1We note there exist some certified defense [ 17, 23, 35, 46] against
+poisoning attacks but not for the graph data. In addition [18, 22] show they
+achieve unsatisfactory performance when adapted to graph data.
+arXiv:2503.18503v1  [cs.LG]  24 Mar 2025
+Following [24], we adapt two graph division strategies—one
+is edge-centric and the other is node-centric—to realize our
+defense. The former strategy map edges, while the latter
+one map nodes from a given graph into multiple subgraphs.
+Theoretically, PGNNCert provably predicts the same label
+for a test node/graph after training on the poisoned training
+set with arbitrary perturbation whose perturbation size (i.e.,
+the total number of manipulated nodes, nodes with feature
+perturbations, and edges) is bounded by a threshold, which
+we call the certified perturbation size. Empirically, we exten-
+sively evaluate PGNNCert on multiple graph datasets and
+multiple node and graph classifiers against arbitrary pertur-
+bations, and compared our methods with state-of-the-art cer-
+tified defenses for node classification against node injection
+poisoning attack [22], and for graph classification against
+edge manipulation [17]. Our results show PGNNCert signif-
+icantly outperforms [22] under node-centric graph division,
+and outperforms [54] under both graph division methods.
+Contributions: Our contributions are summarized below:
+• We develop the first certified defense to robustify GNNs
+against arbitrary poisoning attack on the training set.
+• We propose two strategies (edge-centric and node-centric)
+to realize our defense that leverages the unique message-
+passing mechanism in GNNs.
+• Our robustness guarantee is applicable to both node and
+graph classification tasks and accurate with probability 1.
+• Our defense treat existing certified defenses as special
+cases, as well as significantly outperforming them.
+2. Background and Problem Definition
+2.1. Graph Neural Network (GNN)
+Let a graph be G = {V, E, X}, which consists of the nodes
+V , node features X, and edges E. We denote u ∈ V as
+a node, e = ( u, v) ∈ E as an edge, and Xu as node u’s
+feature. Let fθ be the node or graph classifier parameterized
+by θ. Y is the label set, yv and yG are the groundtruth label
+of a node v and a graph G, respectively.
+Node classification: fθ takes a graph G as input and predicts
+each node v ∈ G a label ˜yv ∈ Y , i.e., ˜yv = fθ(G)v. Given
+a training node set Vtr ⊆ V with ground-truth labels ytr =
+{yv, v ∈ Vtr}, fθ is learnt by minimizing a loss L between
+the node predictions ˜ytr on Vtr and the ground-truth ytr:
+min
+θ
+L(ytr, ˜ytr; θ), ˜ytr = {fθ(G)v, v ∈ Vtr} (1)
+Graph classification: fθ takes a graph G as input and pre-
+dicts a label ˜yG ∈ Y for the whole graph G, i.e., ˜yG = f(G).
+Given a set of training graphs Gtr with ground-truth labels
+ytr = {yG, G ∈ G tr}. The graph classifier fθ is learnt by
+minimizing a loss function L between the predictions on Gtr
+and the ground-truth ˜ytr:
+min
+θ
+L(ytr, ˜ytr; θ), ˜ytr = {fθ(G), G ∈ Gtr} (2)
+2.2. Poisoning Attack on GNNs
+In poisoning attacks against GNNs, an attacker can ma-
+nipulate any training graph G = {V, E, X} ∈ G tr (For
+node classification, Gtr = {G}) into a perturbed one G′ =
+{V ′, E′, X′} during training, where V ′, E′, X′ are the per-
+turbed version of V , E, and X, respectively. For simplicity,
+we denote the nodes, edges and features in training graph(s)
+as V, E, and X , respectively.
+Edge manipulation: The attacker can 1) inject new edges
+E+, and 2) delete existing edges, denoted as E− ⊂ E .
+Node manipulation: The attacker perturbs Gtr by (1) in-
+jecting new nodes V+, whose node feature denoted as X ′
+V+
+can be arbitrary, together with the arbitrarily injected new
+edges EV+ ⊆ {(u, v) /∈ E , ∀u ∈ V + ∨ v ∈ V +} induced by
+V+; and (2) deleting existing nodes V− ⊂ V . When V− are
+deleted, their features XV− ⊆ X and all connected edges
+EV− = {(u, v) ∈ E , ∀u ∈ V − ∨ v ∈ V −} are also removed.
+We denote that for the node classification case, the injected
+and deleted nodes are not from Vtr.
+Node feature manipulation: The attacker arbitrarily manip-
+ulates features XVr of a set of representative nodes Vr to be
+X ′
+Vr. We also denote the edges connected with nodes Vr as
+EVr = {(u, v) ∈ E : ∀u ∈ V r ∨ v ∈ V r}.
+Arbitrary manipulation: The attacker can manipulate a
+training graphs in Gtr with an arbitrary combined perturba-
+tions on edges, nodes, and node features for each of them.
+The attacker can manipulate several training graphs at the
+same time with different combinations of attack.
+For description simplicity, we will use {E+, E−} to in-
+dicate the edge manipulation with arbitrary injected edges
+E+ and deleted edges E− on Gtr. Similarly, we will use
+{V+, EV+ , X ′
+V+ , V−, EV− } to indicate the node manipula-
+tion, and {Vr, EVr , X ′
+Vr } the node feature manipulation. Any
+combination of the manipulations is inherently well-defined.
+2.3. Problem Statement
+Threat model: Given a node/graph classifier f, a training
+graph set Gtr, the adversary canarbitrarily manipulate a num-
+ber of the edges, nodes, and node features in any graph ofGtr,
+such that after training, f misclassifies target graphs in graph
+classification or target nodes in node classification. Since we
+focus on certified defenses, we consider the strongest attack
+where the adversary has white-box access toGtr i.e., it knows
+all the edges, nodes, and node features in Gtr.
+Defense goal: We aim to build provably robust GNNs
+against poisoning attacks that:
+• has a deterministic robustness guarantee;
+• is suitable for both node and graph classification tasks;
+• provably predicts the same label against the arbitrary poi-
+soning perturbation within the certified perturbation size.
+Our ultimate goal is to obtain the largest-possible certified
+perturbation size that satisfies all the above conditions.
+3. Our Certified Defense: PGNNCert
+3.1. Overview
+Our method is inspired by previous work [ 24, 54], which
+divides a test input into several sub-parts and assembles a
+voting GNN classifier on the sub-parts. We generalize this
+idea by designing the dividing strategy tailored to training
+set. Specifically, it consists of four steps below:
+In the first step, we divide the training graph set into
+multiple subgraph sets. For each training graph G ∈ G tr
+with ground-truth label yG ∈ ytr, we divide it into S sub-
+graphs G1, G2, . . . , GS via a hash function and ensure edges
+in different subgraphs are disjoint. This process is detailed
+in Section 3.2-3.3. By collecting these subgraphs, we build
+S sets of subgraphs G[S] = {G1, G2, . . . ,GS}. In each sub-
+graph set Gi, there exists an exact subgraph Gi generated
+from G, and we label Gi the same label yG as G.
+In the second step, we train multiple classifiers with the
+respective subgraph sets. On each subgraph set Gi, we
+initialize a classifier fi with weights θi and train it below:
+Node classifier: min
+θi
+L(ytr, ˜yi; θi), ˜yi = {fi(G)v, v ∈ Vtr}
+Graph classifier: min
+θi
+L(ytr, ˜yi; θi), ˜yi = {fi(G), G ∈ G tr}
+In the third step, we build the voting-based classifier
+based on the trained sub-classifiers. Given a test graph
+G, we first divide it into S subgraphs {G1, . . . , GS} by the
+same subgraph division method. Then we apply a voting
+classifier f, which assembles the predictions of the trained
+classifiers f[S] on the subgraphs:
+Node classifier: nyv =
+XS
+i=1
+I(fi(Gi)v = yv), ∀yv ∈ Y (3)
+Graph clasifier: nyG =
+XS
+i=1
+I(fi(Gi) = yG), ∀yG ∈ Y (4)
+We then define our voting node/graph classifier ¯f as
+returning the class with the most vote:
+Voting node classifier: ¯f(G)v = arg max
+yv ∈Y
+nyv (5)
+Voting graph classifier: ¯f(G) = arg max
+yG∈Y
+nyG (6)
+In the forth step, we derive the deterministic robustness
+guarantee for the test graph. We denote ya and yb as
+the class with the most vote nya and the second-most vote
+nyb, respectively. We pick the class with a smaller index if
+ties exist. Denote G′
+tr as the perturbed train dataset of Gtr,
+and G′
+[S] = {G′
+1, G′
+2, . . . ,G′
+S} be the perturbed subgraph sets
+generated from G′
+tr under the same graph division strategy.
+Then we have the below condition for certified robustness
+against arbitrary poisoning attacks on GNNs.
+Theorem 1 (Sufficient Condition for Certified Robust-
+ness). Let ya, yb, nya , nyb be defined above in node
+classification or graph classification, and let P =
+⌊nya − nyb − I(ya > y b)⌋/2. The voting classifier ¯f
+trained on Gtr guarantees the same prediction on G for the
+target node v in node classification or the target graph G
+in graph classification with the poisoned voting classifier
+¯f ′, if the number of different sub-classifiers (i.e., different
+in weights) trained on G[S] and G′
+[S] under the arbitrary
+perturbation is bounded by P . I.e.,
+∀G′
+tr :
+XS
+i=1
+I(θi ̸= θ′
+i) ≤ P =⇒ ¯f(G)v = ¯f ′(G)v (7)
+∀G′
+tr :
+XS
+i=1
+I(θi ̸= θ′
+i) ≤ P =⇒ ¯f(G) = ¯f ′(G) (8)
+Proof is in Appendix A.The above theorem motivates
+us to design the graph division method such that: 1) the
+number of different sub-classifiers with trained on G[S] and
+G′
+[S] can be upper bounded (and the smaller the better). 2)
+the difference between nya and nyb is as large as possible,
+ensuring larger certified perturbation size.
+Next, we introduce our two graph division methods. Fig-
+ure 2 visualizes the divided subgraphs of the two methods
+without and with the adversarial manipulation.
+3.2. Edge-Centric Graph Division
+Our first graph division method is edge-centric. The idea
+is to divide edges in a graph into different subgraphs, such
+that each edge is deterministically mapped into only one
+subgraph. With this strategy, we can bound the number of
+altered classifiers trained on these subgraphs before and after
+the arbitrary perturbation (Theorem 2), which facilitates
+deriving the certified perturbation size (Theorem 3). All
+proofs are detailed in Appendix A.
+3.2.1 Generating edge-centric subgraphs
+We follow [24, 54] to use a hash function h (e.g., MD5) to
+generate the subgraphs for every train graphG ∈ Gtr. A hash
+function takes a bit string as input and outputs an integer
+(e.g., within a range [0, 2128 −1]). We uses the string of edge
+or node index as the input to the hash function. For instance,
+for a node u, its string is denoted as str(u), while for an
+edge e = (u, v), its string is str(u) + str(v), where “+"
+means string concatenation, and str turns the node index
+into a string and adds “0” prefix to align it into a fixed length.
+Assuming S subgraphs in total, the subgraph index ie of
+every edge e = (u, v) is defined as2
+ie = h[str(u) + str(v)] mod S + 1, (9)
+where mod is the module function. Denoting E i as the set of
+edges whose subgraph index is i, i.e., E i = {∀e ∈ E : ie =
+i}, S subgraphs for G can be built as{Gi = (V, E i, X) : i =
+1, 2, · · · , S}, where edges in different subgraphs are disjoint,
+i.e., E i ∩ E j = ∅, ∀i, j ∈ { 1, · · · , S}, i ̸= j. Here, we
+2In the undirected graph, we put the node with a smaller index (say u)
+first and let h[str(v) + str(u)] = h[str(u) + str(v)].
+Figure 1. Overview of our PGNNCert (use node classification for illustration), which consists of four steps.
+mention that we need to further postprocess the subgraphs
+for graph classification, in order to derive the robustness
+guarantee. Particularly, in each subgraph Gi, we remove
+all isolated nodes who have no connected edges. This is
+because although they have no influence on other nodes’
+representation, their information would still be passed to the
+global graph embedding aggregation.
+After dividing all training graphs in Gtr, we combine all
+generated subgraphs with the same index as a separate sub-
+graph training set: Gi = {Gi, ∀G ∈ G tr}, ∀i ∈ [S]. We
+denote the S training sets as G[S] = {G1, · · · , GS}.
+3.2.2 Bounding the number of different sub-classifiers
+For a perturbed training set G′
+tr, we use the same graph
+division strategy to generate a set of S subgraphs sets
+G′
+[S] = {G′
+1, G′
+2, · · · , G′
+T }. Then, we can upper bound
+the number of different classifiers trained on G[S] and G′
+[S]
+against any individual perturbation.
+Theorem 2 (Bounded Number of Edge-Centric Subgraphs
+with Altered Predictions under Arbitrary Perturbation) .
+Given any training graph set Gtr, and S edge-centric sub-
+graph sets G[S] for Gtr. A perturbed training set G′
+train] of
+Gtrain] is with arbitrary edge manipulation {E+, E−}, node
+manipulation {V+, EV+ , V−, EV− }, and node feature manip-
+ulation {XVr , Vr, EVr } on arbitrary graphs in Gtr. Then at
+most p = |E+| + |E−| + |EV+ | + |EV− | + |EVr | node/graph
+sub-classifiers in f[S] are different in weights between train-
+ing on the subgraph sets G[S] and on the perturbed subgraph
+sets G′
+[S]. In other words, PS
+i=1 I(θi ̸= θ′
+i) ≤ p for both
+node classification case and graph classification case.
+3.2.3 Deriving the robustness guarantee
+Based on Theorems 1 and 2, we can derive the certified per-
+turbation size as the maximal perturbation such that Equa-
+tion 7 or Equation 8 is satisfied. Formally,
+Theorem 3 (Certified Robustness Guarantee with Edge–
+Centric Subgraphs against Arbitrary Perturbation) . Let
+f, ya, yb, nya , nyb be defined above for edge-centric sub-
+graphs, and p be the perturbation size induced by an arbi-
+trary perturbed training set G′
+tr on Gtr. After training on G′
+tr
+and G′
+tr, the voting classifier ¯f and poisoned classifier ¯f ′
+guarantee the same prediction for the target node v in node
+classification (i.e., ¯f(G′)v = ¯f(G)v) or target graph G in
+graph classification (i.e., ¯f(G′) = ¯f(G)), when p satisfies.
+p ≤ P = ⌊nya − nyb − I(ya > y b)⌋/2. (10)
+Or to say, the maximum certified perturbation size is P .
+3.3. Node-Centric Graph Division
+We observe the robustness guarantee under edge-centric
+graph division is largely dominated by the edges (i.e.,
+EV+ , EV−) induced by the manipulated nodes V+, V−, and
+edges EVr by the perturbed node features X′
+Vr. This guaran-
+tee could be weak against node or node feature manipulation,
+as the number of edges (i.e., |EV+ |, |EV− |, |EVr |) could be
+much larger, compared with the number of the nodes (i.e.,
+|V+|, |V−|, |Vr|). For instance, an injected node could link
+with many edges to a given graph in practice, and when the
+number exceeds P in Equation 10, the certified robustness
+guarantee is ineffective. This flaw inspires us to generate
+subgraphs, where we expect at most one subgraph is affected
+under every node or node feature manipulation on a training
+graph (this means all edges of a manipulated node should be
+in a same subgraph), implying only a training subgraph set
+is affected. Following [24], we apply a tailored node-centric
+graph division strategy to achieve our goal.
+3.3.1 Generating node-centric directed subgraphs
+We use a hash function h to generate directed subgraphs
+for a given train graph G = ( V, E, X) ∈ G tr. Our node-
+centric graph division strategy as follow: (1) we treat every
+undirected edge e = (u, v) ∈ G as two directed edges for
+u3: the outgoing edge u → v and incoming edge v → u;
+(2) for every node u, we compute the subgraph index of its
+every outgoing edge u → v:
+iu→v = h[str(u)] mod S + 1. (11)
+3GNNs inherently handles directed graphs with directed message pass-
+ing – each node only uses its incoming neighbors’ message for update.
+(a) Edge-Centric Graph Division against edge injection and node injection attacks
+(b) Node-Centric Graph Division against edge injection and node injection attacks
+Figure 2. Illustration of our edge-centric and node-centric graph division strategies for node classification. We use edge injection and node
+injection poisoning attacks to show the bounded number of altered predictions on the generated subgraphs after the attack. Figures 8-9 in
+Appendix also show other attacks and on graph classification.
+Note outgoing edges of u are mapped in the same subgraph.
+We use ⃗Ei to denote the set of directed edges whose
+subgraph index is i, i.e., ⃗Ei = {∀u → v ∈ E : iu→v =
+i}. Then, we can construct S directed subgraphs for G as
+⃗Gi = (V, ⃗Ei, X), ∀i ∈ [1, S]. After generating subgraphs for
+all training graphs, we combine all subgraphs with the same
+index as a separate subgraph set: ⃗Gi = { ⃗Gi, ∀G ∈ Gtr}, ∀i ∈
+[S]. We denote the S training sets as ⃗G[S] = { ⃗G1, · · · , ⃗GS}.
+Here, we mention that we need to further postprocess
+the subgraphs for graph classification, in order to derive the
+robustness guarantee. Particularly, in each subgraph ⃗Gi, we
+remove all other nodes whose subgraph index is not i. This
+is because although they have no influence on other nodes’
+representation, their information would still be passed to the
+global graph embedding aggregation. To make up the loss of
+connectivity between nodes and simulate the aggregation, we
+add an extra node with a zero feature, and add an outgoing
+edge from every node with index i to it.
+3.3.2 Bounding the number of different sub-classifiers
+For a perturbed training set G′
+tr, we use the same graph
+division strategy to generate a set of S directed subgraph
+sets ⃗G′
+[S] = { ⃗G′
+1, ⃗G′
+2, · · · , ⃗G′
+T }. We first show the theoretical
+result on bounding the number of different trained classifiers
+on ⃗G[S] and ⃗G′
+[S] against any individual perturbation.
+Theorem 4 (Bounded Number of Node-Centric Subgraphs
+with Altered Predictions under Arbitrary Perturbation). Let
+Gtr, v, G, E+, E−, V+, V−, Vr be defined in Theorem 2, and
+⃗G[S], ⃗G′
+[S] contain directed subgraph sets under the node-
+centric graph division. Then, at most ¯p = 2|E+| + 2|E−| +
+|V+|+|V−|+|Vr| trained node classifiers inf[S] are different
+in weights after training on ⃗G[S] and on ⃗G′
+[S]. In other words,
+PS
+i=1 I(θi ̸= θ′
+i) ≤ ¯p for any target node v ∈ G in node
+classification. Meanwhile, at most ¯p = |E+| + |E−| + |V+| +
+|V−| + |Vr| trained graph classifiers in f[S] are different in
+weights after training on ⃗G[S] and on ⃗G′
+[S]. In other words,
+PS
+i=1 I(θi ̸= θ′
+i) ≤ ¯p in graph classification.
+3.3.3 Deriving the robustness guarantee
+Based on Theorem 1 and Theorem 4, we can derive the
+certified perturbation size formally stated below
+Theorem 5 (Certified Robustness Guarantee with Node–
+Centric Subgraphs against Arbitrary Perturbation) . Let
+f, ya, yb, nya , nyb
+4 be defined above for node-centric sub-
+graphs, and ¯p be the perturbation size induced by an arbi-
+trary perturbed graph G′ on G. With a probability 100%,
+the voting classifier ¯f guarantees the same prediction on
+both G′ and G for the target node v in node classification
+(i.e., ¯f(G′)v = ¯f(G)v) or the target graph G in graph clas-
+sification (i.e., ¯f(G′) = ¯f(G)), if
+¯p ≤ P = ⌊nya − nyb − I(ya > y b)⌋/2. (12)
+4Note that nya , nyb have different values with those in edge-centric
+graph division. Here we use the same notation for description brevity.
+4. Experiments
+4.1. Experiments Settings
+Datasets: We use four node classification datasets (Cora-
+ML [31], Citeseer [38], PubMed [38], Amazon-C [57]) and
+four graph classification datasets (AIDS [34], MUTAG [9],
+PROTEINS [5], and DD [10]) for evaluation. In each dataset,
+we take 30% nodes (for node classification) or 50% graphs
+(for graph classification) as the training set, 10% and 20%
+as the validation set and 30% nodes/graph as the test set.
+Table 5 in Appendix shows the basic statistics of them.
+GNN classifiers and PGNNCert training: We adopt
+three well-known GNNs as the base node/graph classifiers:
+GCN [21], GSAGE [15] and GAT [44]. We denote the two
+versions of PGNNCert under edge-centric and node-centric
+graph division asPGNNCert-E and PGNNCert-N, respec-
+tively. By default, we use GCN as the node/graph classifier.
+Evaluation metric: Following existing works [22, 47, 54],
+we use the certified node/graph accuracy at perturbation size
+as the evaluation metric. Given a perturbation size p and
+test nodes/graphs, certified node/graph accuracy at p is the
+fraction of test nodes/graphs that are accurately classified by
+the voting node/graph classifier and its certified perturbation
+size is no smaller than p. Note that the standard node/graph
+accuracy is achieved when over p = 0.
+Parameter setting: PGNNCert has two hyperparameters:
+the hash function h and the number of subgraphs S. By
+default, we use MD5 as the hash function and setS = 50, 60
+respectively for node and graph classification, considering
+their different graph sizes. We also study the impact of them.
+Compared baselines: As PGNNCert encompasses existing
+defenses as special cases, we can compare PGNNCert with
+them against less types of perturbation. Here, we choose
+the sparse-smoothing RS [4], Bagging [17] and Bi-RS [22]
+as compared baselines in face of node injection poisoning
+attack on node classification task. For Bi-RS, We adopt the
+pe = 0.2, pn = 0.9, N = 1000 setting as described, and test
+both include and exclude methods. We also use Bagging for
+comparison on graph classification.5
+4.2. Experiment Results on PGNNCert
+Main results: Figures 3-4 show the certified node accuracy
+and Figures 5-6 show the certified graph accuracy at pertur-
+bation size p w.r.t. S under the two graph division strategies,
+respectively. We have the following observations.
+• Both PGNNCert-E and PGNNCert-N can tolerate the
+perturbation size up to 25 and 30, on the node and graph
+classification datasets. This means PGNNCert-E can
+defend against a total of 25 (30) arbitrary edges, while
+PGNNCert-N against a total of 25 (30) arbitrary edges
+5Source code is at https://github.com/JetRichardLee/PGNNCert
+Table 1. Node/graph accuracy of normally trained GNN and of
+PGNNCert with GNN trained on the subgraphs.
+Dataset GCN PGNNCert GSAGE PGNNCert GAT PGNNCert
+-E -N -E -N -E -N
+Cora-ML 0.73 0.68 0.68 0.67 0.65 0.68 0.74 0.69 0.69
+Citeseer 0.66 0.67 0.67 0.69 0.68 0.68 0.70 0.67 0.67
+Pubmed 0.86 0.83 0.85 0.84 0.84 0.85 0.85 0.85 0.84
+Amazon-C 0.81 0.81 0.81 0.82 0.78 0.80 0.83 0.78 0.80
+AIDS 0.99 0.88 0.96 0.97 0.94 0.95 0.96 0.93 0.96
+MUTAG 0.71 0.64 0.64 0.70 0.63 0.64 0.71 0.65 0.65
+Proteins 0.82 0.81 0.78 0.83 0.80 0.81 0.82 0.78 0.77
+DD 0.80 0.79 0.77 0.81 0.78 0.76 0.81 0.77 0.79
+and nodes caused by the arbitrary perturbation, on the
+node (graph) classification datasets, respectively. Note
+that node classification datasets have several orders of
+more nodes/edges than graph classification datasets, hence
+PGNNCert can tolerate more perturbations on them.
+• S acts as the robustness-accuracy tradeoff. That is, a larger
+(smaller) S yields a higher (lower) certified perturbation
+size, but a smaller (higher) normal accuracy (p = 0).
+• In PGNNCert-N, the guaranteed perturbed nodes can
+have infinite edges. This implies that PGNNCert-N
+has better robustness than PGNNCert-E against the per-
+turbed edges by node/node feature manipulation.
+Impact of base GNN classifiers: Figures 10-11 and Fig-
+ures 12-13 in Appendix show the certified accuracy using
+GSAGE and GAT as the base classifier, respectively. We
+have similar observations as those results with GCN.
+Impact of hash function: Figures 14-17 show the certified
+node/edge accuracy of PGNNCert-E and PGNNCert-N
+with different hash functions. We observe that our certified
+accuracy and certified perturbation size are almost the same
+in all cases. This reveals our PGNNCert is insensitive to
+the hash function, and [54] draws a similar conclusion.
+Impact of subgraphs on normal accuracy: We test the
+normal accuracy of (not) using subgraphs to train the GNN
+classifier. Table 1 shows the test node/graph accuracy of
+normally trained GNN without sbugraphs and PGNNCert
+with GNN trained on the subgraphs. We observe that the
+accuracy of PGNNCert is 5% smaller than that of normally
+trained GNN in almost all cases, and in some cases even
+larger. This implies the augmented subgraphs for training
+marginally affects the normal test accuracy.
+4.3. Comparison Results with SOTA Baselines
+In this section, we comparePGNNCert with SOTA defenses
+(Bi-RS [22], RS [4], Bagging [17]) against node injection
+poisoning attacks and graph structure poisoning attacks [17].
+Results for node classification against node injection poi-
+soning attacks: We follow Bi-RS [22] by setting the injected
+nodes’ degrees asτ = 5 and show the certified node accu-
+racy with varying number of injected nodes. Figure 7 shows
+the comparison results. We can see PGNNCert-E has bet-
+ter certified accuracy than RS, Bagging and Bi-RS-Include,
+(a) Cora-ML
+ (b) Citeseer
+ (c) Pubmed
+ (d) Amazon-C
+Figure 3. Certified node accuracy of our PGNNCert-E w.r.t. the number of subgraphs S.
+(a) Cora-ML
+ (b) Citeseer
+ (c) Pubmed
+ (d) Amazon-C
+Figure 4. Certified node accuracy of our PGNNCert-N w.r.t. the number of subgraphs S.
+(a) AIDS
+ (b) MUTAG
+ (c) PROTEINS
+ (d) DD
+Figure 5. Certified graph accuracy of our PGNNCert-E w.r.t. the number of subgraphs S.
+(a) AIDS
+ (b) MUTAG
+ (c) PROTEINS
+ (d) DD
+Figure 6. Certified graph accuracy of our PGNNCert-N w.r.t. the number of subgraphs S.
+(a) Cora-ML
+ (b) Citeseer
+ (c) Pubmed
+ (d) Amazon-C
+Figure 7. Certified node accuracy of our PGNNCert and SOTA defenses against node injection attacks.
+but it is worse than Bi-RS-Exclude. This aligns with our
+assumption on its weakness against node-relevant attack. By
+contrast, PGNNCert-N outperforms all compared baselines.
+We highlight that each bounded node in PGNNCert-N can
+inject as many edges as possible, meaning the total number
+of bounded edges in PGNNCert-N could be infinite.
+Table 2. Certified graph accuracy of our PGNNCert and Bagging
+against edge perturbations.
+Datasets Methods #Edges=0 5 10 15
+Proteins
+Bagging 0.756 0.205 0.000 0.00
+PGNNCert-E 0.744 0.518 0.260 0.00
+PGNNCert-N 0.778 0.474 0.102 0.00
+DD
+Bagging 0.785 0.311 0.000 0.00
+PGNNCert-E 0.792 0.578 0.330 0.063
+PGNNCert-N 0.771 0.344 0.006 0.000
+Table 3. Results of PGNNCert on CIFAR10.
+Datasets Methods p=0 1 3 5
+CIFAR10 PGNNCert-E 0.596 0.556 0.482 0.107
+PGNNCert-N 0.636 0.593 0.498 0.113
+Table 4. Defense results against the optimization-based Mettack.
+Dataset Nettack p=0 20 30 40
+Cora-ML PGNNCert-N 0.675 0.675 0.668 0.661
+Results for graph classification against graph poison-
+ing attacks: Table 2 shows the certified graph accuracies
+of PGNNCert and Bagging against edge perturbations on
+graph classification tasks. PGNNCert outperforms Bagging,
+especially when the perturbation size is larger.
+5. Discussion
+Evaluation on CV datasets. We also test a benchmark su-
+perpixel graph CIFAR10 in computer vision [11] for graph
+classification, to show the generality of our defense. CI-
+FAR10 is an image classification dataset, which is converted
+into graphs using the SLIC superpixels [1]. Each node has
+the superpixel coordinates as the feature and each superpixel
+graph has a label. Results in the default setting are shown
+in Table 3, where we see PGNNCert can obtain about 50%
+certified accuracy when 3 arbitrary edges are perturbed.
+PGNNCert against optimization-based attacks. We first
+emphasize that PGNNCert is provably robust against all
+(known and unknown) attacks, when their perturbation bud-
+get is within the derived bound (in Eqn 10 or Eqn 12), regard-
+less of the attack knowledge of PGNNCert. Here, we test
+PGNNCert-N against Metattack [63] when its perturbation
+size m is larger than the derived certified perturbation size
+P=25 (with certified accuracy 0.588) on Cora-ML with S=60.
+Results are shown in Table 4. We see PGNNCert-N can
+achieve 0.661 accuracy of defending against Metattack even
+when it perturbs 40 edges and nodes in total.
+Limitations. Despite the effectiveness of PGNNCert, its
+inefficiency remains a main limitation for large GNNs.
+PGNNCert trains S classifiers on S subgraphs and uses
+S subgraphs for certification. It may incur a train-
+ing/certification complexity that is S times of standard GNN
+training/testing. This overhead could be significant when
+PGNNCert is applied to large GNNs. On the other hand,
+we note that the S classifiers can be trained in parallel once
+obtaining the S subgraphs after graph division.
+6. Related Work
+Adversarial attacks on GNNs: Existing attacks to GNNs
+can be classified as graph evasion attacks [8, 25, 26, 29, 30,
+32, 50–53, 55, 64] and poisoning attacks [8, 28, 40, 41, 45,
+55, 60, 63, 63]. For instance, [ 8] leveraged reinforcement
+learning techniques to design evasion attacks to both graph
+classification and node classification via modifying the graph
+structure. Most attacks require the attacker fully or partially
+knows the GNN model, while [32, 50] relaxing this to only
+have black-box access, i.e., only query the GNN model API.
+For example, [50] formulates the black-box attack to GNNs
+as an online optimization problem with bandit feedback and
+provably obtains a sublinear query number. Furthermore,
+[25] generalizes the black-box evasion attack on explainable
+GNNs. In the realm of graph poisoning attacks, [ 55] pro-
+posed a MinMax attack to GNNs based on gradient-based
+optimization, while [63] introduced Metattack that perturbs
+the entire graph using meta learning.
+Certified robustness against graph poisoning graphs:
+Most existing certified defenses for GNNs are against test-
+time evasion attacks [16, 19, 22, 24, 27, 47, 54, 60], with a
+few ones [22] against training-time poisoning attacks.
+There exist two main approaches providing certified ro-
+bustness against poisoning data: 1) Randomized-smoothing
+based methods [ 22, 35, 46] regard the training-prediction
+process as an end-to-end function, and treat poisoning attack
+as a special case of evasion attack; 2) V oting based meth-
+ods [17, 23] partition training data into subsets and train
+a sub-classifier on each subset. However, they restrict the
+attacker on one type of perturbation (nodes, edges, or node
+features); they are applicable for a particular GNN task; and
+their robustness guarantees are not 100% accurate. We are
+the first work to develop a deterministically certified robust
+GNN against graph poisoning attack with arbitrary kind of
+perturbations on both node and graph classification tasks.
+7. Conclusion
+We investigate the robustness of Graph Neural Networks
+(GNNs) against graph poisoning attacks and introduce
+PGNNCert, the first certified defense with deterministic
+guarantees against arbitrary poisoning perturbations, in-
+cluding modifications to nodes, edges, and node features.
+PGNNCert employs novel graph division strategies and
+leverages the message-passing mechanism in GNNs to es-
+tablish robustness guarantees. Its universality allows it to
+encompass existing certified defenses as special cases. Ex-
+perimental evaluations demonstrate that PGNNCert effec-
+tively mitigates arbitrary poisoning perturbations, offering
+superior robustness and efficiency compared to state-of-the-
+art certified defenses. Future works include extending the
+proposed defense for federated GNNs [49, 58] and casually
+explainable GNNs [2] against arbitrary poisoning attacks.
+8. Acknowledgment
+We thank all the anonymous reviewers for their valuable
+feedback and constructive comments. This work is partially
+supported by the National Science Foundation (NSF) under
+grant Nos. ECCS-2216926, CNS-2241713, CNS-2331302,
+CNS-2339686, and the Cisco Research Award.
+References
+[1] R. Achanta, A. Shaji, K. Smith, A. Lucchi, P. Fua, and Sabine
+Süsstrunk. Slic superpixels compared to state-of-the-art su-
+perpixel methods. IEEE Transactions on Pattern Analysis &
+Machine Intelligence, 34(11):2274–2282, 2012. 8
+[2] Arman Behnam and Binghui Wang. Graph neural network
+causal explanation via neural causal models. In ECCV, 2024.
+8
+[3] Alaa Bessadok, Mohamed Ali Mahjoub, and Islem Rekik.
+Graph neural networks in network neuroscience. IEEE
+TPAMI, 2022. 1
+[4] Aleksandar Bojchevski, Johannes Gasteiger, and Stephan
+Günnemann. Efficient robustness certificates for discrete data:
+Sparsity-aware randomized smoothing for graphs, images and
+more. In ICML, 2020. 6
+[5] K.M. Borgwardt, C.S. Ong, S. Schönauer, SVN Vish-
+wanathan, A.J. Smola, and H. Kriegel. Protein function
+prediction via graph kernels. Bioinformatics, 2005. 6
+[6] Yongqiang Chen, Han Yang, Yonggang Zhang, MA KAILI,
+Tongliang Liu, Bo Han, and James Cheng. Understanding
+and improving graph injection attack by promoting unnotice-
+ability. In ICLR, 2022. 1
+[7] Enyan Dai, Minhua Lin, Xiang Zhang, and Suhang Wang.
+Unnoticeable backdoor attacks on graph neural networks. In
+WWW, 2023.
+[8] Hanjun Dai, Hui Li, Tian Tian, Xin Huang, Lin Wang, Jun
+Zhu, and Le Song. Adversarial attack on graph structured
+data. In ICML, 2018. 1, 8
+[9] A.K. Debnath, R.L. Lopez de Compadre, G. Debnath, A.J.
+Shusterman, and C. Hansch. Structure-activity relationship
+of mutagenic aromatic and heteroaromatic nitro compounds.
+correlation with molecular orbital energies and hydrophobic-
+ity. Journal of medicinal chemistry , 34(2):786–797, 1991.
+6
+[10] P.D. Dobson and A.J. Doig. Distinguishing enzyme structures
+from non-enzymes without alignments. J. of Mol. Bio., 330
+(4):771–783, 2003. 6
+[11] Vijay Prakash Dwivedi, Chaitanya K. Joshi, Anh Tuan Luu,
+Thomas Laurent, Yoshua Bengio, and Xavier Bresson. Bench-
+marking graph neural networks. Journal of Machine Learning
+Research, 24(1):48, 2023. 8
+[12] Negin Entezari, Saba A Al-Sayouri, Amirali Darvishzadeh,
+and Evangelos E Papalexakis. All you need is low (rank)
+defending against adversarial attacks on graphs. In WSDM,
+2020. 1
+[13] Wenqi Fan, Yao Ma, Qing Li, Yuan He, Eric Zhao, Jiliang
+Tang, and Dawei Yin. Graph neural networks for social
+recommendation. In WWW, 2019. 1
+[14] Victor Fung, Jiaxin Zhang, Eric Juarez, and Bobby G Sumpter.
+Benchmarking graph neural networks for materials chemistry.
+npj Computational Materials, 2021. 1
+[15] Will Hamilton, Zhitao Ying, and Jure Leskovec. Inductive
+representation learning on large graphs. In NIPS, 2017. 1, 6
+[16] Jinyuan Jia, Binghui Wang, Xiaoyu Cao, and Neil Zhenqiang
+Gong. Certified robustness of community detection against
+adversarial structural perturbation via randomized smoothing.
+In The Web Conference, 2020. 1, 8
+[17] Jinyuan Jia, Xiaoyu Cao, and Neil Zhenqiang Gong. Intrinsic
+certified robustness of bagging against data poisoning attacks.
+In AAAI, 2021. 1, 2, 6, 8
+[18] Jinyuan Jia, Yupei Liu, Yuepeng Hu, and Neil Zhenqiang
+Gong. Pore: Provably robust recommender systems against
+data poisoning attacks. In USENIX Security Symposium, 2023.
+1
+[19] Hongwei Jin, Zhan Shi, Venkata Jaya Shankar Ashish Peruri,
+and Xinhua Zhang. Certified robustness of graph convolution
+networks for graph classification under topological attacks.
+In NeurIPS, 2020. 1, 8
+[20] Mingxuan Ju, Yujie Fan, Chuxu Zhang, and Yanfang Ye. Let
+graph be the go board: gradient-free node injection attack for
+graph neural networks via reinforcement learning. In AAAI,
+2023. 1
+[21] Thomas N Kipf and Max Welling. Semi-supervised classifi-
+cation with graph convolutional networks. In ICLR, 2017. 1,
+6
+[22] Yuni Lai, Yulin Zhu, Bailin Pan, and Kai Zhou. Node-aware
+bi-smoothing: Certified robustness against graph injection
+attacks. In IEEE SP, 2024. 1, 2, 6, 8
+[23] Alexander Levine and Soheil Feizi. Deep partition aggrega-
+tion: Provable defenses against general poisoning attacks. In
+ICLR, 2020. 1, 8
+[24] Jiate Li and Binghui Wang. Agnncert: Defending graph neu-
+ral networks against arbitrary perturbations with deterministic
+certification. In USENIX Security, 2025. 1, 2, 3, 4, 8
+[25] Jiate Li, Meng Pang, Yun Dong, Jinyuan Jia, and Binghui
+Wang. Graph neural network explanations are fragile. In
+ICML, 2024. 8
+[26] Jiate Li, Meng Pang, and Binghui Wang. Practicable black-
+box evasion attacks on link prediction in dynamic graphs–a
+graph sequential embedding method. In AAAI, 2024. 8
+[27] Jiate Li, Meng Pang, Yun Dong, Jinyuan Jia, and Binghui
+Wang. Provably robust explainable graph neural networks
+against graph perturbation attacks. In ICLR, 2025. 8
+[28] Xuanqing Liu, Si Si, Xiaojin Zhu, Yang Li, and Cho-Jui Hsieh.
+A unified framework for data poisoning attack to graph-based
+semi-supervised learning. arXiv preprint arXiv:1910.14147,
+2019. 8
+[29] Jiaqi Ma, Shuangrui Ding, and Qiaozhu Mei. Towards
+more practical adversarial attacks on graph neural networks.
+NeurIPS, 33:4756–4766, 2020. 8
+[30] Yao Ma, Suhang Wang, Tyler Derr, Lingfei Wu, and Jiliang
+Tang. Attacking graph convolutional networks via rewiring.
+arXiv preprint arXiv:1906.03750, 2019. 8
+[31] Andrew Kachites McCallum, Kamal Nigam, Jason Rennie,
+and Kristie Seymore. Automating the construction of internet
+portals with machine learning. Information Retrieval, 3:127–
+163, 2000. 6
+[32] Jiaming Mu, Binghui Wang, Qi Li, Kun Sun, Mingwei Xu,
+and Zhuotao Liu. A hard label black-box adversarial attack
+against graph neural networks. In CCS, 2021. 8
+[33] Felix Mujkanovic, Simon Geisler, Stephan Günnemann, and
+Aleksandar Bojchevski. Are defenses for graph neural net-
+works robust? NeurIPS, 2022. 1
+[34] Kaspar Riesen and Horst Bunke. Iam graph database reposi-
+tory for graph based pattern recognition and machine learning.
+In Structural, Syntactic, and Statistical Pattern Recognition,
+pages 287–297. Springer, 2008. 6
+[35] Elan Rosenfeld, Ezra Winston, Pradeep Ravikumar, and Zico
+Kolter. Certified robustness to label-flipping attacks via ran-
+domized smoothing. In International Conference on Machine
+Learning, pages 8230–8241. PMLR, 2020. 1, 8
+[36] Alvaro Sanchez-Gonzalez, Jonathan Godwin, Tobias Pfaff,
+Rex Ying, Jure Leskovec, and Peter Battaglia. Learning to
+simulate complex physics with graph networks. In ICML,
+2020. 1
+[37] Franco Scarselli, Marco Gori, Ah Chung Tsoi, Markus Hagen-
+buchner, and Gabriele Monfardini. The graph neural network
+model. IEEE TNN, 2008. 1
+[38] Prithviraj Sen, Galileo Namata, Mustafa Bilgic, Lise Getoor,
+Brian Galligher, and Tina Rad. Collective classification in
+network data. AI magazine, 2008. 6
+[39] Jonathan Shlomi, Peter Battaglia, and Jean-Roch Vlimant.
+Graph neural networks in particle physics. Machine Learning:
+Science and Technology, 2020. 1
+[40] Yiwei Sun, Suhang Wang, Xianfeng Tang, Tsung-Yu Hsieh,
+and Vasant Honavar. Adversarial attacks on graph neural
+networks via node injections: A hierarchical reinforcement
+learning approach. In WWW, 2020. 1, 8
+[41] Tsubasa Takahashi. Indirect adversarial attacks via poison-
+ing neighbors for graph convolutional networks. In IEEE
+BigData, 2019. 8
+[42] Xianfeng Tang, Yandong Li, Yiwei Sun, Huaxiu Yao, Prasen-
+jit Mitra, and Suhang Wang. Transferring robustness for graph
+neural network against poisoning attacks. In WSDM, 2020. 1
+[43] Shuchang Tao, Huawei Shen, Qi Cao, Liang Hou, and Xueqi
+Cheng. Adversarial immunization for certifiable robustness
+on graphs. In WSDM, 2021. 1
+[44] Petar Veliˇckovi´c, Guillem Cucurull, Arantxa Casanova, Adri-
+ana Romero, Pietro Lio, and Yoshua Bengio. Graph attention
+networks. In ICLR, 2018. 1, 6
+[45] Binghui Wang and Neil Zhenqiang Gong. Attacking graph-
+based classification via manipulating the graph structure. In
+CCS, 2019. 1, 8
+[46] Binghui Wang, Xiaoyu Cao, Neil Zhenqiang Gong, et al. On
+certifying robustness against backdoor attacks via randomized
+smoothing. arXiv preprint arXiv:2002.11750, 2020. 1, 8
+[47] Binghui Wang, Jinyuan Jia, Xiaoyu Cao, and Neil Zhenqiang
+Gong. Certified robustness of graph neural networks against
+adversarial structural perturbation. In KDD, 2021. 1, 6, 8
+[48] Binghui Wang, Jinyuan Jia, and Neil Zhenqiang Gong. Semi-
+supervised node classification on graphs: Markov random
+fields vs. graph neural networks. In AAAI, 2021. 1
+[49] Binghui Wang, Ang Li, Meng Pang, Hai Li, and Yiran Chen.
+Graphfl: A federated learning framework for semi-supervised
+node classification on graphs. In ICDM, 2022. 8
+[50] Binghui Wang, Youqi Li, and Pan Zhou. Bandits for struc-
+ture perturbation-based black-box attacks to graph neural
+networks with theoretical guarantees. In CVPR, 2022. 8
+[51] Binghui Wang, Meng Pang, and Yun Dong. Turning strengths
+into weaknesses: A certified robustness inspired attack frame-
+work against graph neural networks. In CVPR, 2023. 1
+[52] Binghui Wang, Minhua Lin, Tianxiang Zhou, Pan Zhou, Ang
+Li, Meng Pang, Hai Li, and Yiran Chen. Efficient, direct, and
+restricted black-box graph evasion attacks to any-layer graph
+neural networks via influence function. In WSDM, 2024.
+[53] Huijun Wu, Chen Wang, Yuriy Tyshetskiy, Andrew Docherty,
+Kai Lu, and Liming Zhu. Adversarial examples on graph data:
+Deep insights into attack and defense. In IJCAI, 2019. 8
+[54] Zaishuo Xia, Han Yang, Binghui Wang, and Jinyuan Jia.
+Deterministic certification of graph neural networks against
+adversarial perturbations. In ICLR, 2024. 1, 2, 3, 6, 8
+[55] Kaidi Xu, Hongge Chen, Sijia Liu, Pin-Yu Chen, Tsui-Wei
+Weng, Mingyi Hong, and Xue Lin. Topology attack and de-
+fense for graph neural networks: An optimization perspective.
+In IJCAI, 2019. 1, 8
+[56] Keyulu Xu, Weihua Hu, Jure Leskovec, and Stefanie Jegelka.
+How powerful are graph neural networks? In ICLR, 2019. 1
+[57] Cheng Yang, Jiawei Liu, and Chuan Shi. Extract the knowl-
+edge of graph neural networks and go beyond it: An effective
+knowledge distillation framework. In WWW, 2021. 6
+[58] Yuxin Yang, Qiang Li, Jinyuan Jia, Yuan Hong, and Binghui
+Wang. Distributed backdoor attacks on federated graph learn-
+ing and certified defenses. In CCS, 2024. 8
+[59] Li Zhang and Haiping Lu. A feature-importance-aware and
+robust aggregator for gcn. In CIKM, 2020. 1
+[60] Zaixi Zhang, Jinyuan Jia, Binghui Wang, and Neil Zhenqiang
+Gong. Backdoor attacks to graph neural networks. In SAC-
+MAT, 2021. 1, 8
+[61] Xin Zhao, Zeru Zhang, Zijie Zhang, Lingfei Wu, Jiayin Jin,
+Yang Zhou, Dejing Dou, and Da Yan. Expressive 1-lipschitz
+neural networks for robust multiple graph learning against
+adversarial attacks. In ICML, 2021. 1
+[62] Dingyuan Zhu, Ziwei Zhang, Peng Cui, and Wenwu Zhu. Ro-
+bust graph convolutional networks against adversarial attacks.
+In KDD, 2019. 1
+[63] Daniel Zügner and Stephan Günnemann. Adversarial attacks
+on graph neural networks via meta learning. In ICLR, 2019.
+1, 8
+[64] Daniel Zügner, Amir Akbarnejad, and Stephan Günnemann.
+Adversarial attacks on neural networks for graph data. In
+KDD, 2018. 8
+Deterministic Certification of Graph Neural Networks against
+Graph Poisoning Attacks with Arbitrary Perturbations
+Supplementary Material
+A. Proofs
+A.1. Proof of Theorem 1
+We prove for node classification and it is identical for graph
+classification.
+Recall ya and yb are respectively the class with the most
+vote nya and with the second-most vote nyb on predicting
+the target node v in the subgraphs {Gi}′s. Hence,
+nya − I(ya > y b) ≥ nyb (13)
+nyb − I(yb > y c) ≥ nyc , ∀yc ∈ Y \ { ya} (14)
+where I is the indicator function, and we pick the class with
+a smaller index when there exist ties.
+Further, on the poisoned classifiersf ′
+[S] with θ′
+[S] after the
+attack, the vote n′
+ya of the class ya and vote n′
+yc of any other
+class yc ∈ Y \ { ya} satisfy the below relationship:
+n′
+ya ≥ nya −
+TX
+i=1
+I(fi(Gi)v ̸= f ′
+i(Gi)v) (15)
+n′
+yc ≤ nyc +
+TX
+i=1
+I(fi(Gi)v ̸= f ′
+i(Gi)v) (16)
+Since f[S] and f ′
+[S] only differ in trained weights, the
+above expression PT
+i=1 I(fi(Gi)v ̸= f ′
+i(Gi)v) could be re-
+placed by PT
+i=1 I(θi ̸= θ′
+i)
+To ensure the returned label by the voting node classifier
+¯f does not change, i.e., ¯f(G)v = ¯f ′(G)v, ∀G′
+tr, we must
+have:
+n′
+ya ≥ n′
+yc + I(ya > y c), ∀yc ∈ Y \ { ya} (17)
+Combining with Eqns 15 and 16, the sufficient condition
+for Eqn 17 to satisfy is to ensure:
+nya −
+TX
+i=1
+I(θi ̸= θ′
+i) ≥ nyc +
+TX
+i=1
+I(θi ̸= θ′
+i) (18)
+Or,
+nya ≥ nyc + 2
+TX
+i=1
+I(θi ̸= θ′
+i) + I(ya > y c). (19)
+Plugging Eqn 14, we further have this condition:
+nya ≥ nyb − I(yb > y c) + 2
+TX
+i=1
+I(θi ̸= θ′
+i) + I(ya > y c)
+(20)
+We observe that:
+I(ya > y b) ≥ I(ya > y c) − I(yb > y c), ∀yc ∈ Y \ { ya}
+(21)
+Combining Eqn 21 with Eqn 20, we have:
+nya ≥ nyb + 2
+TX
+i=1
+I(θi ̸= θ′
+i) + I(ya > y b) (22)
+Let M = ⌊nya − nyb − I(ya > y b)⌋/2, hence
+XT
+i=1
+I(θi ̸= θ′
+i) ≤ M.
+A.2. Proof of Theorem 2
+To prove Theorem 2, we will first certify the bounded number
+of altered predictions under (1) edge manipulation, (2) node
+manipulation and (3) node feature manipulation separately
+through Theorems 6-8.
+Theorem 6. Assume Gtr is under the edge manipulation
+{E+, E−}, then at most |E+| + |E−| sub-classifiers trained
+by our edge-centric subgraph sets are different between G′
+[S]
+and G[S].
+Proof. Edges of a train graph G in all subgraph sets of G[S]
+are disjoint. Hence, when any edge in G is deleted or added
+by an adversary, only one subgraph set in G[S] is affected.
+Further, when any |E+| + |E−| edges in G are perturbed,
+there are at most |E+| + |E−| subgraph set between G[S] and
+G′
+[S] are different. By training S node/graph sub-classifiers
+on G[S] and G′
+[S], there are at most |E+|+ |E−| sub-classifiers
+that have different weights between them.
+Theorem 7. Assume the training graph set Gtr is under the
+node manipulation {V+, EV+ , X′
+V+ , V−, EV− }, then at most
+|EV+ | + |EV− | sub-classifiers trained by our edge-centric
+subgraph sets are different between G′
+[S] and G[S].
+Theorem 8. Assume the training graph set Gtr is under
+the node feature manipulation {Vr, EVr , X′
+Vr }, then at most
+|EVr | sub-classifiers trained by our edge-centric subgraph
+sets are different between G′
+[S] and G[S].
+Proof. Our proof for the above two theorems is based on the
+key observation that manipulations on isolated nodes do not
+participate in the forward calculation of other nodes’ repre-
+sentations in GNNs. Take node injection for instance and
+the proof for other cases are similar. Note that all subgraphs
+after node injection will contain the newly injected nodes,
+but they still do not have overlapped edges between each
+other via the hash mapping. Hence, the edges EV+ induced
+by the injected nodes V+ exist in at most |EV+ | subgraphs.
+In other word, the injected nodes V+ in at least S − |E+|
+subgraphs have no edges and are isolated.
+Due to the message passing mechanism in GNNs, every
+node only uses its neighboring nodes’ representations to
+update its own representation. Hence, these subgraphs with
+the isolated injected nodes, whatever their features X′
+V+
+are, would have no influence on other nodes’ representation
+calculation. Therefore, in at least S − |E+| subgraph sets,
+the training nodes’/graphs’ representations and gradients
+maintain the same, implying the trained classifier weight to
+be the same.
+By combining above theorems, we could reach Theorem 2
+by simply adding up the bounded number.
+A.3. Proof of Theorem 4
+Similar to the proof of Theorem 2, to prove Theorem 4, we
+first certify the bounded number of altered predictions under
+(1) edge manipulation, (2) node manipulation and (3) node
+feature manipulation separately through Theorems 9-11.
+Theorem 9. Assume Gtr is under the edge manipulation
+{E+, E−}, then at most 2|E+| + 2|E−| node sub-classifiers
+trained by our node-centric subgraph sets are different be-
+tween ⃗G′
+[S] and ⃗G[S], and at most |E+| + |E−| graph sub-
+classifiers trained by our node-centric subgraph sets are
+different between ⃗G′
+[S] and ⃗G[S].
+Proof. For the node classifier, We simply analyze when an
+arbitrary edge (u, v) is deleted/added from a train graph
+G ∈ G tr. It is obvious at most two subgraphs ⃗Giu→v and
+⃗Giv→u are perturbed after perturbation, and therefore two
+subgraph sets are affected. Generalizing this observation
+to any |E+| + |E−| edges in G being perturbed, at most
+2|E+| + 2|E−| subgraph sets are generated different between
+G[S] and G′
+[S].
+For the graph classifier, we consider the following two
+cases: i) iu→v = iv→u. this means u and v are in the same
+subgraph, hence at most one subgraph’s representation is
+affected; ii) iu→v ̸= iv→u. Due to the removal of other
+nodes whose subgraph index is not i in every subgraph ⃗Gi,
+both direct edges would always be removed from ⃗Giu→v
+and ⃗Giv→u if exist. Generalizing this observation to any
+|E+| + |E−| edges in G being perturbed, at most |E+| + |E−|
+subgraph sets are generated different between G[S] and G′
+[S].
+Theorem 10. Assume a graph G is under the node manipu-
+lation {V+, EV+ , X′
+V+ , V−, EV− }, then at most |V+| + |V−|
+Node Classification Ave degree |V| |E| |C|
+Cora-ML 5.6 2, 995 8,416 7
+Citeseer 2.8 3,327 4,732 6
+Pubmed 4.5 19,717 44,338 3
+Amazon-C 71.5 13,752 491,722 10
+Graph Classification |G| |V| avg |E| avg |C|
+AIDS 2,000 15.7 16.2 2
+MUTAG 4,337 30.3 30.8 2
+PROTEINS 1,113 39.1 72.8 2
+DD 1,178 284.3 715.7 2
+Table 5. Datasets and their statistics.
+node/graph sub-classifiers trained by our node-centric sub-
+graph sets are different between ⃗G′
+S and ⃗GS.
+Theorem 11. Assume a graph G is under the node feature
+manipulation {Vr, EVr , X′
+Vr }, then at most |Vr| node/graph
+sub-classifiers trained by our node-centric subgraphs are
+different between ⃗G′
+S and ⃗GS.
+Proof. Our proof for the above two theorems is based on
+the key observation that: in a directed graph, manipulations
+on nodes with no outgoing edge have no influence on other
+nodes’ representations in GNNs. For any node u ∈ G, only
+one subgraph ⃗Gh[str(u)] mod S+1 has outgoing edges. Take
+node injection for instance and the proof for other cases are
+similar. Note that all subgraphs after node injection will
+contain newly injected nodes V+, but they still do not have
+overlapped nodes with outgoing edges between each other
+via the hashing mapping. Hence, the injected nodes only
+have outgoing edges in at most |V+| subgraphs. Due to the
+directed message passing mechanism in GNNs, every node
+only uses its incoming neighboring nodes’ representation
+to update its own representation. Hence, the injected nodes
+with no outgoing edges, whatever their features X′
+V+ are,
+would have no influence on other nodes’ representation and
+gradients, including the training nodes’, implying at least
+S − | V+| subgraphs’ training process maintain the same.
+By collaborating above theorems together, we could reach
+Theorem 4 by simply adding up the bounded number.
+(a) Edge-Centric Graph Division for Node Classification against edge deletion, node deletion and node feature manipulation
+(b) Node-Centric Graph Division for Node Classification against edge deletion, node deletion and node feature manipulation
+Figure 8. Illustration of our edge-centric and node-centric graph division strategies for node classification against edge deletion, node
+deletion, and node feature manipulation. To summarize: 1 deleted edge affects at most 1 subgraph prediction in both graph division
+strategies. In contrast, 1 deleted node with, e.g., 3 incident edges can affect at most 3 subgraph predictions with edge-centric graph division,
+but at most 1 subgraph prediction with node-centric graph division.
+(a) Edge-Centric Graph Division for Graph Classification against edge manipulation, node manipulation and feature manipulation
+(b) Node-Centric Graph Division for Graph Classification against edge manipulation, node manipulation and feature manipulation
+Figure 9. Illustration of our edge-centric and node-centric graph division strategies for graph classification. The conclusion are similar to
+those for node classification.
+(a) Cora-ML
+ (b) Citeseer
+ (c) Pubmed
+ (d) Amazon-C
+Figure 10. Certified node accuracy of our PGNNCert-E with GSAGE w.r.t. the number of subgraphs S.
+(a) Cora-ML
+ (b) Citeseer
+ (c) Pubmed
+ (d) Amazon-C
+Figure 11. Certified node accuracy of our PGNNCert-N with GSAGE w.r.t. the number of subgraphs S.
+(a) Cora-ML
+ (b) Citeseer
+ (c) Pubmed
+ (d) Amazon-C
+Figure 12. Certified node accuracy of our PGNNCert-E with GAT w.r.t. the number of subgraphsS.
+(a) Cora-ML
+ (b) Citeseer
+ (c) Pubmed
+ (d) Amazon-C
+Figure 13. Certified node accuracy of our PGNNCert-N with GAT w.r.t. the number of subgraphsS.
+(a) Cora-ML
+ (b) Citeseer
+ (c) Pubmed
+ (d) Amazon-C
+Figure 14. Certified node accuracy of our PGNNCert-E w.r.t. the hash function h.
+(a) Cora-ML
+ (b) Citeseer
+ (c) Pubmed
+ (d) Amazon-C
+Figure 15. Certified node accuracy of our PGNNCert-N w.r.t. the hash function h.
+(a) AIDS
+ (b) MUTAG
+ (c) PROTEINS
+ (d) DD
+Figure 16. Certified graph accuracy of our PGNNCert-E w.r.t. the hash function h.
+(a) AIDS
+ (b) MUTAG
+ (c) PROTEINS
+ (d) DD
+Figure 17. Certified graph accuracy of our PGNNCert-N w.r.t. the hash function h.
